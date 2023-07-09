@@ -1,4 +1,4 @@
-# %%myproject%%
+github# %%myproject%%
 
 [![ci](https://github.com/%%myorg%%/%%myproject%%/actions/workflows/ci.yml/badge.svg)](https://github.com/%%myorg%%/%%myproject%%/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/%%myorg%%/%%myproject%%/branch/main/graph/badge.svg)](https://codecov.io/gh/%%myorg%%/%%myproject%%)
