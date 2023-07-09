@@ -25,6 +25,9 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./code
     permissions:
       actions: read
       contents: read
