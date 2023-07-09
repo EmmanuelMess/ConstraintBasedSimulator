@@ -2,8 +2,8 @@ add_executable(intro main.cpp)
 
 target_link_libraries(
   intro
-  PRIVATE myproject::myproject_options
-          myproject::myproject_warnings)
+  PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_options
+          ConstraintBasedSimulator::ConstraintBasedSimulator_warnings)
 
 target_link_system_libraries(
   intro
