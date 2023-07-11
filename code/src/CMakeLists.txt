@@ -1,2 +1,1 @@
-add_subdirectory(sample_library)
 add_subdirectory(main_app)
