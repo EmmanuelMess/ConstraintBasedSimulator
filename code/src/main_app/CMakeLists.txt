@@ -13,6 +13,7 @@ target_link_system_libraries(
   main_app
   PRIVATE
           spdlog::spdlog
-          foonathan::lexy)
+          foonathan::lexy
+          eigen)
 
 target_include_directories(main_app PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
