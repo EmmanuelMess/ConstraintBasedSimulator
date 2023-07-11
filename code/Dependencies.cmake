@@ -40,7 +40,7 @@ function(ConstraintBasedSimulator_setup_dependencies)
     cpmaddpackage("https://github.com/foonathan/lexy/releases/download/v2022.12.1/lexy-src.zip")
   endif()
 
-  if(NOT TARGET eigen::eigen)
+  if(NOT TARGET eigen)
     cpmaddpackage("https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip")
   endif()
 
