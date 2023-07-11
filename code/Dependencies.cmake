@@ -40,4 +40,8 @@ function(ConstraintBasedSimulator_setup_dependencies)
     cpmaddpackage("gh:lefticus/tools#update_build_system")
   endif()
 
+  if(NOT TARGET foonathan::lexy)
+    cpmaddpackage("https://github.com/foonathan/lexy/releases/download/v2022.12.1/lexy-src.zip")
+  endif()
+
 endfunction()
