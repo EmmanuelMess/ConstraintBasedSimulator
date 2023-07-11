@@ -34,6 +34,8 @@ target_link_libraries(
   tests
   PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
           ConstraintBasedSimulator::ConstraintBasedSimulator_options
+          foonathan::lexy
+          eigen
           Catch2::Catch2WithMain)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
