@@ -168,11 +168,26 @@ jobs:
         with:
           compiler: "gcc"
 
-      - name: Setup Qt
+      - name: Windows - Setup Qt
+        if:  runner.os == 'Windows'
         uses: jurplel/install-qt-action@v3
         with:
           version: 6.4.2
-          host: ${{ 'windows' if contains(matrix.os, 'windows') else 'mac' if contains(matrix.os, 'mac') else 'linux' }}
+          host: 'windows'
+
+      - name: Linux - Setup Qt
+        if:  runner.os == 'Linux'
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.4.2
+          host: 'linux'
+
+      - name: Mac - Setup Qt
+        if: runner.os == 'Mac'
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.4.2
+          host: 'mac'
 
       - name: Configure CMake
         run: |
