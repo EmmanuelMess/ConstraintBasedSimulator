@@ -37,18 +37,25 @@ TEST_CASE("lexy works", "[lexy base]") {
 }
 
 TEST_CASE("Eigen works", "[eigen base]") {
-    Eigen::Matrix3d matrix = Eigen::Matrix3d::Random();
-    matrix = (matrix + Eigen::Matrix3d::Constant(1.2)) * 50;
+    const Eigen::Matrix3d matrix = Eigen::Matrix3d::Random();
+    const Eigen::Matrix3d constant = Eigen::Matrix3d::Constant(1.2);
+    const int constantScalar = 50;
+
+    const Eigen::Matrix3d matrix1 = (matrix + constant) * constantScalar;
 
     const Eigen::Vector3d vector(1,2,3);
+    const Eigen::Vector3d result(404.274,512.237,261.153);
+    const double margin = 0.02;
 
-    REQUIRE((matrix * vector - Eigen::Vector3d(404.274,512.237,261.153)).sum() <= 0.02);
+    REQUIRE((matrix1 * vector - result).sum() <= margin);
 }
 
 TEST_CASE("Qt6 works", "[qt6 base]") {
     QList<qint8> list;
 
-    list.append(5);
+    const quint8 constant = 5;
+
+    list.append(constant);
 
     REQUIRE(list.size() == 1);
 }
