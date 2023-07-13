@@ -9,6 +9,8 @@
 
 #include <Eigen/Core>
 
+#include <QtCore/QList>
+
 struct Color {
     std::uint8_t r, g, b;
 };
@@ -41,4 +43,12 @@ TEST_CASE("Eigen works", "[eigen base]") {
     const Eigen::Vector3d vector(1,2,3);
 
     REQUIRE((matrix * vector - Eigen::Vector3d(404.274,512.237,261.153)).sum() <= 0.02);
+}
+
+TEST_CASE("Qt6 works", "[qt6 base]") {
+    QList<qint8> list;
+
+    list.append(5);
+
+    REQUIRE(list.size() == 1);
 }
