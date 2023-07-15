@@ -1,6 +1,6 @@
-# Constraint based simulator
+# Constraint Based Simulator
 
-### Requirements
+## Requirements
 
 Read a file that contains the initial simulation state and constraints.
 
@@ -21,17 +21,17 @@ constraints:
   * Constant force away from point
   * constant plus sin(x) force from point
 
-### Items that could change (as a probability)
+## Items that could change (as a probability)
 
-#### High
+### High
 
 * File format
 * UI
 
-#### Medium
+### Medium
 
 
 
-#### Low
+### Low
 
 * The simulation algorithms
