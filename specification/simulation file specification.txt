@@ -1,0 +1,31 @@
+statement ::= ε
+            | <point-definition> eol
+            | <static-qualifier> eol
+            | <graphical-statement> eol
+
+point-definition ::= <identifier> = (<decimal>, <decimal>)
+
+static-qualifier ::= static <identifier>
+
+constraint ::= constraint <constraint-type> <identifier> <identifier> <constraint-operator> <decimal>
+             | constraint <constraint-type> <identifier> <identifier> fun <function>
+
+constraint-type ::= distance
+                  | force
+
+constraint-operator ::= == 
+                      | <
+                      | >
+                      | >=
+                      | <=
+                       
+function ::= (<function-parameters>) -> <function-body>
+
+function-parameters ::= ε
+                      | <function-parameters>, <property-identifier>
+                      
+property-identifier ::= distance
+
+graphical-statement ::= show bar <identifier> <indentifier>
+                      | show circle <identifier> radius <decimal>
+
