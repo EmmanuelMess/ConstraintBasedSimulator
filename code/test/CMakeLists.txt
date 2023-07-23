@@ -29,7 +29,9 @@ add_test(NAME cli.has_help COMMAND intro --help)
 add_test(NAME cli.version_matches COMMAND intro --version)
 set_tests_properties(cli.version_matches PROPERTIES PASS_REGULAR_EXPRESSION "${PROJECT_VERSION}")
 
-add_executable(tests tests.cpp)
+add_executable(tests eigen.cpp
+                     lexy.cpp
+                     qt.cpp)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 target_link_libraries(
   tests
@@ -39,6 +41,9 @@ target_link_libraries(
           eigen
           Qt6::Core
           Catch2::Catch2WithMain)
+
+target_include_directories(tests ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                                                         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
   add_custom_command(
@@ -63,13 +68,16 @@ catch_discover_tests(
   OUTPUT_SUFFIX
   .xml)
 
-# Add a file containing a set of constexpr tests
+# Add a file containing a set of constexpr tests|
 add_executable(constexpr_tests constexpr_tests.cpp)
 target_link_libraries(
   constexpr_tests
   PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
           ConstraintBasedSimulator::ConstraintBasedSimulator_options
           Catch2::Catch2WithMain)
+
+target_include_directories(constexpr_tests ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                                                                   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
 
 catch_discover_tests(
   constexpr_tests
@@ -92,6 +100,8 @@ target_link_libraries(
   PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
           ConstraintBasedSimulator::ConstraintBasedSimulator_options
           Catch2::Catch2WithMain)
+target_include_directories(relaxed_constexpr_tests ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                                                                           $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
 target_compile_definitions(relaxed_constexpr_tests PRIVATE -DCATCH_CONFIG_RUNTIME_STATIC_REQUIRE)
 
 catch_discover_tests(

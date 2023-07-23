@@ -1,0 +1,9 @@
+A = (0.0, 0.0)
+static A
+constraint distance A B >= 5.0
+constraint distance A B < 505500.032651
+constraint force B B < 505500.032651
+
+show   circle   A   radius   5.0
+
+show bar A B
