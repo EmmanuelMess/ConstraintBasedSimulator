@@ -1,0 +1,5 @@
+
+enum ConstraintType {
+    Distance,
+    Force
+};
