@@ -1,4 +1,10 @@
-add_executable(main_app main.cpp)
+add_executable(main_app
+    main.cpp
+    input_reader/ReadInput.cpp
+    input_reader/Point.cpp
+    input_reader/Constraint.cpp
+    input_reader/Parser.cpp
+    input_reader/ConstraintType.cpp)
 
 target_link_libraries(
   main_app
