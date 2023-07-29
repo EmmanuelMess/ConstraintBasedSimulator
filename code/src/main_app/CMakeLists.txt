@@ -1,15 +1,13 @@
+add_subdirectory("input_reader")
+
 add_executable(main_app
-    main.cpp
-    input_reader/ReadInput.cpp
-    input_reader/Point.cpp
-    input_reader/Constraint.cpp
-    input_reader/Parser.cpp
-    input_reader/ConstraintType.cpp)
+    main.cpp)
 
 target_link_libraries(
   main_app
   PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_options
-          ConstraintBasedSimulator::ConstraintBasedSimulator_warnings)
+          ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
+          ConstraintBasedSimulator::input_reader)
 
 
 target_include_directories(main_app ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -20,7 +18,6 @@ target_link_system_libraries(
   main_app
   PRIVATE
           spdlog::spdlog
-          foonathan::lexy
           eigen
           Qt6::Core)
 

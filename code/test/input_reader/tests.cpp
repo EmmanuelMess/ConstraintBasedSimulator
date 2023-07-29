@@ -1,31 +1,63 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <filesystem>
+#include <fstream>
+
 #include "main_app/input_reader/ReadInput.hpp"
 
-TEST_CASE("Input Reader", "[example 0]") {
-    const std::string path = "/home/emmanuel/Rápido/Projects/GitHub/ConstraintBasedSimulator/examples0.simulator";
+TEST_CASE("Read file", "[InputReader::readFile]") {
+    SECTION("single point") {
+        std::error_code error;
+        const std::string path = std::filesystem::temp_directory_path(error) / "example.simulator";
+        REQUIRE(error.value() == 0);
 
-    input_reader::ReadInput inputReader;
-    inputReader.readFile(path);
-}
+        {
+            std::ofstream output(path);
+            output << "A = (0, 0)\n";
+            output.close();
+        }
 
-TEST_CASE("Input Reader", "[example 1]") {
-    const std::string path = "/home/emmanuel/Rápido/Projects/GitHub/ConstraintBasedSimulator/examples1.simulator";
+        input_reader::ReadInput inputReader;
+        REQUIRE(inputReader.readFile(path));
 
-    input_reader::ReadInput inputReader;
-    inputReader.readFile(path);
-}
+        const std::vector<input_reader::Point> dynamicPoints = { { .x = 0, .y = 0, .name = "A"} };
+        REQUIRE(inputReader.getDynamicPoints() == dynamicPoints);
 
-TEST_CASE("Input Reader", "[example 2]") {
-    const std::string path = "/home/emmanuel/Rápido/Projects/GitHub/ConstraintBasedSimulator/examples2.simulator";
+        REQUIRE(inputReader.getStaticPoints().empty());
+        REQUIRE(inputReader.getConstraints().empty());
+        REQUIRE(inputReader.getGraphics().empty());
+    }
 
-    input_reader::ReadInput inputReader;
-    inputReader.readFile(path);
-}
+    SECTION("multiple points with qualifiers") {
+        std::error_code error;
+        const std::string path = std::filesystem::temp_directory_path(error) / "example.simulator";
+        REQUIRE(error.value() == 0);
 
-TEST_CASE("Input Reader", "[example 3]") {
-    const std::string path = "/home/emmanuel/Rápido/Projects/GitHub/ConstraintBasedSimulator/examples3.simulator";
+        {
+            std::ofstream output(path);
+            output << "A = (0, 0)\n"
+                   << "B = (3.0, -90)\n"
+                   << "C = (0.5, 5000)\n"
+                   << "D = (200, 800)\n"
+                   << "static A\n"
+                   << "static D\n";
+            output.close();
+        }
 
-    input_reader::ReadInput inputReader;
-    inputReader.readFile(path);
+        input_reader::ReadInput inputReader;
+        REQUIRE(inputReader.readFile(path));
+
+        const std::vector<input_reader::Point> staticPoints = {
+            { .x = 0, .y = 0, .name = "A" }, { .x = 200, .y = 800, .name = "D" }
+        };
+        REQUIRE(inputReader.getStaticPoints() == staticPoints);
+
+        const std::vector<input_reader::Point> dynamicPoints = {
+            { .x = 3.0, .y = -90, .name = "B"}, { .x = 0.5, .y = 5000, .name = "C" }
+        };
+        REQUIRE(inputReader.getDynamicPoints() == dynamicPoints);
+
+        REQUIRE(inputReader.getConstraints().empty());
+        REQUIRE(inputReader.getGraphics().empty());
+    }
 }
