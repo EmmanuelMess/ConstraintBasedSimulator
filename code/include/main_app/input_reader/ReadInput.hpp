@@ -5,12 +5,8 @@
 #include <vector>
 #include <unordered_map>
 
-#include <lexy/input/file.hpp>
-#include <lexy_ext/report_error.hpp>
-
 #include "main_app/input_reader/Constraint.hpp"
 #include "main_app/input_reader/GraphicalElement.hpp"
-#include "main_app/input_reader/Parser.hpp"
 #include "main_app/input_reader/Point.hpp"
 
 namespace input_reader {
