@@ -43,7 +43,7 @@ namespace input_reader::internal {
         using SimulationState = std::vector<Statement>;
     } // ast
 
-    namespace grammar {
+    namespace parser {
         namespace dsl = lexy::dsl;
 
         constexpr auto staticReserved = LEXY_LIT("static");
@@ -134,7 +134,7 @@ namespace input_reader::internal {
             static constexpr auto rule = dsl::terminator(dsl::eof).opt_list(dsl::p<Statement>);
             static constexpr auto value = lexy::as_list<ast::SimulationState>;
         };
-    } // grammar
+    } // parser
 }
 
 #endif// CONSTRAINTBASEDSIMULATOR_PARSER_HPP

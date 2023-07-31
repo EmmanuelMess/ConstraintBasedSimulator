@@ -13,7 +13,7 @@
 
 bool input_reader::ReadInput::readFile(const std::filesystem::path& path) {
     auto input = lexy::read_file<lexy::utf8_encoding>(path.c_str());
-    auto result = lexy::parse<internal::grammar::SimulationState>(input.buffer(), lexy_ext::report_error.path(path.c_str()));
+    auto result = lexy::parse<internal::parser::SimulationState>(input.buffer(), lexy_ext::report_error.path(path.c_str()));
 
     if (!result.has_value()) {
         spdlog::error("Parsing error! ");

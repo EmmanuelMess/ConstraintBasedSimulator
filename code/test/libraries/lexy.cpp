@@ -11,7 +11,7 @@ struct Color {
     std::uint8_t r, g, b;
 };
 
-namespace grammar {
+namespace parser {
 namespace dsl = lexy::dsl;
 
 struct channel {
@@ -23,11 +23,11 @@ struct color {
     static constexpr auto rule = dsl::hash_sign + dsl::times<3>(dsl::p<channel>);
     static constexpr auto value = lexy::construct<Color>;
 };
-} // namespace grammar
+} // parser
 
 TEST_CASE("lexy works", "[lexy base]") {
     auto literal = lexy::zstring_input("#FF00FF");
-    auto result = lexy::parse<grammar::color>(literal, lexy_ext::report_error);
+    auto result = lexy::parse<parser::color>(literal, lexy_ext::report_error);
 
     REQUIRE(result);
 }
