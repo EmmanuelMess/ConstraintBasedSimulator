@@ -6,21 +6,17 @@
 
 #include <spdlog/spdlog.h>
 
-#include <lexy/input/file.hpp>
-#include <lexy_ext/report_error.hpp>
-
 #include "main_app/input_reader/Parser.hpp"
 
 bool input_reader::ReadInput::readFile(const std::filesystem::path& path) {
-    auto input = lexy::read_file<lexy::utf8_encoding>(path.c_str());
-    auto result = lexy::parse<internal::parser::SimulationState>(input.buffer(), lexy_ext::report_error.path(path.c_str()));
+    const auto statementsOptional = input_reader::internal::parser::Parser::readFile(path);
 
-    if (!result.has_value()) {
+    if(!statementsOptional) {
         spdlog::error("Parsing error! ");
         return false;
     }
 
-    const auto statements = result.value();
+    const auto& statements = *statementsOptional;
 
     const auto [points, identifiersForStaticPoints] = [&statements]() {
         std::vector<internal::ast::Point> pointsInternal;
