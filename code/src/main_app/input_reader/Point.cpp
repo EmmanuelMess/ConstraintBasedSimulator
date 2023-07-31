@@ -1,1 +1,0 @@
-#include "main_app/input_reader/Point.hpp"

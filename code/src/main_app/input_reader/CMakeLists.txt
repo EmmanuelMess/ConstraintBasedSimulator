@@ -1,9 +1,5 @@
 add_library(input_reader
-    ReadInput.cpp
-    Point.cpp
-    Constraint.cpp
-    Parser.cpp
-    ConstraintType.cpp)
+    ReadInput.cpp)
 
 add_library(ConstraintBasedSimulator::input_reader ALIAS input_reader)
 
