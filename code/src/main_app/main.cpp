@@ -10,9 +10,10 @@
 #include <internal_use_only/config.hpp>
 
 #include "main_app/input_reader/ReadInput.hpp"
+#include "main_app/ui/UiRunner.hpp"
 
 // NOLINTNEXTLINE(bugprone-exception-escape)
-int main() {
+int main(int argc, char *argv[]) {
     try {
         const auto path = std::filesystem::path("/fast/emmanuel/Projects/GitHub/ConstraintBasedSimulator/examples/example1.simulation");
         input_reader::ReadInput inputReader;
@@ -29,5 +30,7 @@ int main() {
         for(const auto& point : inputReader.getStaticPoints()) {
             spdlog::info("{} = ({}, {})", point.name, point.x, point.y);
         }
+
+        return ui::runUi(argc, argv);
     } catch (const std::exception &e) { spdlog::error("Unhandled exception in main: {}", e.what()); }
 }

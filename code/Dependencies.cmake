@@ -47,40 +47,27 @@ function(ConstraintBasedSimulator_setup_dependencies)
   if(NOT TARGET qt6)
     message("-- Adding qt6")
 
-    # Download and extract archive of Qt 6.4.2
-    set( QT_VERSION "6.4.2" )
-    set( QT_ARCHIVE_URL "https://download.qt.io/official_releases/qt/6.4/${QT_VERSION}/submodules/qtbase-everywhere-src-${QT_VERSION}.tar.xz" )
-    set( QT_ARCHIVE_FILE "/tmp/qtbase-everywhere-src-${QT_VERSION}.tar.xz" )
+    # Download and extract archive of Qt
+    set( QT_VERSION "6.5.2" )
+    set( QT_COMPRESSED_FILE "qtbase-everywhere-src-${QT_VERSION}" )
+    set( QT_ARCHIVE_URL "https://download.qt.io/official_releases/qt/6.5/${QT_VERSION}/submodules/${QT_COMPRESSED_FILE}.tar.xz" )
+    set( QT_ARCHIVE_PATH "/tmp/${QT_COMPRESSED_FILE}.tar.xz" )
     set( QT_BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_deps" )
-    set( QT_SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_deps/qtbase-everywhere-src-${QT_VERSION}" )
-    set( QT_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_deps/qtbase-everywhere-src-${QT_VERSION}-build" )
+    set( QT_SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_deps/${QT_COMPRESSED_FILE}" )
+    set( QT_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_deps/${QT_COMPRESSED_FILE}-build" )
 
-    file( DOWNLOAD ${QT_ARCHIVE_URL} ${QT_ARCHIVE_FILE}
+    file( DOWNLOAD ${QT_ARCHIVE_URL} ${QT_ARCHIVE_PATH}
         SHOW_PROGRESS
-        EXPECTED_HASH MD5=01f3938ca797d0e5a578c7786c618fb7)
-    execute_process( COMMAND ${CMAKE_COMMAND} -E tar xvf ${QT_ARCHIVE_FILE}
+        EXPECTED_HASH MD5=0c184f5a9bdf166c3811cd2d51feda45)
+    execute_process( COMMAND ${CMAKE_COMMAND} -E tar xvf ${QT_ARCHIVE_PATH}
         WORKING_DIRECTORY ${QT_BASE_DIR}
         OUTPUT_QUIET)
 
+
     # Configure Qt (skip building of useless modules)
     file( MAKE_DIRECTORY ${QT_BUILD_DIR} )
-    execute_process( COMMAND ${QT_SOURCE_DIR}/configure -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
-
-    # Check if system supports parallelization
-    if( DEFINED ENV{NUMBER_OF_PROCESSORS} )
-      set( JOBS_OPTION "-j$ENV{NUMBER_OF_PROCESSORS}" )
-    elseif( DEFINED ENV{PROCESSOR_COUNT} )
-      set( JOBS_OPTION "-j$ENV{PROCESSOR_COUNT}" )
-    else()
-      set( JOBS_OPTION "" )
-    endif()
-
-    # Use -j option to compile if possible (qt is very big)
-    if( JOBS_OPTION )
-      execute_process( COMMAND ninja ${JOBS_OPTION} WORKING_DIRECTORY ${QT_BUILD_DIR} )
-    else()
-      execute_process( COMMAND ninja WORKING_DIRECTORY ${QT_BUILD_DIR} )
-    endif()
+    execute_process( COMMAND ${QT_SOURCE_DIR}/configure -release -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
+    execute_process( COMMAND cmake --build . --parallel ${JOBS_OPTION} WORKING_DIRECTORY ${QT_BUILD_DIR} )
 
     # Set necessary environment variables to use Qt
     set( ENV{QTDIR} ${QT_BUILD_DIR} )
