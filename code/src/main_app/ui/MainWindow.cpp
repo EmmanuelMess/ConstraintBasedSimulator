@@ -2,4 +2,8 @@
 
 namespace ui::internal {
 
+MainWindow::MainWindow(QWidget *parent)
+  : QMainWindow(parent) {
+
+}
 }

@@ -66,7 +66,7 @@ function(ConstraintBasedSimulator_setup_dependencies)
 
     # Configure Qt (skip building of useless modules)
     file( MAKE_DIRECTORY ${QT_BUILD_DIR} )
-    execute_process( COMMAND ${QT_SOURCE_DIR}/configure -release -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
+    execute_process( COMMAND ${QT_SOURCE_DIR}/configure -release -c++std c++20 -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
     execute_process( COMMAND cmake --build . --parallel ${JOBS_OPTION} WORKING_DIRECTORY ${QT_BUILD_DIR} )
 
     # Set necessary environment variables to use Qt

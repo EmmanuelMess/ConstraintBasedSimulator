@@ -1,6 +1,24 @@
-add_library(ui
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+qt_standard_project_setup()
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+if (NOT CMAKE_PREFIX_PATH)
+  message(WARNING "CMAKE_PREFIX_PATH is not defined, you may need to set it "
+      "(-DCMAKE_PREFIX_PATH=\"path/to/Qt/lib/cmake\" or -DCMAKE_PREFIX_PATH=/usr/include/{host}/qt{version}/ on Ubuntu)")
+endif ()
+
+qt_add_library(ui STATIC
     UiRunner.cpp
-    MainWindow.cpp)
+    MainWindow.cpp
+    GrapherWidget.cpp
+
+    # HACK adding headers here is required for Q_OBJECT
+    ${PROJECT_SOURCE_DIR}/include/main_app/ui/UiRunner.hpp
+    ${PROJECT_SOURCE_DIR}/include/main_app/ui/MainWindow.hpp
+    ${PROJECT_SOURCE_DIR}/include/main_app/ui/GrapherWidget.hpp)
 
 add_library(ConstraintBasedSimulator::ui ALIAS ui)
 
@@ -20,8 +38,6 @@ set_target_properties(
     PROPERTIES VERSION ${PROJECT_VERSION}
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN YES)
-
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 
 target_link_system_libraries(
     ui
