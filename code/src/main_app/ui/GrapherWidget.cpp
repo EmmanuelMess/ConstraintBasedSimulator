@@ -22,6 +22,8 @@ void GrapherWidget::paintEvent(QPaintEvent *) {
                                     << QPointF(width() / 2 - 0.2 * width(), 0.8 * height())
                                     << QPointF(width() / 2 + 0.2 * width(), 0.8 * height()));
 
+
+
 }
 
 QSize GrapherWidget::sizeHint() const {

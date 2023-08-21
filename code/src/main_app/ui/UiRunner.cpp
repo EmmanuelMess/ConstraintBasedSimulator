@@ -3,15 +3,15 @@
 #include <QApplication>
 #include <QtWidgets>
 
-#include "main_app/ui/GrapherWidget.hpp"
+#include "main_app/ui/MainWindow.hpp"
 
 namespace ui {
 int runUi(int argc, char *argv[]) {
     const QApplication app(argc, argv);
-    internal::GrapherWidget window;
-    window.resize(320, 240);
-    window.show();
-    window.setWindowTitle(QApplication::translate("toplevel", "Top-level widget"));
+    ui::internal::MainWindow mainWindow;
+    mainWindow.resize(1550, 600);
+    mainWindow.show();
+    mainWindow.setWindowTitle(QApplication::translate("toplevel", "Top-level widget"));
     return app.exec();
 }
 }
