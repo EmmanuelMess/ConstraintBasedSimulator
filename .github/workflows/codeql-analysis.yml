@@ -20,6 +20,8 @@ on:
   schedule:
     - cron: '38 0 * * 5'
 
+env:
+  QT_VERSION: "6.5.2"
 
 jobs:
   analyze:
@@ -83,6 +85,19 @@ jobs:
 
         gcovr: false
         opencppcoverage: false
+
+    - name: Setup Fortran - gcc
+      if: contains(matrix.compiler, 'gcc' )
+      uses: awvwgk/setup-fortran@v1
+      with:
+        compiler: gcc
+
+    - name: Setup Qt - Linux
+      if:  runner.os == 'Linux'
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{ env.QT_VERSION }}
+        host: 'linux'
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0 to make sure coverage
       # has meaningful results

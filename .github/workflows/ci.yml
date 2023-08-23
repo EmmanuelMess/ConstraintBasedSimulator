@@ -11,6 +11,7 @@ on:
 
 env:
   CLANG_TIDY_VERSION: "15.0.2"
+  QT_VERSION: "6.5.2"
   VERBOSE: 1
 
 
@@ -163,30 +164,37 @@ jobs:
           gcovr: true
           opencppcoverage: true
 
-      - name: Setup Fortran
+      - name: Setup Fortran - gcc
+        if: contains(matrix.compiler, 'gcc' )
         uses: awvwgk/setup-fortran@v1
         with:
-          compiler: "gcc"
+          compiler: gcc
 
-      - name: Windows - Setup Qt
+      - name: Setup Fortran - llvm
+        if: contains(matrix.compiler, 'llvm' )
+        uses: awvwgk/setup-fortran@v1
+        with:
+          compiler: llvm
+
+      - name: Setup Qt - Windows
         if:  runner.os == 'Windows'
         uses: jurplel/install-qt-action@v3
         with:
-          version: 6.4.2
+          version: ${{ env.QT_VERSION }}
           host: 'windows'
 
-      - name: Linux - Setup Qt
+      - name: Setup Qt - Linux
         if:  runner.os == 'Linux'
         uses: jurplel/install-qt-action@v3
         with:
-          version: 6.4.2
+          version: ${{ env.QT_VERSION }}
           host: 'linux'
 
-      - name: Mac - Setup Qt
+      - name: Setup Qt - Mac
         if: runner.os == 'Mac'
         uses: jurplel/install-qt-action@v3
         with:
-          version: 6.4.2
+          version: ${{ env.QT_VERSION }}
           host: 'mac'
 
       - name: Configure CMake
