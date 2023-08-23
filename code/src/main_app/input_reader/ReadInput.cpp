@@ -8,15 +8,16 @@
 
 #include "main_app/input_reader/Parser.hpp"
 
-bool input_reader::ReadInput::readFile(const std::filesystem::path& path) {
-    const auto statementsOptional = input_reader::internal::parser::Parser::readFile(path);
+namespace input_reader {
+bool ReadInput::readFile(const std::filesystem::path &path) {
+    const auto statementsOptional = internal::parser::Parser::readFile(path);
 
-    if(!statementsOptional) {
+    if (!statementsOptional) {
         spdlog::error("Parsing error! ");
         return false;
     }
 
-    const auto& statements = *statementsOptional;
+    const auto &statements = *statementsOptional;
 
     const auto [points, identifiersForStaticPoints] = [&statements]() {
         std::vector<internal::ast::Point> pointsInternal;
@@ -40,11 +41,11 @@ bool input_reader::ReadInput::readFile(const std::filesystem::path& path) {
         staticPoints.clear();
         staticPoints.reserve(identifiersForStaticPoints.size());
 
-        for (const auto& point : points) {
+        for (const auto &point : points) {
             const bool isStatic = identifiersForStaticPoints.contains(point.identifier);
             if (!isStatic) { continue; }
 
-            staticPoints.emplace_back(Point {
+            staticPoints.emplace_back(Point{
               .x = point.xCoordinate,
               .y = point.yCoordinate,
               .name = point.identifier,
@@ -56,11 +57,11 @@ bool input_reader::ReadInput::readFile(const std::filesystem::path& path) {
     {
         dynamicPoints.clear();
         dynamicPoints.reserve(points.size() - identifiersForStaticPoints.size());
-        for (const auto& point : points) {
+        for (const auto &point : points) {
             const auto isStatic = identifiersForStaticPoints.contains(point.identifier);
             if (isStatic) { continue; }
 
-            dynamicPoints.emplace_back(Point {
+            dynamicPoints.emplace_back(Point{
               .x = point.xCoordinate,
               .y = point.yCoordinate,
               .name = point.identifier,
@@ -74,18 +75,15 @@ bool input_reader::ReadInput::readFile(const std::filesystem::path& path) {
     return true;
 }
 
-std::vector<input_reader::Point> input_reader::ReadInput::getStaticPoints() const {
-    return staticPoints;
-}
+std::vector<Point> ReadInput::getStaticPoints() const { return staticPoints; }
 
-std::vector<input_reader::Point> input_reader::ReadInput::getDynamicPoints() const {
-    return dynamicPoints;
-}
+std::vector<Point> ReadInput::getDynamicPoints() const { return dynamicPoints; }
 
-std::unordered_map<input_reader::Point, input_reader::Constraint> input_reader::ReadInput::getConstraints() const {
+std::unordered_map<Point, Constraint> ReadInput::getConstraints() const {
     return constraints;
 }
 
-std::unordered_map<input_reader::Point, input_reader::GraphicalElement> input_reader::ReadInput::getGraphics() const {
+std::unordered_map<Point, GraphicalElement> ReadInput::getGraphics() const {
     return graphics;
+}
 }
