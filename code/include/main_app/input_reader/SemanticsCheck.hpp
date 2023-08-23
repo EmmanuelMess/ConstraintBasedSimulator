@@ -5,7 +5,7 @@
 
 namespace input_reader::internal::semantics {
 class SemanticsCheck {
-    static bool checkSemantics(parser::SimulationState);
+    static bool checkSemantics(const ast::SimulationState& simulationState);
 };
 }
 
