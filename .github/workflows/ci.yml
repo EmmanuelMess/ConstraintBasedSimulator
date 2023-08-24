@@ -170,12 +170,6 @@ jobs:
         with:
           compiler: gcc
 
-      - name: Setup Fortran - llvm
-        if: contains(matrix.compiler, 'llvm' )
-        uses: awvwgk/setup-fortran@v1
-        with:
-          compiler: llvm
-
       - name: Setup Qt - Windows
         if:  runner.os == 'Windows'
         uses: jurplel/install-qt-action@v3
