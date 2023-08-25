@@ -55,13 +55,9 @@ endif()
 # to whatever you want, or use different for different binaries
 catch_discover_tests(
   input_reader_tests
-  TEST_PREFIX
-  "unittests."
-  REPORTER
-  XML
-  OUTPUT_DIR
-  .
-  OUTPUT_PREFIX
-  "unittests."
-  OUTPUT_SUFFIX
-  .xml)
+  TEST_PREFIX "unittests."
+  LABELS "[InputReader]"
+  REPORTER XML
+  OUTPUT_DIR .
+  OUTPUT_PREFIX "unittests."
+  OUTPUT_SUFFIX .xml )
