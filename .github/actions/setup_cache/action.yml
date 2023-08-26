@@ -14,7 +14,9 @@ inputs:
   packaging_maintainer_mode:
     required: true
     type: string
-
+  build_path:
+    required: true
+    type: string
 
 runs:
   using: "composite"
@@ -24,10 +26,10 @@ runs:
       with:
         # You might want to add .ccache to your cache configuration?
         path: |
+          ${{ inputs.build_path }}
           ~/.cache/pip
           ~/.ccache
-          ./build
         key: ${{ runner.os }}-${{ inputs.compiler }}-${{ inputs.build_type }}-${{ inputs.generator }}-${{ inputs.packaging_maintainer_mode }}-${{ hashFiles('**/CMakeLists.txt') }}
         restore-keys: |
-          ${{ runner.os }}-${{ inputs.compiler }}-${{ inputs.build_type }}
+          ${{ runner.os }}-${{ inputs.compiler }}-${{ inputs.build_type }}-${{ inputs.generator }}-${{ inputs.packaging_maintainer_mode }}
 

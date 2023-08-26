@@ -139,6 +139,7 @@ jobs:
           build_type: ${{ matrix.build_type }}
           packaging_maintainer_mode: ${{ matrix.packaging_maintainer_mode }}
           generator: ${{ matrix.generator }}
+          build_path: ${{ github.workspace }}/code/build
 
       - name: Project Name
         uses: cardinalby/export-env-action@v2
