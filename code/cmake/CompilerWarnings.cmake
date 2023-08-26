@@ -9,7 +9,10 @@ function(
   MSVC_WARNINGS
   CLANG_WARNINGS
   GCC_WARNINGS
-  CUDA_WARNINGS)
+  CUDA_WARNINGS
+  MSVC_IGNORE_WARNINGS
+  CLANG_IGNORE_WARNINGS
+  GCC_IGNORE_WARNINGS)
   if("${MSVC_WARNINGS}" STREQUAL "")
     set(MSVC_WARNINGS
         /W4 # Baseline reasonable warnings
@@ -81,6 +84,22 @@ function(
     )
   endif()
 
+  if("${MSVC_IGNORE_WARNINGS}" STREQUAL "")
+    set(MSVC_IGNORE_WARNINGS "")
+  endif()
+
+  if("${CLANG_IGNORE_WARNINGS}" STREQUAL "")
+    set(CLANG_IGNORE_WARNINGS
+        -Wno-readability-redundant-member-init # Allow redundant initializer for members
+    )
+  endif()
+
+  if("${GCC_IGNORE_WARNINGS}" STREQUAL "")
+    set(GCC_IGNORE_WARNINGS
+      ${CLANG_IGNORE_WARNINGS}
+    )
+  endif()
+
   if(WARNINGS_AS_ERRORS)
     message(TRACE "Warnings are treated as errors")
     list(APPEND CLANG_WARNINGS -Werror)
@@ -89,11 +108,11 @@ function(
   endif()
 
   if(MSVC)
-    set(PROJECT_WARNINGS_CXX ${MSVC_WARNINGS})
+    set(PROJECT_WARNINGS_CXX ${MSVC_WARNINGS} ${MSVC_IGNORE_WARNINGS})
   elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-    set(PROJECT_WARNINGS_CXX ${CLANG_WARNINGS})
+    set(PROJECT_WARNINGS_CXX ${CLANG_WARNINGS} ${CLANG_IGNORE_WARNINGS})
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(PROJECT_WARNINGS_CXX ${GCC_WARNINGS})
+    set(PROJECT_WARNINGS_CXX ${GCC_WARNINGS} ${GCC_IGNORE_WARNINGS})
   else()
     message(AUTHOR_WARNING "No compiler warnings set for CXX compiler: '${CMAKE_CXX_COMPILER_ID}'")
     # TODO support Intel compiler

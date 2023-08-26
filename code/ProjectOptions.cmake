@@ -128,6 +128,9 @@ macro(ConstraintBasedSimulator_local_options)
     ""
     ""
     ""
+    ""
+    ""
+    ""
     "")
 
   if(ConstraintBasedSimulator_ENABLE_USER_LINKER)
