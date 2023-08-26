@@ -3,8 +3,6 @@
 
 namespace simulator {
 class Simulator {
-  public:
-    void initialize();
 };
 }
 
