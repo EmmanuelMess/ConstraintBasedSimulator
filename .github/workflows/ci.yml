@@ -171,6 +171,11 @@ jobs:
         with:
           compiler: gcc
 
+      - name: Remove Fortran - llvm
+        if: contains(matrix.compiler, 'llvm' ) && runner.os == 'Linux'
+        run: |
+          sudo apt purge gfortran
+          
       - name: Setup Qt - Windows
         if:  runner.os == 'Windows'
         uses: jurplel/install-qt-action@v3
