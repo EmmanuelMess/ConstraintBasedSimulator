@@ -31,5 +31,5 @@ runs:
           ~/.ccache
         key: ${{ runner.os }}-${{ inputs.compiler }}-${{ inputs.build_type }}-${{ inputs.generator }}-${{ inputs.packaging_maintainer_mode }}-${{ hashFiles('**/CMakeLists.txt') }}
         restore-keys: |
-          ${{ runner.os }}-${{ inputs.compiler }}-${{ inputs.build_type }}-${{ inputs.generator }}-${{ inputs.packaging_maintainer_mode }}
+          ${{ runner.os }}-${{ inputs.compiler }}-${{ inputs.build_type }}-${{ inputs.generator }}
 
