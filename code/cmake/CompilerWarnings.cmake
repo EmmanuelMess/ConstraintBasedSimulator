@@ -89,14 +89,13 @@ function(
   endif()
 
   if("${CLANG_IGNORE_WARNINGS}" STREQUAL "")
-    set(CLANG_IGNORE_WARNINGS
-        -Wno-readability-redundant-member-init # Allow redundant initializer for members
-    )
+    set(CLANG_IGNORE_WARNINGS "")
   endif()
 
   if("${GCC_IGNORE_WARNINGS}" STREQUAL "")
     set(GCC_IGNORE_WARNINGS
       ${CLANG_IGNORE_WARNINGS}
+      -Wno-readability-redundant-member-init # Allow redundant initializer for members
     )
   endif()
 
