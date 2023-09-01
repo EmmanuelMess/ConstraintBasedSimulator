@@ -45,7 +45,7 @@ function(ConstraintBasedSimulator_setup_dependencies)
   endif()
 
   if(NOT TARGET qt6)
-    message("-- Adding qt6")
+    message(STATUS "Adding qt6")
 
     # Download and extract archive of Qt
     set( QT_VERSION "6.5.2" )
@@ -66,12 +66,23 @@ function(ConstraintBasedSimulator_setup_dependencies)
 
     # Configure Qt (skip building of useless modules)
     file( MAKE_DIRECTORY ${QT_BUILD_DIR} )
-    execute_process( COMMAND ${QT_SOURCE_DIR}/configure -release -c++std c++20 -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
+
+    if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+      message(STATUS "Configuring Qt for Linux")
+      execute_process( COMMAND ${QT_SOURCE_DIR}/configure -release -c++std c++20 -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
+    endif ()
+    if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+      message(STATUS "Configuring Qt for Windows")
+      execute_process( COMMAND ${QT_SOURCE_DIR}/configure.bat -release -c++std c++20 -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
+    endif ()
+
+    message(STATUS "Building Qt")
     execute_process( COMMAND cmake --build . --parallel ${JOBS_OPTION} WORKING_DIRECTORY ${QT_BUILD_DIR} )
 
     # Set necessary environment variables to use Qt
     set( ENV{QTDIR} ${QT_BUILD_DIR} )
     set( ENV{PATH} ${QT_BUILD_DIR}/bin:$ENV{PATH})
+    set( ENV{CMAKE_PREFIX_PATH} ${QT_BUILD_DIR}/bin:$ENV{CMAKE_PREFIX_PATH})
   endif()
 
 endfunction()

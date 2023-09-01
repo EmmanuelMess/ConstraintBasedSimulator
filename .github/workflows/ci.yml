@@ -40,6 +40,7 @@ jobs:
           # you can specify the version after `-` like "llvm-15.0.2".
           - llvm-15.0.2
           - gcc-11
+          - msvc
         generator:
           - "Ninja Multi-Config"
         build_type:
@@ -52,9 +53,15 @@ jobs:
           - OFF
 
         exclude:
+          # Qt broken
+          - os: windows-2019
+            compiler: llvm-15.0.2
           # mingw is determined by this author to be too buggy to support
           - os: windows-2019
             compiler: gcc-11
+          # no version available
+          - os: ubuntu-20.04
+            compiler: msvc
 
         include:
           # Add appropriate variables for gcov version required. This will intentionally break
@@ -180,6 +187,12 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt install build-essential libgl1-mesa-dev libgstreamer-gl1.0-0 libpulse-dev libxcb-glx0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-render0 libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb1 libxkbcommon-dev libxkbcommon-x11-0 libxcb-xkb-dev
+
+      - name: Setup Qt Dependencies - Windows
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_64
 
       - name: Configure CMake
         run: |
