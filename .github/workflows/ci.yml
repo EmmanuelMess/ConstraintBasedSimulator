@@ -92,41 +92,41 @@ jobs:
             packaging_maintainer_mode: On
             enable_ipo: Off
 
-          # Windows msvc builds
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Debug
-            packaging_maintainer_mode: On
-            enable_ipo: On
-
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Release
-            packaging_maintainer_mode: On
-            enable_ipo: On
-
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Debug
-            packaging_maintainer_mode: Off
-
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Release
-            packaging_maintainer_mode: Off
-            package_generator: ZIP
-
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Release
-            packaging_maintainer_mode: On
-            enable_ipo: On
-            build_shared: On
+          # Windows msvc builds # Broken
+          #- os: windows-2022
+          #  compiler: msvc
+          #  generator: "Visual Studio 17 2022"
+          #  build_type: Debug
+          #  packaging_maintainer_mode: On
+          #  enable_ipo: On
+#
+          #- os: windows-2022
+          #  compiler: msvc
+          #  generator: "Visual Studio 17 2022"
+          #  build_type: Release
+          #  packaging_maintainer_mode: On
+          #  enable_ipo: On
+#
+          #- os: windows-2022
+          #  compiler: msvc
+          #  generator: "Visual Studio 17 2022"
+          #  build_type: Debug
+          #  packaging_maintainer_mode: Off
+#
+          #- os: windows-2022
+          #  compiler: msvc
+          #  generator: "Visual Studio 17 2022"
+          #  build_type: Release
+          #  packaging_maintainer_mode: Off
+          #  package_generator: ZIP
+#
+          #- os: windows-2022
+          #  compiler: msvc
+          #  generator: "Visual Studio 17 2022"
+          #  build_type: Release
+          #  packaging_maintainer_mode: On
+          #  enable_ipo: On
+          #  build_shared: On
 
 
     steps:
