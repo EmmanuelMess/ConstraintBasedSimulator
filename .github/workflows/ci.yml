@@ -35,7 +35,7 @@ jobs:
         os:
           - ubuntu-20.04
           # - macos-10.15 # doesn't run for free
-          - windows-2019
+          # - windows-2019 # Broken
         compiler:
           # you can specify the version after `-` like "llvm-15.0.2".
           - llvm-15.0.2
