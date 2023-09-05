@@ -12,7 +12,7 @@
 namespace input_reader {
 
 class ReadInput {
-  public:
+public:
     [[nodiscard]] bool readFile(const std::filesystem::path& path);
 
     std::vector<Point> getStaticPoints() const;
@@ -20,7 +20,7 @@ class ReadInput {
     std::unordered_map<Point, Constraint> getConstraints() const;
     std::unordered_map<Point, GraphicalElement> getGraphics() const;
 
-  private:
+private:
     std::vector<Point> staticPoints;
     std::vector<Point> dynamicPoints;
     std::unordered_map<Point, Constraint> constraints;
