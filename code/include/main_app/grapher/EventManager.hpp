@@ -13,10 +13,29 @@ public:
     EventManager(EventManager&) = delete;
     void operator=(EventManager&) = delete;
 
+    /**
+     * Pause UI element activated
+     */
     Signal<void()> signalPause;
+
+    /**
+     * Set speed UI element activated
+     */
     Signal<void()> signalSetSpeed;
+
+    /**
+     * Refresh UI element activated
+     */
     Signal<void()> signalRefresh;
+
+    /**
+     * A new frame is required
+     */
     Signal<void()> signalRequireFrame;
+
+    /**
+     * A simulation state is required
+     */
     Signal<void()> signalRequireState;
 
 private:
