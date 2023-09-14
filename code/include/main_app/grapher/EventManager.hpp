@@ -31,12 +31,17 @@ public:
     /**
      * A new frame is required
      */
-    Signal<void()> signalRequireFrame;
+    Signal<void()> signalRequestFrame;
 
     /**
      * A simulation state is required
      */
-    Signal<void()> signalRequireState;
+    Signal<void()> signalRequestState;
+
+    /**
+     * A new frame has been created
+     */
+    Signal<void()> signalNewFrame;
 
 private:
     EventManager() = default;

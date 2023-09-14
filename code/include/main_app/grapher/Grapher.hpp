@@ -8,7 +8,16 @@ public:
     Grapher();
 
 private:
-    void onRequireFrame();
+    bool paused;
+    unsigned int speed;
+
+    void onSetSpeed(unsigned int newSpeed);
+
+    void onPause(bool pause);
+
+    void onRefresh();
+
+    void onRequestFrame();
 };
 
 } // grapher

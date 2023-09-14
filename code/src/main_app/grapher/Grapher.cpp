@@ -1,16 +1,27 @@
 #include "main_app/grapher/Grapher.hpp"
+
+#include <chrono>
+
 #include "main_app/grapher/EventManager.hpp"
 
 namespace grapher {
 
 Grapher::Grapher() {
-    EventManager::getInstance().signalRefresh.connect([this]() { onRequireFrame(); });
-    EventManager::getInstance().signalRequireFrame.connect([this]() { onRequireFrame(); });
 }
 
+void Grapher::onSetSpeed(unsigned int newSpeed) {
+    speed = newSpeed;
+}
 
+void Grapher::onPause(bool pause) {
+    this->paused = pause;
+}
 
-void Grapher::onRequireFrame() {
+void Grapher::onRefresh() {
+
+}
+
+void Grapher::onRequestFrame() {
 
 }
 
