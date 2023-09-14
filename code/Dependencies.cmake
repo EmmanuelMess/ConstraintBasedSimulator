@@ -85,4 +85,8 @@ function(ConstraintBasedSimulator_setup_dependencies)
     set( ENV{CMAKE_PREFIX_PATH} ${QT_BUILD_DIR}/bin:$ENV{CMAKE_PREFIX_PATH})
   endif()
 
+  if(NOT TARGET autodiff)
+    cpmaddpackage("gh:autodiff/autodiff@1.0.3")
+  endif()
+
 endfunction()
