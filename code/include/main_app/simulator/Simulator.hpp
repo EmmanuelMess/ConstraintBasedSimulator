@@ -26,6 +26,7 @@ private:
     void resetForces();
     void calculateForces(std::chrono::milliseconds deltaTime);
     void calculateConstraintForces();
+    SimulationState onRequestState() const;
 };
 }
 

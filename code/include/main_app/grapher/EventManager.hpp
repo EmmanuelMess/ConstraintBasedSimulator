@@ -3,30 +3,31 @@
 
 #include "Signal.hpp"
 
+namespace events {
 class EventManager {
 public:
-    static EventManager& getInstance() {
+    static EventManager &getInstance() {
         static EventManager instance;
         return instance;
     }
 
-    EventManager(EventManager&) = delete;
-    void operator=(EventManager&) = delete;
+    EventManager(EventManager &) = delete;
+    void operator=(EventManager &) = delete;
 
     /**
      * Pause UI element activated
      */
-    Signal<void()> signalPause;
+    Signal<void(bool isPaused)> signalPause;
 
     /**
      * Set speed UI element activated
      */
-    Signal<void()> signalSetSpeed;
+    Signal<void(unsigned int speed)> signalSetSpeed;
 
     /**
      * Refresh UI element activated
      */
-    Signal<void()> signalRefresh;
+    Signal<void(std::chrono::milliseconds deltaTime)> signalRefresh;
 
     /**
      * A new frame is required
@@ -36,7 +37,7 @@ public:
     /**
      * A simulation state is required
      */
-    Signal<void()> signalRequestState;
+    Signal<simulator::SimulationState()> signalRequestState;
 
     /**
      * A new frame has been created
@@ -46,5 +47,6 @@ public:
 private:
     EventManager() = default;
 };
+} // events
 
 #endif// CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP

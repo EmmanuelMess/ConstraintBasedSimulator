@@ -1,5 +1,6 @@
 #include "main_app/simulator/Simulator.hpp"
 
+#include "main_app/grapher/EventManager.hpp"
 #include "main_app/simulator/StateLoader.hpp"
 
 namespace simulator {
@@ -23,6 +24,8 @@ void Simulator::initialize() {
           .mass = DYNAMIC_POINT_MASS,
         });
     }
+
+    events::EventManager::getInstance().signalRequestState.connect([this] { return onRequestState(); });
 }
 
 void Simulator::step(std::chrono::milliseconds deltaTime) {
@@ -52,4 +55,8 @@ SimulationState Simulator::getCurrentState() const {
     return {};
 }
 
+SimulationState Simulator::onRequestState() const {
+    return getCurrentState();
 }
+
+} // simulator

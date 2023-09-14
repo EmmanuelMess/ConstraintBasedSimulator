@@ -1,6 +1,8 @@
 #ifndef CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP
 #define CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP
 
+#include <chrono>
+
 namespace grapher {
 
 class Grapher {
@@ -15,7 +17,7 @@ private:
 
     void onPause(bool pause);
 
-    void onRefresh();
+    void onRefresh(std::chrono::milliseconds deltaTime);
 
     void onRequestFrame();
 };
