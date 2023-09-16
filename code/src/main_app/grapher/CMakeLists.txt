@@ -6,7 +6,8 @@ add_library(ConstraintBasedSimulator::grapher ALIAS grapher)
 target_link_libraries(
     grapher
     PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_options
-            ConstraintBasedSimulator::ConstraintBasedSimulator_warnings)
+            ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
+            ConstraintBasedSimulator::simulator)
 
 
 target_include_directories(grapher ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -24,7 +25,9 @@ target_link_system_libraries(
     grapher
     PRIVATE
     spdlog::spdlog
-    eigen)
+    eigen
+    autodiff # TODO remove this when we stop testing
+)
 
 
 if(NOT BUILD_SHARED_LIBS)

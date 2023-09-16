@@ -1,3 +1,4 @@
+add_subdirectory("grapher")
 add_subdirectory("input_reader")
 add_subdirectory("simulator")
 add_subdirectory("ui")
@@ -19,6 +20,7 @@ target_include_directories(main_app ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${
 target_link_system_libraries(
   main_app
   PRIVATE
-          spdlog::spdlog)
+          spdlog::spdlog
+)
 
 target_include_directories(main_app PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")

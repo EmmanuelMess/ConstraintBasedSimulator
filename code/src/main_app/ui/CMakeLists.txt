@@ -25,7 +25,8 @@ add_library(ConstraintBasedSimulator::ui ALIAS ui)
 target_link_libraries(
     ui
     PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_options
-            ConstraintBasedSimulator::ConstraintBasedSimulator_warnings)
+            ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
+            ConstraintBasedSimulator::grapher)
 
 
 target_include_directories(ui ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -44,7 +45,10 @@ target_link_system_libraries(
     PRIVATE
     spdlog::spdlog
     Qt6::Core
-    Qt6::Widgets)
+    Qt6::Widgets
+    Eigen3::Eigen # TODO remove this when we stop testing
+    autodiff # TODO remove this when we stop testing
+)
 
 
 if(NOT BUILD_SHARED_LIBS)

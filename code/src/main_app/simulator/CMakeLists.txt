@@ -1,5 +1,6 @@
 add_library(simulator
-    Simulator.cpp)
+    Simulator.cpp
+    StateLoader.cpp)
 
 add_library(ConstraintBasedSimulator::simulator ALIAS simulator)
 
@@ -24,7 +25,7 @@ target_link_system_libraries(
     simulator
     PRIVATE
     spdlog::spdlog
-    eigen
+    Eigen3::Eigen
     autodiff)
 
 

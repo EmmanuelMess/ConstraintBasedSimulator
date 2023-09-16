@@ -1,5 +1,7 @@
 #include "main_app/simulator/Simulator.hpp"
 
+#include <spdlog/spdlog.h>
+
 #include "main_app/grapher/EventManager.hpp"
 #include "main_app/simulator/StateLoader.hpp"
 
@@ -8,29 +10,37 @@ namespace simulator {
 void Simulator::initialize() {
     const input_reader::ReadInput state = StateLoader::getLoaded();
 
-    particles.reserve(state.getStaticPoints().size() + state.getDynamicPoints().size());
-    for (const auto& point : state.getStaticPoints()) {
-        particles.emplace_back(
-          Vector2d(point.x, point.y),
-          Vector2d::Zero(),
-          STATIC_POINT_MASS,
-          point.identifier
-        );
-    }
+    const std::vector<input_reader::Point>& staticPoints = state.getStaticPoints();
+    const std::vector<input_reader::Point>& dynamicPoints = state.getDynamicPoints();
 
-    for (const auto& point : state.getDynamicPoints()) {
-        particles.emplace_back(
-          Vector2d(point.x, point.y),
-          Vector2d::Zero(),
-          DYNAMIC_POINT_MASS,
-          point.identifier
-        );
-    }
+    particles.reserve(staticPoints.size() + dynamicPoints.size());
 
-    for(const auto& [key, value] : state.getConstraints()) {
+    std::transform(staticPoints.begin(), staticPoints.end(), std::back_inserter(particles),
+      [](const input_reader::Point& point){
+        return Particle {
+            Vector2d(point.x, point.y),
+            Vector2d::Zero(),
+            STATIC_POINT_MASS,
+            point.identifier
+        };
+    });
+
+    std::transform(dynamicPoints.begin(), dynamicPoints.end(), std::back_inserter(particles),
+    [](const input_reader::Point& point){
+        return Particle {
+            Vector2d(point.x, point.y),
+            Vector2d::Zero(),
+            DYNAMIC_POINT_MASS,
+            point.identifier
+        };
+    });
+
+    for(const auto& [key, value] : std::unordered_map<input_reader::PointId, input_reader::Constraint> {
+           { "B", { input_reader::ConstraintType::DistanceConstraint, input_reader::ConstraintProperty(5.0) } }
+         }) {
         if(value.constraintType == input_reader::ConstraintType::DistanceConstraint) {
-            constraints[key] = [value](Vector2d position) {
-                const double constraint = (0.5 * (position[0] * position[0] + position[1] * position[1]) - 1);
+            constraints[key] = [value](const autodiff::var& positionX, const autodiff::var& positionY) {
+                const autodiff::var constraint = (0.5 * (positionX * positionX + positionY * positionY) - 1);
                 return constraint - std::get<input_reader::Distance>(value.properties);
             };
         }
@@ -39,9 +49,9 @@ void Simulator::initialize() {
     events::EventManager::getInstance().signalRequestState.connect([this] { return onRequestState(); });
 }
 
-void Simulator::step(std::chrono::milliseconds deltaTime) {
+void Simulator::step() {
     resetForces();
-    calculateForces(deltaTime);
+    //TODO calculateForces(deltaTime);
     calculateConstraintForces();
     // TODO calculate acceleration and apply
 }
@@ -52,10 +62,6 @@ void Simulator::resetForces() {
     }
 }
 
-void Simulator::calculateForces(std::chrono::milliseconds deltaTime) {
-    // Function of time constraints go here
-}
-
 void Simulator::calculateConstraintForces() {
     // Solve JWJ^T λ = − J̇q̇ − JWQ − k_s C − k_d  Ċ
 
@@ -64,14 +70,23 @@ void Simulator::calculateConstraintForces() {
             return particleB.identifier == key;
         });
 
-        const double constraint = constraintFunction(particle.position);
+        autodiff::var x = particle.position[0];
+        autodiff::var y = particle.position[1];
 
+        autodiff::var constraint = constraintFunction(x, y);
+        auto constraint1st = autodiff::derivatives(constraint, autodiff::wrt(x));
+
+        spdlog::info("Particle ({}, {}): Compute constraint {}", particle.position[0], particle.position[1], static_cast<double>(constraint));
+        spdlog::info("Particle ({}, {}): Compute constraint {}", particle.position[0], particle.position[1], constraint1st[0]);
     }
 
 }
 
 SimulationState Simulator::getCurrentState() const {
-    return {};
+    return {
+        .particles = particles,
+        .constraints = constraints,
+    };
 }
 
 SimulationState Simulator::onRequestState() const {

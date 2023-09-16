@@ -1,7 +1,8 @@
 #ifndef CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP
 #define CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP
 
-#include "Signal.hpp"
+#include "main_app/grapher/Signal.hpp"
+#include "main_app/simulator/SimulationState.hpp"
 
 namespace events {
 class EventManager {

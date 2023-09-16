@@ -5,15 +5,15 @@
 #include <vector>
 #include <unordered_map>
 
-#include "Constraint.hpp"
-#include "Particle.hpp"
-#include "SimulationState.hpp"
+#include "main_app/simulator/Constraint.hpp"
+#include "main_app/simulator/Particle.hpp"
+#include "main_app/simulator/SimulationState.hpp"
 
 namespace simulator {
 class Simulator {
 public:
     void initialize();
-    void step(std::chrono::milliseconds deltaTime);
+    void step();
     [[nodiscard]] SimulationState getCurrentState() const;
 
 private:
@@ -24,7 +24,6 @@ private:
     std::unordered_map<ParticleId, Constraint> constraints;
 
     void resetForces();
-    void calculateForces(std::chrono::milliseconds deltaTime);
     void calculateConstraintForces();
     SimulationState onRequestState() const;
 };

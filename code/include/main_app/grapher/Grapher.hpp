@@ -3,6 +3,8 @@
 
 #include <chrono>
 
+#include "main_app/simulator/Simulator.hpp"
+
 namespace grapher {
 
 class Grapher {
@@ -12,14 +14,15 @@ public:
 private:
     bool paused;
     unsigned int speed;
+    simulator::Simulator simulation;
 
     void onSetSpeed(unsigned int newSpeed);
 
     void onPause(bool pause);
 
-    void onRefresh(std::chrono::milliseconds deltaTime);
+    void onRefresh();
 
-    void onRequestFrame();
+    simulator::SimulationState onRequestFrame() const;
 };
 
 } // grapher

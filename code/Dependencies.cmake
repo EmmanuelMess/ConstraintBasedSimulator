@@ -40,9 +40,10 @@ function(ConstraintBasedSimulator_setup_dependencies)
     cpmaddpackage("https://github.com/foonathan/lexy/releases/download/v2022.12.1/lexy-src.zip")
   endif()
 
-  if(NOT TARGET eigen)
+  if(NOT TARGET Eigen3::Eigen)
+    set(EIGEN_BUILD_DOC OFF)
     set(BUILD_TESTING OFF)
-
+    set(EIGEN_BUILD_PKGCONFIG OFF)
     cpmaddpackage("https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip")
   endif()
 
@@ -89,9 +90,7 @@ function(ConstraintBasedSimulator_setup_dependencies)
 
   if(NOT TARGET autodiff)
     set(AUTODIFF_BUILD_PYTHON OFF)
-    cpmaddpackage(
-        "gh:autodiff/autodiff@1.0.3"
-    )
+    cpmaddpackage("gh:autodiff/autodiff@1.0.3")
   endif()
 
 endfunction()

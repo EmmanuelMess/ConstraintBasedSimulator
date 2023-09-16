@@ -17,11 +17,11 @@ input_reader::ReadInput StateLoader::getLoaded() {
 
     spdlog::info("Dynamic:");
     for(const auto& point : inputReader.getDynamicPoints()) {
-        spdlog::info("{} = ({}, {})", point.name, point.x, point.y);
+        spdlog::info("{} = ({}, {})", point.identifier, point.x, point.y);
     }
     spdlog::info("Static:");
     for(const auto& point : inputReader.getStaticPoints()) {
-        spdlog::info("{} = ({}, {})", point.name, point.x, point.y);
+        spdlog::info("{} = ({}, {})", point.identifier, point.x, point.y);
     }
 
     return inputReader;
