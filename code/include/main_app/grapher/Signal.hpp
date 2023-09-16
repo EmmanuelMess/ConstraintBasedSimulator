@@ -2,6 +2,7 @@
 #define CONSTRAINTBASEDSIMULATOR_SIGNAL_HPP
 
 #include <vector>
+#include <optional>
 #include <functional>
 
 template<typename Signature>
