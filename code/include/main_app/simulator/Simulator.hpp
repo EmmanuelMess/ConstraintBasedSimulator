@@ -21,7 +21,7 @@ private:
     static constexpr float DYNAMIC_POINT_MASS = std::numeric_limits<float>::epsilon();
 
     std::vector<Particle> particles;
-    std::unordered_map<Particle, Constraint> constraints;
+    std::unordered_map<ParticleId, Constraint> constraints;
 
     void resetForces();
     void calculateForces(std::chrono::milliseconds deltaTime);

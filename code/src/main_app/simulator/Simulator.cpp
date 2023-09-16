@@ -11,18 +11,27 @@ void Simulator::initialize() {
     particles.reserve(state.getStaticPoints().size() + state.getDynamicPoints().size());
     for (const auto& point : state.getStaticPoints()) {
         particles.push_back({
-          .position = Eigen::Vector2f(point.x, point.y),
-          .force = Eigen::Vector2f::Zero(),
+          .position = Vector2d(point.x, point.y),
+          .force = Vector2d::Zero(),
           .mass = STATIC_POINT_MASS,
         });
     }
 
     for (const auto& point : state.getDynamicPoints()) {
         particles.push_back({
-          .position = Eigen::Vector2f(point.x, point.y),
-          .force = Eigen::Vector2f::Zero(),
+          .position = Vector2d(point.x, point.y),
+          .force = Vector2d::Zero(),
           .mass = DYNAMIC_POINT_MASS,
         });
+    }
+
+    for(const auto& [key, value] : state.getConstraints()) {
+        if(value.constraintType == input_reader::ConstraintType::DistanceConstraint) {
+            constraints[key] = [value](Vector2d position) {
+                double c = (0.5 * (position[0] * position[0] + position[1] * position[1]) - 1);
+                return c - std::get<input_reader::Distance>(value.properties);
+            };
+        }
     }
 
     events::EventManager::getInstance().signalRequestState.connect([this] { return onRequestState(); });
@@ -37,7 +46,7 @@ void Simulator::step(std::chrono::milliseconds deltaTime) {
 
 void Simulator::resetForces() {
     for (auto &particle : particles) {
-        particle.force = Eigen::Vector2f::Zero();
+        particle.force = Vector2d::Zero();
     }
 }
 

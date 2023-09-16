@@ -17,14 +17,14 @@ public:
 
     std::vector<Point> getStaticPoints() const;
     std::vector<Point> getDynamicPoints() const;
-    std::unordered_map<Point, Constraint> getConstraints() const;
-    std::unordered_map<Point, GraphicalElement> getGraphics() const;
+    std::unordered_map<PointId, Constraint> getConstraints() const;
+    std::unordered_map<PointId, GraphicalElement> getGraphics() const;
 
 private:
     std::vector<Point> staticPoints;
     std::vector<Point> dynamicPoints;
-    std::unordered_map<Point, Constraint> constraints;
-    std::unordered_map<Point, GraphicalElement> graphics;
+    std::unordered_map<PointId, Constraint> constraints;
+    std::unordered_map<PointId, GraphicalElement> graphics;
 };
 
 } // input_reader

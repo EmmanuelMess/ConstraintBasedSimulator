@@ -1,13 +1,15 @@
 #ifndef CONSTRAINTBASEDSIMULATOR_PARTICLE_HPP
 #define CONSTRAINTBASEDSIMULATOR_PARTICLE_HPP
 
-#include <Eigen/Core>
+#include "main_app/simulator/ParticleId.hpp"
+#include "main_app/simulator/Vector2d.hpp"
 
 namespace simulator {
 struct Particle {
-    Eigen::Vector2f position;
-    Eigen::Vector2f force;
+    Vector2d position;
+    Vector2d force;
     float mass;
+    ParticleId identifier;
 };
 }
 

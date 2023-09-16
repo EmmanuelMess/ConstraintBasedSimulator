@@ -5,7 +5,9 @@
 
 namespace input_reader {
 
-using ConstraintProperty = std::variant<int>; // TODO define properties
+using Distance = double;
+
+using ConstraintProperty = std::variant<Distance>;
 
 } // input_reader
 

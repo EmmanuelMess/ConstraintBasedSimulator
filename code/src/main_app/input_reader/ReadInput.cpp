@@ -48,7 +48,7 @@ bool ReadInput::readFile(const std::filesystem::path &path) {
             staticPoints.emplace_back(Point{
               .x = point.xCoordinate,
               .y = point.yCoordinate,
-              .name = point.identifier,
+              .identifier = point.identifier,
             });
         }
     }
@@ -64,7 +64,7 @@ bool ReadInput::readFile(const std::filesystem::path &path) {
             dynamicPoints.emplace_back(Point{
               .x = point.xCoordinate,
               .y = point.yCoordinate,
-              .name = point.identifier,
+              .identifier = point.identifier,
             });
         }
     }
@@ -79,11 +79,11 @@ std::vector<Point> ReadInput::getStaticPoints() const { return staticPoints; }
 
 std::vector<Point> ReadInput::getDynamicPoints() const { return dynamicPoints; }
 
-std::unordered_map<Point, Constraint> ReadInput::getConstraints() const {
+std::unordered_map<PointId, Constraint> ReadInput::getConstraints() const {
     return constraints;
 }
 
-std::unordered_map<Point, GraphicalElement> ReadInput::getGraphics() const {
+std::unordered_map<PointId, GraphicalElement> ReadInput::getGraphics() const {
     return graphics;
 }
 }
