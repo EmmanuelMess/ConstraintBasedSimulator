@@ -10,19 +10,21 @@ void Simulator::initialize() {
 
     particles.reserve(state.getStaticPoints().size() + state.getDynamicPoints().size());
     for (const auto& point : state.getStaticPoints()) {
-        particles.push_back({
-          .position = Vector2d(point.x, point.y),
-          .force = Vector2d::Zero(),
-          .mass = STATIC_POINT_MASS,
-        });
+        particles.emplace_back(
+          Vector2d(point.x, point.y),
+          Vector2d::Zero(),
+          STATIC_POINT_MASS,
+          point.identifier
+        );
     }
 
     for (const auto& point : state.getDynamicPoints()) {
-        particles.push_back({
-          .position = Vector2d(point.x, point.y),
-          .force = Vector2d::Zero(),
-          .mass = DYNAMIC_POINT_MASS,
-        });
+        particles.emplace_back(
+          Vector2d(point.x, point.y),
+          Vector2d::Zero(),
+          DYNAMIC_POINT_MASS,
+          point.identifier
+        );
     }
 
     for(const auto& [key, value] : state.getConstraints()) {
