@@ -28,8 +28,8 @@ void Simulator::initialize() {
     for(const auto& [key, value] : state.getConstraints()) {
         if(value.constraintType == input_reader::ConstraintType::DistanceConstraint) {
             constraints[key] = [value](Vector2d position) {
-                double c = (0.5 * (position[0] * position[0] + position[1] * position[1]) - 1);
-                return c - std::get<input_reader::Distance>(value.properties);
+                const double constraint = (0.5 * (position[0] * position[0] + position[1] * position[1]) - 1);
+                return constraint - std::get<input_reader::Distance>(value.properties);
             };
         }
     }
@@ -57,6 +57,14 @@ void Simulator::calculateForces(std::chrono::milliseconds deltaTime) {
 void Simulator::calculateConstraintForces() {
     // Solve JWJ^T λ = − J̇q̇ − JWQ − k_s C − k_d  Ċ
 
+    for(const auto& [key, constraintFunction] : constraints) {
+        const Particle particle = *std::find_if(particles.begin(), particles.end(), [&key](const Particle& particleB){
+            return particleB.identifier == key;
+        });
+
+        const double constraint = constraintFunction(particle.position);
+
+    }
 
 }
 

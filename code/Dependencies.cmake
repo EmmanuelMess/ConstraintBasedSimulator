@@ -41,6 +41,8 @@ function(ConstraintBasedSimulator_setup_dependencies)
   endif()
 
   if(NOT TARGET eigen)
+    set(BUILD_TESTING OFF)
+
     cpmaddpackage("https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip")
   endif()
 
@@ -86,7 +88,10 @@ function(ConstraintBasedSimulator_setup_dependencies)
   endif()
 
   if(NOT TARGET autodiff)
-    cpmaddpackage("gh:autodiff/autodiff@1.0.3")
+    set(AUTODIFF_BUILD_PYTHON OFF)
+    cpmaddpackage(
+        "gh:autodiff/autodiff@1.0.3"
+    )
   endif()
 
 endfunction()
