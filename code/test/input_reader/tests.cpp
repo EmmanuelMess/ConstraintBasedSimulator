@@ -20,7 +20,7 @@ TEST_CASE("Read file", "[InputReader::readFile]") {
         input_reader::ReadInput inputReader;
         REQUIRE(inputReader.readFile(path));
 
-        const std::vector<input_reader::Point> dynamicPoints = { { .x = 0, .y = 0, .name = "A"} };
+        const std::vector<input_reader::Point> dynamicPoints = { { .x = 0, .y = 0, .identifier = "A"} };
         REQUIRE(inputReader.getDynamicPoints() == dynamicPoints);
 
         REQUIRE(inputReader.getStaticPoints().empty());
@@ -48,12 +48,12 @@ TEST_CASE("Read file", "[InputReader::readFile]") {
         REQUIRE(inputReader.readFile(path));
 
         const std::vector<input_reader::Point> staticPoints = {
-            { .x = 0, .y = 0, .name = "A" }, { .x = 200, .y = 800, .name = "D" }
+            { .x = 0, .y = 0, .identifier = "A" }, { .x = 200, .y = 800, .identifier = "D" }
         };
         REQUIRE(inputReader.getStaticPoints() == staticPoints);
 
         const std::vector<input_reader::Point> dynamicPoints = {
-            { .x = 3.0, .y = -90, .name = "B"}, { .x = 0.5, .y = 5000, .name = "C" }
+            { .x = 3.0, .y = -90, .identifier = "B"}, { .x = 0.5, .y = 5000, .identifier = "C" }
         };
         REQUIRE(inputReader.getDynamicPoints() == dynamicPoints);
 
