@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_PARTICLE_HPP
-#define CONSTRAINTBASEDSIMULATOR_PARTICLE_HPP
+#pragma once
 
 #include "main_app/simulator/ParticleId.hpp"
 #include "main_app/simulator/Vector2d.hpp"
@@ -12,5 +11,3 @@ struct Particle {
     ParticleId identifier;
 };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_PARTICLE_HPP

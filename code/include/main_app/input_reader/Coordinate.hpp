@@ -1,10 +1,7 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_COORDINATE_HPP
-#define CONSTRAINTBASEDSIMULATOR_COORDINATE_HPP
+#pragma once
 
 namespace input_reader {
 
 using Coordinate = double;
 
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_COORDINATE_HPP

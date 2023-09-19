@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_CONSTRAINTPROPERTY_HPP
-#define CONSTRAINTBASEDSIMULATOR_CONSTRAINTPROPERTY_HPP
+#pragma once
 
 #include <variant>
 
@@ -10,5 +9,3 @@ using Distance = double;
 using ConstraintProperty = std::variant<Distance>;
 
 } // input_reader
-
-#endif// CONSTRAINTBASEDSIMULATOR_CONSTRAINTPROPERTY_HPP

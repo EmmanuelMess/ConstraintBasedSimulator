@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_STATELOADER_HPP
-#define CONSTRAINTBASEDSIMULATOR_STATELOADER_HPP
+#pragma once
 
 #include "main_app/input_reader/ReadInput.hpp"
 
@@ -9,5 +8,3 @@ public:
     static input_reader::ReadInput getLoaded();
 };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_STATELOADER_HPP

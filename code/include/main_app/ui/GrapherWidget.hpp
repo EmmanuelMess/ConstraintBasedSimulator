@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_GRAPHERWIDGET_HPP
-#define CONSTRAINTBASEDSIMULATOR_GRAPHERWIDGET_HPP
+#pragma once
 
 #include <QWidget>
 
@@ -14,5 +13,3 @@ class GrapherWidget : public QWidget {
     void paintEvent(QPaintEvent *) override;
 };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_GRAPHERWIDGET_HPP

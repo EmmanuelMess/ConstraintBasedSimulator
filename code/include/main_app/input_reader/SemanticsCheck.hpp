@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_SEMANTICSCHECK_HPP
-#define CONSTRAINTBASEDSIMULATOR_SEMANTICSCHECK_HPP
+#pragma once
 
 #include "main_app/input_reader/LexyComponents.hpp"
 
@@ -8,5 +7,3 @@ class SemanticsCheck {
     static bool checkSemantics(const ast::SimulationState& simulationState);
 };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_SEMANTICSCHECK_HPP

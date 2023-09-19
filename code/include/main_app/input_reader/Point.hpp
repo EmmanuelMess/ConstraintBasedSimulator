@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 #include "main_app/input_reader/Coordinate.hpp"

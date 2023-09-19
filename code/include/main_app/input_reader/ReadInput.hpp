@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_READINPUT_HPP
-#define CONSTRAINTBASEDSIMULATOR_READINPUT_HPP
+#pragma once
 
 #include <filesystem>
 #include <vector>
@@ -28,5 +27,3 @@ private:
 };
 
 } // input_reader
-
-#endif// CONSTRAINTBASEDSIMULATOR_READINPUT_HPP

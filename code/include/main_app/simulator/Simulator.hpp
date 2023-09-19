@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_SIMULATOR_HPP
-#define CONSTRAINTBASEDSIMULATOR_SIMULATOR_HPP
+#pragma once
 
 #include <chrono>
 #include <vector>
@@ -35,5 +34,3 @@ private:
     friend class EventLatch;
 };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_SIMULATOR_HPP

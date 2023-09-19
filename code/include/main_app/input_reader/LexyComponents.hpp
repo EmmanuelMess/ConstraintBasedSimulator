@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_LEXYCOMPONENTS_HPP
-#define CONSTRAINTBASEDSIMULATOR_LEXYCOMPONENTS_HPP
+#pragma once
 
 #include <string>
 #include <variant>
@@ -129,4 +128,3 @@ namespace ast {
     };
 } // parser
 }
-#endif// CONSTRAINTBASEDSIMULATOR_LEXYCOMPONENTS_HPP

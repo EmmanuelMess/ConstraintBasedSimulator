@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_SIGNAL_HPP
-#define CONSTRAINTBASEDSIMULATOR_SIGNAL_HPP
+#pragma once
 
 #include <vector>
 #include <optional>
@@ -37,5 +36,3 @@ private:
         return { };
     }
 };
-
-#endif// CONSTRAINTBASEDSIMULATOR_SIGNAL_HPP

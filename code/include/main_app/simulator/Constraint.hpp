@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_SIMULATOR_CONSTRAINT_HPP
-#define CONSTRAINTBASEDSIMULATOR_SIMULATOR_CONSTRAINT_HPP
+#pragma once
 
 #include <functional>
 
@@ -10,4 +9,3 @@
 namespace simulator {
 using Constraint = std::function<autodiff::var(autodiff::var positionX, autodiff::var positionY)>;
 }
-#endif// CONSTRAINTBASEDSIMULATOR_SIMULATOR_CONSTRAINT_HPP

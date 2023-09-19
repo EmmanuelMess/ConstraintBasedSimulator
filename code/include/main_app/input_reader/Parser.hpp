@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_PARSER_HPP
-#define CONSTRAINTBASEDSIMULATOR_PARSER_HPP
+#pragma once
 
 #include <optional>
 #include <filesystem>
@@ -13,5 +12,3 @@ namespace input_reader::internal::parser {
         static std::optional<ast::SimulationState> readFile(const std::filesystem::path &path);
     };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_PARSER_HPP

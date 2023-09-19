@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_EVENTLATCH_HPP
-#define CONSTRAINTBASEDSIMULATOR_EVENTLATCH_HPP
+#pragma once
 
 namespace simulator {
 /**
@@ -11,5 +10,3 @@ public:
     static void eventLatch();
 };
 } // simulator
-
-#endif// CONSTRAINTBASEDSIMULATOR_EVENTLATCH_HPP

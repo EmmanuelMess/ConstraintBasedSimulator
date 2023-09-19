@@ -1,8 +1,5 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_UIRUNNER_HPP
-#define CONSTRAINTBASEDSIMULATOR_UIRUNNER_HPP
+#pragma once
 
 namespace ui {
 int runUi(int argc, char *argv[]);
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_UIRUNNER_HPP

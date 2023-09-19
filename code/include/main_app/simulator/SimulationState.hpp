@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_SIMULATIONSTATE_HPP
-#define CONSTRAINTBASEDSIMULATOR_SIMULATIONSTATE_HPP
+#pragma once
 
 #include <vector>
 
@@ -13,5 +12,3 @@ struct SimulationState {
     std::vector<ParticlePosition> particlePositions;
 };
 } // simulator
-
-#endif// CONSTRAINTBASEDSIMULATOR_SIMULATIONSTATE_HPP

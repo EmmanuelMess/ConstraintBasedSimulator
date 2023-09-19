@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_MAINWINDOW_HPP
-#define CONSTRAINTBASEDSIMULATOR_MAINWINDOW_HPP
+#pragma once
 
 #include <QMainWindow>
 #include <QtCore>
@@ -23,5 +22,3 @@ class MainWindow : public QMainWindow {
     QPushButton speedButton;
 };
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_MAINWINDOW_HPP

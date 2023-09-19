@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_INPUT_READER_CONSTRAINT_HPP
-#define CONSTRAINTBASEDSIMULATOR_INPUT_READER_CONSTRAINT_HPP
+#pragma once
 
 #include "main_app/input_reader/ConstraintType.hpp"
 #include "main_app/input_reader/ConstraintProperty.hpp"
@@ -12,5 +11,3 @@ struct Constraint {
 };
 
 } // input_reader
-
-#endif// CONSTRAINTBASEDSIMULATOR_INPUT_READER_CONSTRAINT_HPP

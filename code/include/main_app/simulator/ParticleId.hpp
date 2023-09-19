@@ -1,10 +1,7 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_PARTICLEID_HPP
-#define CONSTRAINTBASEDSIMULATOR_PARTICLEID_HPP
+#pragma once
 
 #include <string>
 
 namespace simulator {
 using ParticleId = std::string;
 }
-
-#endif// CONSTRAINTBASEDSIMULATOR_PARTICLEID_HPP

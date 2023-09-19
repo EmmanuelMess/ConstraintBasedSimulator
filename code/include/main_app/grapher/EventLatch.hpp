@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_EVENTLATCH_HPP
-#define CONSTRAINTBASEDSIMULATOR_EVENTLATCH_HPP
+#pragma once
 
 namespace grapher {
 /**
@@ -11,5 +10,3 @@ public:
     static void eventLatch();
 };
 } // grapher
-
-#endif// CONSTRAINTBASEDSIMULATOR_EVENTLATCH_HPP

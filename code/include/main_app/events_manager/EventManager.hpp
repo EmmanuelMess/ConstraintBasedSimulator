@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP
-#define CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP
+#pragma once
 
 #include <chrono>
 
@@ -56,5 +55,3 @@ private:
     EventManager() = default;
 };
 } // events_manager
-
-#endif// CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP

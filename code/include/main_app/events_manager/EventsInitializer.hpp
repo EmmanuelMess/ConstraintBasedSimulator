@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_EVENTSINITIALIZER_HPP
-#define CONSTRAINTBASEDSIMULATOR_EVENTSINITIALIZER_HPP
+#pragma once
 
 namespace events_manager {
 
@@ -8,5 +7,3 @@ public:
     EventsInitializer();
 };
 } // events_manager
-
-#endif// CONSTRAINTBASEDSIMULATOR_EVENTSINITIALIZER_HPP

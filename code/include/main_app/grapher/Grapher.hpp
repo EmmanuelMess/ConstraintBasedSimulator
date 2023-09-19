@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP
-#define CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP
+#pragma once
 
 #include "main_app/simulator/SimulationState.hpp"
 #include <chrono>
@@ -31,4 +30,3 @@ private:
 };
 
 } // grapher
-#endif// CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP

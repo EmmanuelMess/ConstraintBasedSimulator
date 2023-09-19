@@ -1,5 +1,4 @@
-#ifndef CONSTRAINTBASEDSIMULATOR_CONSTRAINTTYPE_HPP
-#define CONSTRAINTBASEDSIMULATOR_CONSTRAINTTYPE_HPP
+#pragma once
 
 namespace input_reader {
 enum ConstraintType {
@@ -8,5 +7,3 @@ enum ConstraintType {
 };
 
 } // input_reader
-
-#endif// CONSTRAINTBASEDSIMULATOR_CONSTRAINTTYPE_HPP
