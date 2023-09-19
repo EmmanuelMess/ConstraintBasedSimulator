@@ -9,12 +9,15 @@
 // the source template at `configured_files/config.hpp.in`.
 #include <internal_use_only/config.hpp>
 
+#include "main_app/events_manager/EventsInitializer.hpp"
 #include "main_app/input_reader/ReadInput.hpp"
 #include "main_app/ui/UiRunner.hpp"
 
 // NOLINTNEXTLINE(bugprone-exception-escape)
 int main(int argc, char *argv[]) {
     try {
+        const events_manager::EventsInitializer eventsInitializer;
+
         const auto path = std::filesystem::path("/fast/emmanuel/Projects/GitHub/ConstraintBasedSimulator/examples/example1.simulation");
         input_reader::ReadInput inputReader;
         const bool result = inputReader.readFile(path);

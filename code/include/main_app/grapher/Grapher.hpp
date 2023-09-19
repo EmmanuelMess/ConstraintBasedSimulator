@@ -1,11 +1,12 @@
 #ifndef CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP
 #define CONSTRAINTBASEDSIMULATOR_GRAPHER_HPP
 
+#include "main_app/simulator/SimulationState.hpp"
 #include <chrono>
 
-#include "main_app/simulator/Simulator.hpp"
-
 namespace grapher {
+
+class EventLatch;
 
 class Grapher {
 public:
@@ -14,15 +15,19 @@ public:
 private:
     bool paused;
     unsigned int speed;
-    simulator::Simulator simulation;
 
     void onSetSpeed(unsigned int newSpeed);
 
     void onPause(bool pause);
 
-    void onRefresh();
+    void onRefresh() const;
 
-    simulator::SimulationState onRequestFrame() const;
+    static void onSimulationResult(const simulator::SimulationState& state);
+
+    /**
+     * This is so that events_manager can be registered to call private class memebers
+     */
+    friend class EventLatch;
 };
 
 } // grapher

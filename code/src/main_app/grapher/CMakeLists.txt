@@ -1,4 +1,5 @@
 add_library(grapher
+    EventLatch.cpp
     Grapher.cpp)
 
 add_library(ConstraintBasedSimulator::grapher ALIAS grapher)
@@ -26,7 +27,6 @@ target_link_system_libraries(
     PRIVATE
     spdlog::spdlog
     eigen
-    autodiff # TODO remove this when we stop testing
 )
 
 

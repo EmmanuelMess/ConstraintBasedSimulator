@@ -1,3 +1,4 @@
+add_subdirectory("events_manager")
 add_subdirectory("grapher")
 add_subdirectory("input_reader")
 add_subdirectory("simulator")
@@ -11,6 +12,7 @@ target_link_libraries(
   PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_options
           ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
           ConstraintBasedSimulator::input_reader
+          ConstraintBasedSimulator::events_manager
           ConstraintBasedSimulator::ui)
 
 

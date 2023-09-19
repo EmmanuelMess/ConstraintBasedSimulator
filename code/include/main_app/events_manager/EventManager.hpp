@@ -1,10 +1,12 @@
 #ifndef CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP
 #define CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP
 
-#include "main_app/grapher/Signal.hpp"
+#include <chrono>
+
+#include "main_app/events_manager/Signal.hpp"
 #include "main_app/simulator/SimulationState.hpp"
 
-namespace events {
+namespace events_manager {
 class EventManager {
 public:
     static EventManager &getInstance() {
@@ -31,23 +33,28 @@ public:
     Signal<void(std::chrono::milliseconds deltaTime)> signalRefresh;
 
     /**
+     * Step simulation
+     */
+    Signal<void(std::chrono::milliseconds deltaTime)> signalStep;
+
+    /**
      * A new frame is required
      */
     Signal<void()> signalRequestFrame;
 
     /**
-     * A simulation state is required
+     * A simulation state was generated
      */
-    Signal<simulator::SimulationState()> signalRequestState;
+    Signal<void(simulator::SimulationState)> signalSimulationResult;
 
     /**
      * A new frame has been created
      */
-    Signal<void()> signalNewFrame;
+    Signal<void(simulator::SimulationState)> signalNewFrame;
 
 private:
     EventManager() = default;
 };
-} // events
+} // events_manager
 
 #endif// CONSTRAINTBASEDSIMULATOR_EVENTMANAGER_HPP

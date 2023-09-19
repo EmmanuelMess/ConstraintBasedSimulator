@@ -1,20 +1,14 @@
 #include "main_app/grapher/Grapher.hpp"
+#include "main_app/events_manager/EventManager.hpp"
 
 #include <chrono>
-
-#include "main_app/grapher/EventManager.hpp"
 
 namespace grapher {
 
 Grapher::Grapher()
   : paused(true)
   , speed(1) {
-    events::EventManager::getInstance().signalSetSpeed.connect([this](unsigned int newSpeed) { onSetSpeed(newSpeed); });
-    events::EventManager::getInstance().signalPause.connect([this](bool isPaused) { onPause(isPaused); });
-    events::EventManager::getInstance().signalRefresh.connect([this](std::chrono::milliseconds) { onRefresh(); });
-    events::EventManager::getInstance().signalRequestFrame.connect([this]() { onRequestFrame(); });
 
-    simulation.initialize();
 }
 
 void Grapher::onSetSpeed(unsigned int newSpeed) {
@@ -25,15 +19,14 @@ void Grapher::onPause(bool pause) {
     this->paused = pause;
 }
 
-void Grapher::onRefresh() {
+void Grapher::onRefresh() const {
     if(!paused) {
-        simulation.step();
+        events_manager::EventManager::getInstance().signalStep(std::chrono::milliseconds(100));
     }
 }
 
-simulator::SimulationState Grapher::onRequestFrame() const {
-    const simulator::SimulationState state = simulation.getCurrentState();
-    return state;
+void Grapher::onSimulationResult(const simulator::SimulationState& state) {
+    events_manager::EventManager::getInstance().signalNewFrame(state);
 }
 
 } // grapher

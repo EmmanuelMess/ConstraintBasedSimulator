@@ -2,7 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include "main_app/grapher/EventManager.hpp"
+#include "main_app/events_manager/EventManager.hpp"
 #include "main_app/simulator/StateLoader.hpp"
 
 namespace simulator {
@@ -45,8 +45,6 @@ void Simulator::initialize() {
             };
         }
     }
-
-    events::EventManager::getInstance().signalRequestState.connect([this] { return onRequestState(); });
 }
 
 void Simulator::step() {
@@ -54,6 +52,8 @@ void Simulator::step() {
     //TODO calculateForces(deltaTime);
     calculateConstraintForces();
     // TODO calculate acceleration and apply
+
+    events_manager::EventManager::getInstance().signalSimulationResult(getCurrentState());
 }
 
 void Simulator::resetForces() {
@@ -83,9 +83,17 @@ void Simulator::calculateConstraintForces() {
 }
 
 SimulationState Simulator::getCurrentState() const {
+    std::vector<SimulationState::ParticlePosition> particlePositions;
+    std::transform(particles.begin(), particles.end(), std::back_inserter(particlePositions),
+      [](const Particle& particle){
+          return SimulationState::ParticlePosition {
+              .x = particle.position[0],
+              .y = particle.position[1],
+          };
+      });
+
     return {
-        .particles = particles,
-        .constraints = constraints,
+        .particlePositions = particlePositions,
     };
 }
 

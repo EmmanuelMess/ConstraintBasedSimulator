@@ -10,6 +10,8 @@
 #include "main_app/simulator/SimulationState.hpp"
 
 namespace simulator {
+class EventLatch;
+
 class Simulator {
 public:
     void initialize();
@@ -26,6 +28,11 @@ private:
     void resetForces();
     void calculateConstraintForces();
     SimulationState onRequestState() const;
+
+    /**
+     * This is so that events_manager can be registered to call private class memebers
+     */
+    friend class EventLatch;
 };
 }
 

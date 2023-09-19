@@ -46,8 +46,6 @@ target_link_system_libraries(
     spdlog::spdlog
     Qt6::Core
     Qt6::Widgets
-    Eigen3::Eigen # TODO remove this when we stop testing
-    autodiff # TODO remove this when we stop testing
 )
 
 

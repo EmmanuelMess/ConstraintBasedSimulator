@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QtWidgets>
 
-#include "main_app/grapher/EventManager.hpp"
+#include "main_app/events_manager/EventManager.hpp"
 #include "main_app/grapher/Grapher.hpp"
 #include "main_app/ui/MainWindow.hpp"
 
@@ -15,14 +15,12 @@ int runUi(int argc, char *argv[]) {
 
     {
         // TODO test
-        grapher::Grapher grapher;
-
-        events::EventManager::getInstance().signalPause(false);
-        events::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
-        events::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
-        events::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
-        events::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
-        events::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
+        events_manager::EventManager::getInstance().signalPause(false);
+        events_manager::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
+        events_manager::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
+        events_manager::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
+        events_manager::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
+        events_manager::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(100));
     }
 
     const QApplication app(argc, argv);
