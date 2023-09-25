@@ -48,7 +48,7 @@ grapher::DrawableSimulation Grapher::convert(const simulator::SimulationState& s
         const double newPositionX = maxX > 0? position.x / maxX : 0.0;
         const double newPositionY = maxY > 0? position.y / maxY : 0.0;
 
-        drawable.particlePositions.emplace_back(newPositionX, newPositionY);
+        drawable.particlePositions.emplace_back(grapher::DrawableSimulation::ParticlePosition {newPositionX, newPositionY});
     }
 
     return drawable;
