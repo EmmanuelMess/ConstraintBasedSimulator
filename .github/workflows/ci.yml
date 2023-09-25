@@ -4,13 +4,12 @@ on:
   release:
     types: [published]
   push:
-    tags:
     branches:
       - main
       - develop
 
 env:
-  CLANG_TIDY_VERSION: "15.0.2"
+  CLANG_TIDY_VERSION: "16.0.6"
   QT_VERSION: "6.5.2"
   VERBOSE: 1
 
@@ -38,7 +37,7 @@ jobs:
           # - windows-2019 # Broken
         compiler:
           # you can specify the version after `-` like "llvm-15.0.2".
-          - llvm-15.0.2
+          - llvm-16.0.6
           - gcc-11
           - msvc
         generator:
@@ -55,7 +54,7 @@ jobs:
         exclude:
           # Qt broken
           - os: windows-2019
-            compiler: llvm-15.0.2
+            compiler: llvm-16.0.6
           # mingw is determined by this author to be too buggy to support
           - os: windows-2019
             compiler: gcc-11
@@ -70,7 +69,7 @@ jobs:
             gcov_executable: gcov
             enable_ipo: On
 
-          - compiler: llvm-15.0.2
+          - compiler: llvm-16.0.6
             enable_ipo: Off
             gcov_executable: "llvm-cov gcov"
 
