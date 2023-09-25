@@ -14,11 +14,14 @@ qt_add_library(ui STATIC
     UiRunner.cpp
     MainWindow.cpp
     GrapherWidget.cpp
+    SimulationTimer.cpp
 
     # HACK adding headers here is required for Q_OBJECT
     ${PROJECT_SOURCE_DIR}/include/main_app/ui/UiRunner.hpp
     ${PROJECT_SOURCE_DIR}/include/main_app/ui/MainWindow.hpp
-    ${PROJECT_SOURCE_DIR}/include/main_app/ui/GrapherWidget.hpp)
+    ${PROJECT_SOURCE_DIR}/include/main_app/ui/GrapherWidget.hpp
+    ${PROJECT_SOURCE_DIR}/include/main_app/ui/SimulationTimer.hpp
+)
 
 add_library(ConstraintBasedSimulator::ui ALIAS ui)
 

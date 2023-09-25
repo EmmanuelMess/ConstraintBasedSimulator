@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DrawableSimulation.hpp"
 #include "main_app/simulator/SimulationState.hpp"
 #include <chrono>
 
@@ -22,6 +23,8 @@ private:
     void onRefresh() const;
 
     static void onSimulationResult(const simulator::SimulationState& state);
+
+    static grapher::DrawableSimulation convert(const simulator::SimulationState& state);
 
     /**
      * This is so that events_manager can be registered to call private class memebers

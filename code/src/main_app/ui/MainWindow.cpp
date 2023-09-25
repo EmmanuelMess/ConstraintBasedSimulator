@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     , grapherWidget()
     , pauseButton(QApplication::translate("MainWindow", "Pause"))
     , speedButton(QApplication::translate("MainWindow", "Change speed"))
-    , isPaused(true)
+    , isPaused(false)
     , currentSpeed(SimulationSpeed::SPEED_X1)
 {
     layoutButtons.addWidget(&pauseButton);
@@ -32,14 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::onClickedPause() {
-    spdlog::info("Pause clicked {} -> {}", isPaused, !isPaused);
+    spdlog::debug("Pause clicked {} -> {}", isPaused, !isPaused);
     isPaused = !isPaused;
     events_manager::EventManager::getInstance().signalPause(isPaused);
 }
 
 void MainWindow::onClickedSpeed() {
     const auto newSpeed = static_cast<SimulationSpeed>((static_cast<unsigned int>(currentSpeed) + 1) % static_cast<unsigned int>(SimulationSpeed::LAST_ELEMENT));
-    spdlog::info("Speed clicked {} -> {}", currentSpeed, newSpeed);
+    spdlog::debug("Speed clicked {} -> {}", currentSpeed, newSpeed);
     currentSpeed = newSpeed;
     events_manager::EventManager::getInstance().signalSetSpeed(currentSpeed);
 }

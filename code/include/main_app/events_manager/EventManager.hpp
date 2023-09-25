@@ -4,6 +4,7 @@
 
 #include "main_app/events_manager/Signal.hpp"
 #include "main_app/simulator/SimulationState.hpp"
+#include "main_app/grapher/DrawableSimulation.hpp"
 
 namespace events_manager {
 class EventManager {
@@ -49,7 +50,7 @@ public:
     /**
      * A new frame has been created
      */
-    Signal<void(simulator::SimulationState)> signalNewFrame;
+    Signal<void(const grapher::DrawableSimulation&)> signalNewFrame;
 
 private:
     EventManager() = default;
