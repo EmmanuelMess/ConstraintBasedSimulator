@@ -60,4 +60,38 @@ TEST_CASE("Read file", "[InputReader::readFile]") {
         REQUIRE(inputReader.getConstraints().empty());
         REQUIRE(inputReader.getGraphics().empty());
     }
+
+    SECTION("distance constraints") {
+        std::error_code error;
+        const std::string path = std::filesystem::temp_directory_path(error) / "example.simulator";
+        REQUIRE(error.value() == 0);
+
+        {
+            std::ofstream output(path);
+            output << "A = (0, 0)" << '\n'
+                   << "B = (3.0, -90)" << '\n'
+                   << "C = (0.5, 5000)" << '\n'
+                   << "D = (200, 800)" << '\n'
+                   << "static A" << '\n'
+                   << "static D" << '\n'
+                   << "constraint distance A B == 10.0" << '\n;
+            output.close();
+        }
+
+        input_reader::ReadInput inputReader;
+        REQUIRE(inputReader.readFile(path));
+
+        const std::vector<input_reader::Point> staticPoints = {
+            { .x = 0, .y = 0, .identifier = "A" }, { .x = 200, .y = 800, .identifier = "D" }
+        };
+        REQUIRE(inputReader.getStaticPoints() == staticPoints);
+
+        const std::vector<input_reader::Point> dynamicPoints = {
+            { .x = 3.0, .y = -90, .identifier = "B"}, { .x = 0.5, .y = 5000, .identifier = "C" }
+        };
+        REQUIRE(inputReader.getDynamicPoints() == dynamicPoints);
+
+        REQUIRE(inputReader.getConstraints().empty());
+        REQUIRE(inputReader.getGraphics().empty());
+    }
 }
