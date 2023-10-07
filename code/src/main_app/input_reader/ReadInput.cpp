@@ -10,6 +10,8 @@
 
 namespace input_reader {
 bool ReadInput::readFile(const std::filesystem::path &path) {
+    spdlog::info("Loading simulation file {}", path.string());
+
     const auto statementsOptional = internal::parser::Parser::readFile(path);
 
     if (!statementsOptional) {
