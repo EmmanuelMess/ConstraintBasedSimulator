@@ -8,7 +8,7 @@
 
 namespace simulator {
 input_reader::ReadInput StateLoader::getLoaded() {
-    const auto path = std::filesystem::path("/fast/emmanuel/Projects/GitHub/ConstraintBasedSimulator/examples/example1.simulation");
+    const auto path = std::filesystem::path("sample.simulation");
     input_reader::ReadInput inputReader;
     const bool result = inputReader.readFile(path);
     if(!result) {

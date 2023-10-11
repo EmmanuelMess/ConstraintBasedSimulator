@@ -67,6 +67,8 @@ add_subdirectory(configured_files)
 # Adding the src:
 add_subdirectory(src)
 
+file(COPY ${CMAKE_SOURCE_DIR}/sample.simulation DESTINATION ${CMAKE_BINARY_DIR}/src/main_app)
+
 # Don't even look at tests if we're not top level
 if(NOT PROJECT_IS_TOP_LEVEL)
   return()
