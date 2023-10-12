@@ -51,8 +51,22 @@ namespace ast {
         Decimal size;
     };
 
+    struct Bar {
+        Identifier pointA;
+        Identifier pointB;
+    };
+
+    struct Circle {
+        Identifier point;
+        Decimal radius;
+    };
+
+    struct GraphicalStatement {
+        std::variant<Circle, Bar> value;
+    };
+
     struct Statement {
-        std::variant<Point, StaticQualifiedPoint, Constraint> value;
+        std::variant<Point, StaticQualifiedPoint, Constraint, GraphicalStatement> value;
 
         template<typename T> explicit Statement(T specificValue) : value(std::move(specificValue)) {}
     };
@@ -60,11 +74,12 @@ namespace ast {
     using SimulationState = std::vector<Statement>;
 } // ast
 
-    namespace parser {
+namespace parser {
     namespace dsl = lexy::dsl;
 
     constexpr auto staticReserved = LEXY_LIT("static");
     constexpr auto constraintReserved = LEXY_LIT("constraint");
+    constexpr auto showReserved = LEXY_LIT("show");
 
     constexpr auto distanceReserved = LEXY_LIT("distance");
     constexpr auto forceReserved = LEXY_LIT("force");
@@ -74,6 +89,10 @@ namespace ast {
     constexpr auto higherThanReserved = LEXY_LIT(">");
     constexpr auto lessOrEqualThanReserved = LEXY_LIT("<=");
     constexpr auto higherOrEqualThanReserved = LEXY_LIT(">=");
+
+    constexpr auto barReserved = LEXY_LIT("bar");
+    constexpr auto circleReserved = LEXY_LIT("circle");
+    constexpr auto radiusReserved = LEXY_LIT("radius");
 
     struct Identifier : lexy::token_production {
         static constexpr auto rule = [] {
@@ -189,19 +208,62 @@ namespace ast {
         static constexpr auto value = lexy::as_aggregate<ast::Constraint>;
     };
 
+    struct Bar {
+        static constexpr auto rule = [] {
+            auto ws = dsl::whitespace(dsl::ascii::space);
+            auto condition = dsl::peek(barReserved + ws + dsl::p<Identifier> + ws + dsl::p<Identifier>);
+
+            auto pointA = (dsl::member<&ast::Bar::pointA> = dsl::p<Identifier>);
+            auto pointB = (dsl::member<&ast::Bar::pointB> = dsl::p<Identifier>);
+
+            return condition >> (barReserved + pointA + pointB);
+        }();
+        static constexpr auto value = lexy::as_aggregate<ast::Bar>;
+    };
+
+    struct Circle {
+        static constexpr auto rule = [] {
+            auto ws = dsl::whitespace(dsl::ascii::space);
+            auto condition = dsl::peek(circleReserved + ws + dsl::p<Identifier> + ws + radiusReserved + ws + dsl::p<Decimal>);
+
+            auto point = (dsl::member<&ast::Circle::point> = dsl::p<Identifier>);
+            auto radius = (dsl::member<&ast::Circle::radius> = dsl::p<Decimal>);
+
+            return condition >> (circleReserved + point + radiusReserved + radius);
+        }();
+        static constexpr auto value = lexy::as_aggregate<ast::Circle>;
+    };
+
+    struct GraphicalStatement {
+        struct InvalidGraphicalStatement {
+            static LEXY_CONSTEVAL auto name() { return "statement is not bar or circle"; }
+        };
+
+        static constexpr auto rule = [] {
+            auto ws = dsl::whitespace(dsl::ascii::space);
+            auto condition = dsl::peek(showReserved + ws);
+
+            auto circle = (dsl::member<&ast::GraphicalStatement::value> = dsl::p<Circle>);
+            auto bar = (dsl::member<&ast::GraphicalStatement::value> = dsl::p<Bar>);
+
+            return condition >> (showReserved + (circle | bar | dsl::error<InvalidGraphicalStatement>));
+        }();
+        static constexpr auto value = lexy::as_aggregate<ast::GraphicalStatement>;
+    };
+
     struct Statement {
         struct InvalidStatement {
             static LEXY_CONSTEVAL auto name() { return "statement is not point, qualifier, constraint or graphical element"; }
         };
 
         static constexpr auto rule = [] {
-            return dsl::p<StaticQualifiedPoint> | dsl::p<Point> | dsl::p<Constraint> | dsl::error<InvalidStatement>;
+            return dsl::p<StaticQualifiedPoint> | dsl::p<Point> | dsl::p<Constraint> | dsl::p<GraphicalStatement> | dsl::error<InvalidStatement>;
         }();
         static constexpr auto value = lexy::construct<ast::Statement>;
     };
 
     /**
-         * Entrypoint
+      * Entrypoint
      */
     struct SimulationState {
         static constexpr auto whitespace = dsl::ascii::blank / dsl::ascii::newline;
