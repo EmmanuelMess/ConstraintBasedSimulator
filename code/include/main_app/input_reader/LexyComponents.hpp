@@ -4,6 +4,8 @@
 #include <variant>
 #include <vector>
 #include <cmath>
+#include <memory>
+#include <optional>
 
 #include <lexy/action/parse.hpp>
 #include <lexy/callback.hpp>
@@ -31,8 +33,8 @@ namespace ast {
     };
 
     enum ConstraintType {
-        FORCE,
-        DISTANCE,
+        FORCE_CONSTRAINT,
+        DISTANCE_CONSTRAINT,
     };
 
     enum ConstraintOperator {
@@ -43,12 +45,75 @@ namespace ast {
         HIGHER_OR_EQUAL_THAN,
     };
 
+    struct ConstantConstraint {
+        ConstraintOperator constraintOperator;
+        Decimal size;
+    };
+
+    enum PropertyIdentifier {
+        TIME_PROPERTY,
+        DISTANCE_PROPERTY
+    };
+
+    enum UnaryOperator {
+        SIN, COS, TAN,
+        ASIN, ACOS, ATAN,
+        SINH, COSH, TANH,
+        LN, LOG, EXP, SQRT
+    };
+
+    enum BinaryOperator {
+        PLUS,
+        MINUS,
+        TIMES,
+        DIVIDE,
+        EXPONENTIAL
+    };
+
+    struct FunctionBody {
+        std::optional<std::shared_ptr<FunctionBody>> left;
+        std::optional<BinaryOperator> binaryOperator;
+        std::optional<std::shared_ptr<FunctionBody>> right;
+
+        std::optional<UnaryOperator> unaryOperator;
+        std::optional<std::shared_ptr<FunctionBody>> elem;
+
+        std::optional<std::shared_ptr<FunctionBody>> body;
+
+        std::optional<PropertyIdentifier> identifier;
+
+        std::optional<Decimal> decimal;
+
+        FunctionBody(std::shared_ptr<FunctionBody>&& left, BinaryOperator binaryOperator, std::shared_ptr<FunctionBody> right)
+          : left(std::move(left))
+          , binaryOperator(binaryOperator)
+          , right(std::move(right)) {}
+
+        FunctionBody(UnaryOperator unaryOperator, std::shared_ptr<FunctionBody>&& elem)
+          : unaryOperator(unaryOperator)
+          , elem(std::move(elem)) {}
+
+        explicit FunctionBody(std::shared_ptr<FunctionBody>&& body)
+          : body(std::move(body)) {}
+
+        explicit FunctionBody(PropertyIdentifier identifier)
+          : identifier(identifier) {}
+
+        explicit FunctionBody(Decimal decimal)
+          : decimal(decimal) {}
+
+        FunctionBody() = default;
+    };
+
+    struct FunctionConstraint {
+        FunctionBody body;
+    };
+
     struct Constraint {
         ConstraintType constraintType;
         Identifier pointA;
         Identifier pointB;
-        ConstraintOperator constraintOperator;
-        Decimal size;
+        std::variant<ConstantConstraint, FunctionConstraint> constraint;
     };
 
     struct Bar {
@@ -81,14 +146,42 @@ namespace parser {
     constexpr auto constraintReserved = LEXY_LIT("constraint");
     constexpr auto showReserved = LEXY_LIT("show");
 
-    constexpr auto distanceReserved = LEXY_LIT("distance");
-    constexpr auto forceReserved = LEXY_LIT("force");
+    constexpr auto distanceConstraintReserved = LEXY_LIT("distance");
+    constexpr auto forceConstraintReserved = LEXY_LIT("force");
 
     constexpr auto equalReserved = LEXY_LIT("==");
     constexpr auto lessThanReserved = LEXY_LIT("<");
     constexpr auto higherThanReserved = LEXY_LIT(">");
     constexpr auto lessOrEqualThanReserved = LEXY_LIT("<=");
     constexpr auto higherOrEqualThanReserved = LEXY_LIT(">=");
+
+    constexpr auto sinReserved = LEXY_LIT("sin");
+    constexpr auto cosReserved = LEXY_LIT("cos");
+    constexpr auto tanReserved = LEXY_LIT("tan");
+    constexpr auto asinReserved = LEXY_LIT("asin");
+    constexpr auto acosReserved = LEXY_LIT("acos");
+    constexpr auto atanReserved = LEXY_LIT("atan");
+    constexpr auto sinhReserved = LEXY_LIT("sinh");
+    constexpr auto coshReserved = LEXY_LIT("cosh");
+    constexpr auto tanhReserved = LEXY_LIT("tanh");
+    constexpr auto lnReserved = LEXY_LIT("ln");
+    constexpr auto logReserved = LEXY_LIT("log");
+    constexpr auto expReserved = LEXY_LIT("exp");
+    constexpr auto sqrtReserved = LEXY_LIT("sqrt");
+
+    constexpr auto plusReserved = LEXY_LIT("+");
+    constexpr auto minusReserved = LEXY_LIT("-");
+    constexpr auto multiplyReserved = LEXY_LIT("*");
+    constexpr auto divideReserved = LEXY_LIT("/");
+    constexpr auto exponentReserved = LEXY_LIT("^");
+
+    constexpr auto distanceIdentifierReserved = LEXY_LIT("distance");
+    constexpr auto distanceShortIdentifierReserved = LEXY_LIT("d");
+    constexpr auto timeIdentifierReserved = LEXY_LIT("time");
+    constexpr auto timeShortIdentifierReserved = LEXY_LIT("t");
+
+    constexpr auto functionReserved = LEXY_LIT("fun");
+    constexpr auto arrowReserved = LEXY_LIT("->");
 
     constexpr auto barReserved = LEXY_LIT("bar");
     constexpr auto circleReserved = LEXY_LIT("circle");
@@ -163,8 +256,8 @@ namespace parser {
 
         static constexpr auto types
           = lexy::symbol_table<ast::ConstraintType>
-              .map(distanceReserved, ast::ConstraintType::DISTANCE)
-              .map(forceReserved, ast::ConstraintType::FORCE);
+              .map(distanceConstraintReserved, ast::ConstraintType::DISTANCE_CONSTRAINT)
+              .map(forceConstraintReserved, ast::ConstraintType::FORCE_CONSTRAINT);
 
         static constexpr auto rule = [] {
             return dsl::symbol<types> | dsl::error<InvalidConstraintType>;
@@ -191,19 +284,159 @@ namespace parser {
         static constexpr auto value = lexy::construct<ast::ConstraintOperator>;
     };
 
+    struct UnaryOperator {
+        struct InvalidUnaryOperator {
+            static LEXY_CONSTEVAL auto name() { return "unary operator is not valid operator or function"; }
+        };
+
+        static constexpr auto types
+          = lexy::symbol_table<ast::UnaryOperator>
+              .map(sinReserved, ast::UnaryOperator::SIN)
+              .map(cosReserved, ast::UnaryOperator::COS)
+              .map(tanReserved, ast::UnaryOperator::TAN)
+              .map(asinReserved, ast::UnaryOperator::ASIN)
+              .map(acosReserved, ast::UnaryOperator::ACOS)
+              .map(atanReserved, ast::UnaryOperator::ATAN)
+              .map(sinhReserved, ast::UnaryOperator::SINH)
+              .map(coshReserved, ast::UnaryOperator::COSH)
+              .map(tanhReserved, ast::UnaryOperator::TANH)
+              .map(lnReserved, ast::UnaryOperator::LN)
+              .map(logReserved, ast::UnaryOperator::LOG)
+              .map(expReserved, ast::UnaryOperator::EXP)
+              .map(sqrtReserved, ast::UnaryOperator::SQRT);
+
+        static constexpr auto rule = [] {
+            return dsl::symbol<types> | dsl::error<InvalidUnaryOperator>;
+        }();
+
+        static constexpr auto value = lexy::construct<ast::UnaryOperator>;
+    };
+
+    struct BinaryOperator {
+        struct InvalidBinaryOperator {
+            static LEXY_CONSTEVAL auto name() { return "binary operator is not +, -, *, / or ^"; }
+        };
+
+        static constexpr auto types
+          = lexy::symbol_table<ast::BinaryOperator>
+              .map(plusReserved, ast::BinaryOperator::PLUS)
+              .map(minusReserved, ast::BinaryOperator::MINUS)
+              .map(multiplyReserved, ast::BinaryOperator::TIMES)
+              .map(divideReserved, ast::BinaryOperator::DIVIDE)
+              .map(exponentReserved, ast::BinaryOperator::EXPONENTIAL);
+
+        static constexpr auto rule = [] {
+            return dsl::symbol<types> | dsl::error<InvalidBinaryOperator>;
+        }();
+
+        static constexpr auto value = lexy::construct<ast::BinaryOperator>;
+    };
+
+    struct PropertyIdentifier {
+        struct InvalidPropertyIdentifier {
+            static LEXY_CONSTEVAL auto name() { return "property identifier is not time or distance"; }
+        };
+
+        static constexpr auto types
+          = lexy::symbol_table<ast::PropertyIdentifier>
+              .map(timeIdentifierReserved, ast::PropertyIdentifier::TIME_PROPERTY)
+              .map(timeShortIdentifierReserved, ast::PropertyIdentifier::TIME_PROPERTY)
+              .map(distanceIdentifierReserved, ast::PropertyIdentifier::DISTANCE_PROPERTY)
+              .map(distanceShortIdentifierReserved, ast::PropertyIdentifier::DISTANCE_PROPERTY);
+
+        static constexpr auto rule = [] {
+            return dsl::symbol<types> | dsl::error<InvalidPropertyIdentifier>;
+        }();
+        static constexpr auto value = lexy::construct<ast::PropertyIdentifier>;
+    };
+
+    struct PropertyIdentifiers {
+        static constexpr auto rule = [] {
+            auto condition = dsl::peek(dsl::parenthesized.list(dsl::p<PropertyIdentifier>, dsl::sep(dsl::comma)));
+
+            return condition >> (dsl::parenthesized.opt_list(dsl::p<PropertyIdentifier>, dsl::sep(dsl::comma)));
+        }();
+        static constexpr auto value = lexy::noop;
+    };
+
+    struct FunctionBody {
+        struct InvalidFunctionBody {
+            static LEXY_CONSTEVAL auto name() { return "element is not binary operator, unary operator, parenthesis, identifier or decimal"; }
+        };
+        static constexpr auto rule = [] {
+            auto binary = dsl::peek(dsl::recurse<FunctionBody> + dsl::p<BinaryOperator>)
+                          >> (dsl::recurse<FunctionBody> + dsl::p<BinaryOperator> + dsl::recurse<FunctionBody>);
+            auto unary = dsl::peek(dsl::p<UnaryOperator>) >> (dsl::p<UnaryOperator> + dsl::recurse<FunctionBody>);
+            auto parens = dsl::parenthesized(dsl::recurse<FunctionBody>);
+            auto identifier = dsl::peek(dsl::p<PropertyIdentifier>) >> dsl::p<PropertyIdentifier>;
+            auto decimal = dsl::peek(dsl::p<Decimal>) >> dsl::p<Decimal>;
+
+            return binary | unary | parens | identifier | decimal | dsl::error<InvalidFunctionBody>;
+        }();
+
+        static constexpr auto value = lexy::callback<ast::FunctionBody>(
+          [](const ast::FunctionBody& left, ast::BinaryOperator binaryOperator, const ast::FunctionBody& right) {
+            return ast::FunctionBody(std::make_shared<ast::FunctionBody>(left), binaryOperator,
+                std::make_shared<ast::FunctionBody>(right));
+          },
+          [](ast::UnaryOperator unaryOperator, const ast::FunctionBody& elem) {
+              return ast::FunctionBody(unaryOperator, std::make_shared<ast::FunctionBody>(elem));
+          },
+          [](const ast::FunctionBody& value) {
+              return ast::FunctionBody(std::make_shared<ast::FunctionBody>(value));
+          },
+          [](ast::PropertyIdentifier identifier) {
+              return ast::FunctionBody(identifier);
+          },
+          [](ast::Decimal decimal) {
+              return ast::FunctionBody(decimal);
+          }
+          );
+    };
+
+    struct FunctionConstraint {
+        static constexpr auto rule = [] {
+            auto ws = dsl::whitespace(dsl::ascii::space);
+            auto condition = dsl::peek(functionReserved
+                                       + ws + dsl::p<PropertyIdentifiers>
+                                       + ws + arrowReserved + ws + dsl::p<FunctionBody>);
+
+            auto body = (dsl::member<&ast::FunctionConstraint::body> = dsl::p<FunctionBody>);
+            return condition >> (functionReserved + dsl::p<PropertyIdentifiers> + arrowReserved + body);
+        }();
+        static constexpr auto value = lexy::as_aggregate<ast::FunctionConstraint>;
+    };
+
+    struct ConstantConstraint {
+        static constexpr auto rule = [] {
+            auto ws = dsl::whitespace(dsl::ascii::space);
+            auto condition = dsl::peek(dsl::p<ConstraintOperator> + ws + dsl::p<Decimal>);
+
+            auto constraintOperator = (dsl::member<&ast::ConstantConstraint::constraintOperator> = dsl::p<ConstraintOperator>);
+            auto size = (dsl::member<&ast::ConstantConstraint::size> = dsl::p<Decimal>);
+
+            return condition >> (constraintOperator + size);
+        }();
+        static constexpr auto value = lexy::as_aggregate<ast::ConstantConstraint>;
+    };
+
     struct Constraint {
+        struct InvalidConstraint {
+            static LEXY_CONSTEVAL auto name() { return "constraint is not constant or function"; }
+        };
+
         static constexpr auto rule = [] {
             auto ws = dsl::whitespace(dsl::ascii::space);
             auto condition = dsl::peek(constraintReserved + ws + dsl::p<ConstraintType> + ws + dsl::p<Identifier>
-              + ws + dsl::p<Identifier> + ws + dsl::p<ConstraintOperator> + ws + dsl::p<Decimal>);
+              + ws + dsl::p<Identifier>);
 
             auto type = (dsl::member<&ast::Constraint::constraintType> = dsl::p<ConstraintType>);
             auto pointA = (dsl::member<&ast::Constraint::pointA> = dsl::p<Identifier>);
             auto pointB = (dsl::member<&ast::Constraint::pointB> = dsl::p<Identifier>);
-            auto constraintOperator = (dsl::member<&ast::Constraint::constraintOperator> = dsl::p<ConstraintOperator>);
-            auto size = (dsl::member<&ast::Constraint::size> = dsl::p<Decimal>);
+            auto constraint = (dsl::member<&ast::Constraint::constraint> = dsl::p<ConstantConstraint>);
+            auto function = (dsl::member<&ast::Constraint::constraint> = dsl::p<FunctionConstraint>);
 
-            return condition >> (constraintReserved + type + pointA + pointB + constraintOperator + size);
+            return condition >> (constraintReserved + type + pointA + pointB + (constraint | function | dsl::error<InvalidConstraint>));
         }();
         static constexpr auto value = lexy::as_aggregate<ast::Constraint>;
     };

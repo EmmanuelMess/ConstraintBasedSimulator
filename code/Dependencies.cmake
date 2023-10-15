@@ -37,7 +37,7 @@ function(ConstraintBasedSimulator_setup_dependencies)
   endif()
 
   if(NOT TARGET foonathan::lexy)
-    cpmaddpackage("https://github.com/foonathan/lexy/releases/download/v2022.12.1/lexy-src.zip")
+    CPMAddPackage("gh:foonathan/lexy#7e583fe0c717715a10227d2d4ba14581143cf0af")
   endif()
 
   if(NOT TARGET Eigen3::Eigen)

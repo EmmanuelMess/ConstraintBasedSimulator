@@ -21,10 +21,24 @@ constraint-operator ::= ==
                        
 function ::= (<function-parameters>) -> <function-body>
 
-function-parameters ::= ε
+function-parameters ::= <property-identifier>
                       | <function-parameters>, <property-identifier>
-                      
-property-identifier ::= distance
+
+property-identifier ::= distance | t
+
+function-body ::= <function-body> <binary-operator> <function-body>
+                | <unary-operator> <function-body>
+                | ( <function-body> )
+                | <property-identifier>
+                | <decimal>
+
+unary-operator ::= -
+                 | sin | cos | tan
+                 | asin | acos | atan
+                 | sinh | cosh | tanh
+                 | ln | log | exp | sqrt
+
+binary-operator ::= + | - | * | / | ^
 
 graphical-statement ::= show bar <identifier> <indentifier>
                       | show circle <identifier> radius <decimal>
