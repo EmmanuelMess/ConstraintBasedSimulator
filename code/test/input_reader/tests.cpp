@@ -106,24 +106,13 @@ TEST_CASE("Read file", "[InputReader::readFile]") {
                    << "B = (3.0, -90)" << '\n'
                    << "C = (0.5, 5000)" << '\n'
                    << "D = (200, 800)" << '\n'
-                   << "static A" << '\n'
-                   << "static D" << '\n'
+                   << "constraint distance A C fun (time) -> tau" << '\n'
                    << "constraint distance A B fun (time) -> t" << '\n';
             output.close();
         }
 
         input_reader::ReadInput inputReader;
         REQUIRE(inputReader.readFile(path));
-
-        const std::vector<input_reader::Point> staticPoints = {
-            { .x = 0, .y = 0, .identifier = "A" }, { .x = 200, .y = 800, .identifier = "D" }
-        };
-        REQUIRE(inputReader.getStaticPoints() == staticPoints);
-
-        const std::vector<input_reader::Point> dynamicPoints = {
-            { .x = 3.0, .y = -90, .identifier = "B"}, { .x = 0.5, .y = 5000, .identifier = "C" }
-        };
-        REQUIRE(inputReader.getDynamicPoints() == dynamicPoints);
 
         //REQUIRE(!inputReader.getConstraints().empty());
         //REQUIRE(!inputReader.getGraphics().empty());

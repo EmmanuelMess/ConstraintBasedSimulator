@@ -31,6 +31,7 @@ function-body ::= <function-body> <binary-operator> <function-body>
                 | ( <function-body> )
                 | <property-identifier>
                 | <decimal>
+                | <constant>
 
 unary-operator ::= -
                  | sin | cos | tan
@@ -39,6 +40,8 @@ unary-operator ::= -
                  | ln | log | exp | sqrt
 
 binary-operator ::= + | - | * | / | ^
+
+constant ::= tau | pi
 
 graphical-statement ::= show bar <identifier> <indentifier>
                       | show circle <identifier> radius <decimal>

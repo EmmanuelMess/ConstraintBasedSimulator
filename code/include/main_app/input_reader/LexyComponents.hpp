@@ -70,6 +70,10 @@ namespace ast {
         EXPONENTIAL
     };
 
+    enum Constant {
+        TAU, PI
+    };
+
     struct FunctionBody {
         std::optional<std::shared_ptr<FunctionBody>> left;
         std::optional<BinaryOperator> binaryOperator;
@@ -83,6 +87,8 @@ namespace ast {
         std::optional<PropertyIdentifier> identifier;
 
         std::optional<Decimal> decimal;
+
+        std::optional<Constant> constant;
 
         FunctionBody(std::shared_ptr<FunctionBody>&& left, BinaryOperator binaryOperator, std::shared_ptr<FunctionBody> right)
           : left(std::move(left))
@@ -101,6 +107,9 @@ namespace ast {
 
         explicit FunctionBody(Decimal decimal)
           : decimal(decimal) {}
+
+        explicit FunctionBody(Constant constant)
+          : constant(constant) {}
 
         FunctionBody() = default;
     };
@@ -174,6 +183,9 @@ namespace parser {
     constexpr auto multiplyReserved = LEXY_LIT("*");
     constexpr auto divideReserved = LEXY_LIT("/");
     constexpr auto exponentReserved = LEXY_LIT("^");
+
+    constexpr auto tauReserved = LEXY_LIT("tau");
+    constexpr auto piReserved = LEXY_LIT("pi");
 
     constexpr auto distanceIdentifierReserved = LEXY_LIT("distance");
     constexpr auto distanceShortIdentifierReserved = LEXY_LIT("d");
@@ -332,6 +344,22 @@ namespace parser {
         static constexpr auto value = lexy::construct<ast::BinaryOperator>;
     };
 
+    struct Constant {
+        struct InvalidConstant {
+            static LEXY_CONSTEVAL auto name() { return "constant is not tau or pi"; }
+        };
+
+        static constexpr auto types
+          = lexy::symbol_table<ast::Constant>
+              .map(tauReserved, ast::Constant::TAU)
+              .map(piReserved, ast::Constant::PI);
+
+        static constexpr auto rule = [] {
+            return dsl::symbol<types> | dsl::error<InvalidConstant>;
+        }();
+        static constexpr auto value = lexy::construct<ast::Constant>;
+    };
+
     struct PropertyIdentifier {
         struct InvalidPropertyIdentifier {
             static LEXY_CONSTEVAL auto name() { return "property identifier is not time or distance"; }
@@ -361,17 +389,18 @@ namespace parser {
 
     struct FunctionBody {
         struct InvalidFunctionBody {
-            static LEXY_CONSTEVAL auto name() { return "element is not binary operator, unary operator, parenthesis, identifier or decimal"; }
+            static LEXY_CONSTEVAL auto name() { return "element is not binary operator, unary operator, parenthesis, identifier, decimal or constant"; }
         };
         static constexpr auto rule = [] {
-            auto binary = dsl::peek(dsl::recurse<FunctionBody> + dsl::p<BinaryOperator>)
+            auto binary = dsl::peek(dsl::recurse<FunctionBody> + dsl::p<BinaryOperator> + dsl::recurse<FunctionBody>)
                           >> (dsl::recurse<FunctionBody> + dsl::p<BinaryOperator> + dsl::recurse<FunctionBody>);
-            auto unary = dsl::peek(dsl::p<UnaryOperator>) >> (dsl::p<UnaryOperator> + dsl::recurse<FunctionBody>);
+            auto unary = dsl::peek(dsl::p<UnaryOperator> + dsl::recurse<FunctionBody>) >> (dsl::p<UnaryOperator> + dsl::recurse<FunctionBody>);
             auto parens = dsl::parenthesized(dsl::recurse<FunctionBody>);
-            auto identifier = dsl::peek(dsl::p<PropertyIdentifier>) >> dsl::p<PropertyIdentifier>;
             auto decimal = dsl::peek(dsl::p<Decimal>) >> dsl::p<Decimal>;
+            auto constant = dsl::peek(dsl::p<Constant>) >> dsl::p<Constant>;
+            auto identifier = dsl::peek(dsl::p<PropertyIdentifier>) >> dsl::p<PropertyIdentifier>;
 
-            return binary | unary | parens | identifier | decimal | dsl::error<InvalidFunctionBody>;
+            return unary | parens | decimal | constant | identifier | binary | dsl::error<InvalidFunctionBody>;
         }();
 
         static constexpr auto value = lexy::callback<ast::FunctionBody>(
@@ -390,6 +419,9 @@ namespace parser {
           },
           [](ast::Decimal decimal) {
               return ast::FunctionBody(decimal);
+          },
+          [](ast::Constant constant) {
+              return ast::FunctionBody(constant);
           }
           );
     };
