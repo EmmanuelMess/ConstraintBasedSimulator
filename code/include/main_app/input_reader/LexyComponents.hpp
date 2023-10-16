@@ -56,6 +56,7 @@ namespace ast {
     };
 
     enum UnaryOperator {
+        NEGATIVE,
         SIN, COS, TAN,
         ASIN, ACOS, ATAN,
         SINH, COSH, TANH,
@@ -180,8 +181,10 @@ namespace parser {
 
     constexpr auto plusReserved = LEXY_LIT("+");
     constexpr auto minusReserved = LEXY_LIT("-");
+
     constexpr auto multiplyReserved = LEXY_LIT("*");
     constexpr auto divideReserved = LEXY_LIT("/");
+
     constexpr auto exponentReserved = LEXY_LIT("^");
 
     constexpr auto tauReserved = LEXY_LIT("tau");
@@ -296,54 +299,6 @@ namespace parser {
         static constexpr auto value = lexy::construct<ast::ConstraintOperator>;
     };
 
-    struct UnaryOperator {
-        struct InvalidUnaryOperator {
-            static LEXY_CONSTEVAL auto name() { return "unary operator is not valid operator or function"; }
-        };
-
-        static constexpr auto types
-          = lexy::symbol_table<ast::UnaryOperator>
-              .map(sinReserved, ast::UnaryOperator::SIN)
-              .map(cosReserved, ast::UnaryOperator::COS)
-              .map(tanReserved, ast::UnaryOperator::TAN)
-              .map(asinReserved, ast::UnaryOperator::ASIN)
-              .map(acosReserved, ast::UnaryOperator::ACOS)
-              .map(atanReserved, ast::UnaryOperator::ATAN)
-              .map(sinhReserved, ast::UnaryOperator::SINH)
-              .map(coshReserved, ast::UnaryOperator::COSH)
-              .map(tanhReserved, ast::UnaryOperator::TANH)
-              .map(lnReserved, ast::UnaryOperator::LN)
-              .map(logReserved, ast::UnaryOperator::LOG)
-              .map(expReserved, ast::UnaryOperator::EXP)
-              .map(sqrtReserved, ast::UnaryOperator::SQRT);
-
-        static constexpr auto rule = [] {
-            return dsl::symbol<types> | dsl::error<InvalidUnaryOperator>;
-        }();
-
-        static constexpr auto value = lexy::construct<ast::UnaryOperator>;
-    };
-
-    struct BinaryOperator {
-        struct InvalidBinaryOperator {
-            static LEXY_CONSTEVAL auto name() { return "binary operator is not +, -, *, / or ^"; }
-        };
-
-        static constexpr auto types
-          = lexy::symbol_table<ast::BinaryOperator>
-              .map(plusReserved, ast::BinaryOperator::PLUS)
-              .map(minusReserved, ast::BinaryOperator::MINUS)
-              .map(multiplyReserved, ast::BinaryOperator::TIMES)
-              .map(divideReserved, ast::BinaryOperator::DIVIDE)
-              .map(exponentReserved, ast::BinaryOperator::EXPONENTIAL);
-
-        static constexpr auto rule = [] {
-            return dsl::symbol<types> | dsl::error<InvalidBinaryOperator>;
-        }();
-
-        static constexpr auto value = lexy::construct<ast::BinaryOperator>;
-    };
-
     struct Constant {
         struct InvalidConstant {
             static LEXY_CONSTEVAL auto name() { return "constant is not tau or pi"; }
@@ -387,43 +342,104 @@ namespace parser {
         static constexpr auto value = lexy::noop;
     };
 
-    struct FunctionBody {
+    struct FunctionBody : lexy::expression_production {
         struct InvalidFunctionBody {
             static LEXY_CONSTEVAL auto name() { return "element is not binary operator, unary operator, parenthesis, identifier, decimal or constant"; }
         };
-        static constexpr auto rule = [] {
-            auto binary = dsl::peek(dsl::recurse<FunctionBody> + dsl::p<BinaryOperator> + dsl::recurse<FunctionBody>)
-                          >> (dsl::recurse<FunctionBody> + dsl::p<BinaryOperator> + dsl::recurse<FunctionBody>);
-            auto unary = dsl::peek(dsl::p<UnaryOperator> + dsl::recurse<FunctionBody>) >> (dsl::p<UnaryOperator> + dsl::recurse<FunctionBody>);
+
+        static constexpr auto plusOperation = dsl::op(plusReserved);
+        static constexpr auto minusOperation = dsl::op(minusReserved);
+        static constexpr auto multiplyOperation = dsl::op(multiplyReserved);
+        static constexpr auto divideOperation = dsl::op(divideReserved);
+        static constexpr auto exponentOperation = dsl::op(exponentReserved);
+
+        static constexpr auto negativeOperation = dsl::op(minusReserved);
+        static constexpr auto sinOperation = dsl::op(sinReserved);
+        static constexpr auto cosOperation = dsl::op(cosReserved);
+        static constexpr auto tanOperation = dsl::op(tanReserved);
+        static constexpr auto asinOperation = dsl::op(asinReserved);
+        static constexpr auto acosOperation = dsl::op(acosReserved);
+        static constexpr auto atanOperation = dsl::op(atanReserved);
+        static constexpr auto sinhOperation = dsl::op(sinhReserved);
+        static constexpr auto coshOperation = dsl::op(coshReserved);
+        static constexpr auto tanhOperation = dsl::op(tanhReserved);
+        static constexpr auto lnOperation = dsl::op(lnReserved);
+        static constexpr auto logOperation = dsl::op(logReserved);
+        static constexpr auto expOperation = dsl::op(expReserved);
+        static constexpr auto sqrtOperation = dsl::op(sqrtReserved);
+
+        static constexpr auto atom = [] {
             auto parens = dsl::parenthesized(dsl::recurse<FunctionBody>);
             auto decimal = dsl::peek(dsl::p<Decimal>) >> dsl::p<Decimal>;
             auto constant = dsl::peek(dsl::p<Constant>) >> dsl::p<Constant>;
             auto identifier = dsl::peek(dsl::p<PropertyIdentifier>) >> dsl::p<PropertyIdentifier>;
 
-            return unary | parens | decimal | constant | identifier | binary | dsl::error<InvalidFunctionBody>;
+            return parens | decimal | constant | identifier | dsl::error<InvalidFunctionBody>;
         }();
 
+        struct prefix : dsl::prefix_op {
+            static constexpr auto op = negativeOperation
+                                       / sinOperation / cosOperation / tanOperation
+                                       / asinOperation / acosOperation / atanOperation
+                                       / sinhOperation / coshOperation / tanhOperation
+                                       / lnOperation / logOperation / expOperation / sqrtOperation;
+            using operand = dsl::atom;
+        };
+
+        struct exponent : dsl::infix_op_left {
+            static constexpr auto op = exponentOperation;
+            using operand = prefix;
+        };
+
+        struct product : dsl::infix_op_left {
+            static constexpr auto op = multiplyOperation / divideOperation;
+            using operand = exponent;
+        };
+
+        struct sum : dsl::infix_op_left {
+            static constexpr auto op = plusOperation / minusOperation;
+            using operand = product;
+        };
+
+        using operation = sum;
+
+        template<auto Operator, auto Value>
+        static constexpr auto parseBinaryOperation = [](const ast::FunctionBody& left, lexy::op<Operator>,
+                                                 const ast::FunctionBody& right) {
+            return ast::FunctionBody(std::make_shared<ast::FunctionBody>(left), Value,
+              std::make_shared<ast::FunctionBody>(right));
+        };
+
+        template<auto Operator, auto Value>
+        static constexpr auto parseUnaryOperation = [](lexy::op<Operator>, const ast::FunctionBody& operand) {
+            return ast::FunctionBody(Value, std::make_shared<ast::FunctionBody>(operand));
+        };
+
         static constexpr auto value = lexy::callback<ast::FunctionBody>(
-          [](const ast::FunctionBody& left, ast::BinaryOperator binaryOperator, const ast::FunctionBody& right) {
-            return ast::FunctionBody(std::make_shared<ast::FunctionBody>(left), binaryOperator,
-                std::make_shared<ast::FunctionBody>(right));
-          },
-          [](ast::UnaryOperator unaryOperator, const ast::FunctionBody& elem) {
-              return ast::FunctionBody(unaryOperator, std::make_shared<ast::FunctionBody>(elem));
-          },
-          [](const ast::FunctionBody& value) {
-              return ast::FunctionBody(std::make_shared<ast::FunctionBody>(value));
-          },
-          [](ast::PropertyIdentifier identifier) {
-              return ast::FunctionBody(identifier);
-          },
-          [](ast::Decimal decimal) {
-              return ast::FunctionBody(decimal);
-          },
-          [](ast::Constant constant) {
-              return ast::FunctionBody(constant);
-          }
-          );
+          parseBinaryOperation<plusOperation, ast::BinaryOperator::PLUS>,
+          parseBinaryOperation<minusOperation, ast::BinaryOperator::MINUS>,
+          parseBinaryOperation<multiplyOperation, ast::BinaryOperator::TIMES>,
+          parseBinaryOperation<divideOperation, ast::BinaryOperator::DIVIDE>,
+          parseBinaryOperation<exponentOperation, ast::BinaryOperator::EXPONENTIAL>,
+          parseUnaryOperation<negativeOperation, ast::UnaryOperator::NEGATIVE>,
+          parseUnaryOperation<sinOperation, ast::UnaryOperator::SIN>,
+          parseUnaryOperation<cosOperation, ast::UnaryOperator::COS>,
+          parseUnaryOperation<tanOperation, ast::UnaryOperator::TAN>,
+          parseUnaryOperation<asinOperation, ast::UnaryOperator::ASIN>,
+          parseUnaryOperation<acosOperation, ast::UnaryOperator::ACOS>,
+          parseUnaryOperation<atanOperation, ast::UnaryOperator::ATAN>,
+          parseUnaryOperation<sinhOperation, ast::UnaryOperator::SINH>,
+          parseUnaryOperation<coshOperation, ast::UnaryOperator::COSH>,
+          parseUnaryOperation<tanhOperation, ast::UnaryOperator::TANH>,
+          parseUnaryOperation<lnOperation, ast::UnaryOperator::LN>,
+          parseUnaryOperation<logOperation, ast::UnaryOperator::LOG>,
+          parseUnaryOperation<expOperation, ast::UnaryOperator::EXP>,
+          parseUnaryOperation<sqrtOperation, ast::UnaryOperator::SQRT>,
+          [](const ast::FunctionBody& value) { return ast::FunctionBody(std::make_shared<ast::FunctionBody>(value)); },
+          [](ast::PropertyIdentifier identifier) { return ast::FunctionBody(identifier); },
+          [](ast::Decimal decimal) { return ast::FunctionBody(decimal); },
+          [](ast::Constant constant) { return ast::FunctionBody(constant); }
+        );
     };
 
     struct FunctionConstraint {
@@ -431,7 +447,7 @@ namespace parser {
             auto ws = dsl::whitespace(dsl::ascii::space);
             auto condition = dsl::peek(functionReserved
                                        + ws + dsl::p<PropertyIdentifiers>
-                                       + ws + arrowReserved + ws + dsl::p<FunctionBody>);
+                                       + ws + arrowReserved);
 
             auto body = (dsl::member<&ast::FunctionConstraint::body> = dsl::p<FunctionBody>);
             return condition >> (functionReserved + dsl::p<PropertyIdentifiers> + arrowReserved + body);

@@ -104,10 +104,11 @@ TEST_CASE("Read file", "[InputReader::readFile]") {
             std::ofstream output(path);
             output << "A = (0, 0)" << '\n'
                    << "B = (3.0, -90)" << '\n'
-                   << "C = (0.5, 5000)" << '\n'
-                   << "D = (200, 800)" << '\n'
-                   << "constraint distance A C fun (time) -> tau" << '\n'
-                   << "constraint distance A B fun (time) -> t" << '\n';
+                   << "constraint distance A B fun (time) -> tau" << '\n'
+                   << "constraint distance A B fun (time) -> (tau)" << '\n'
+                   << "constraint distance A B fun (time) -> sin (tau)" << '\n'
+                   << "constraint distance A B fun (time) -> sin cos - (t * tau ^ 3 + 2) * distance " << '\n'
+                   << "constraint distance A B fun (time) -> sin (tau * t + 5)" << '\n';
             output.close();
         }
 
