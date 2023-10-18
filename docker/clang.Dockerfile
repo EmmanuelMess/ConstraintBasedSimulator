@@ -2,7 +2,7 @@ FROM silkeh/clang:16
 
 # Setup compilation deps
 RUN apt-get update \
-  && apt install -y gdb ninja-build git \
+  && apt install -y gdb ninja-build git clang-tidy cppcheck \
   && apt-get clean
   
 # Setup Qt deps

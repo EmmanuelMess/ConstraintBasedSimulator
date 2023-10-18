@@ -2,7 +2,7 @@ FROM gcc:13.2.0
 
 # Setup compilation deps
 RUN apt update \
-  && apt install -y cmake gdb ninja-build git \
+  && apt install -y cmake gdb ninja-build git clang-tidy cppcheck \
   && apt clean
   
 # Setup Qt deps
