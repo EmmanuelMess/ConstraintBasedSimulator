@@ -12,7 +12,7 @@ public:
 
 protected:
     [[nodiscard]] QSize sizeHint() const override;
-    void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent * event) override;
 
 private:
     grapher::DrawableSimulation frame;

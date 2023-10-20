@@ -13,7 +13,7 @@ GrapherWidget::GrapherWidget(QWidget *parent) : QWidget(parent) {
     });
 }
 
-void GrapherWidget::paintEvent(QPaintEvent *) {
+void GrapherWidget::paintEvent(__attribute__((unused)) QPaintEvent * event) {
     const double MARGIN = 20.0;
     const double WIDTH = width() - MARGIN * 2;
     const double HEIGHT = height() - MARGIN * 2;
@@ -33,8 +33,11 @@ void GrapherWidget::paintEvent(QPaintEvent *) {
 }
 
 QSize GrapherWidget::sizeHint() const {
-    if (width() < 20 || height() < 20) {
-        return {20, 20};
+    constexpr int MIN_WIDTH = 20;
+    constexpr int MIN_HEIGHT = 20;
+
+    if (width() < MIN_WIDTH || height() < MIN_HEIGHT) {
+        return {MIN_WIDTH, MIN_HEIGHT};
     }
 
     return {width(), height()};

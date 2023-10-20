@@ -24,6 +24,7 @@ input_reader::ReadInput StateLoader::getLoaded() {
         spdlog::info("{} = ({}, {})", point.identifier, point.x, point.y);
     }
 
+
     return inputReader;
 }
 }

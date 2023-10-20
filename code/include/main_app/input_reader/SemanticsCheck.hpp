@@ -4,6 +4,7 @@
 
 namespace input_reader::internal::semantics {
 class SemanticsCheck {
+public:
     static bool checkSemantics(const ast::SimulationState& simulationState);
 };
 }

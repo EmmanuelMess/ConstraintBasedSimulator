@@ -9,10 +9,10 @@ SimulationTimer::SimulationTimer(QObject *parent)
     : QObject(parent)
     , timer(new QTimer(this)) {
     connect(timer, &QTimer::timeout, this, &SimulationTimer::callback);
-    timer->start(1000);
+    timer->start(TIME_STEP);
 }
 
 void SimulationTimer::callback() {
     spdlog::debug("Update!");
-    events_manager::EventManager::getInstance().signalRefresh(std::chrono::milliseconds(1000));
+    events_manager::EventManager::getInstance().signalRefresh(TIME_STEP);
 }

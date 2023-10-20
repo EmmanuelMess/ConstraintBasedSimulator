@@ -39,7 +39,7 @@ void Simulator::initialize() {
            { "B", { input_reader::ConstraintType::DistanceConstraint, input_reader::ConstraintProperty(5.0) } }
          }) {
         if(value.constraintType == input_reader::ConstraintType::DistanceConstraint) {
-            constraints[key] = [value](const autodiff::var& positionX, const autodiff::var& positionY) {
+            constraints[key] = [&value = value](const autodiff::var& positionX, const autodiff::var& positionY) {
                 const autodiff::var constraint = (0.5 * (positionX * positionX + positionY * positionY) - 1);
                 return constraint - std::get<input_reader::Distance>(value.properties);
             };
@@ -65,18 +65,21 @@ void Simulator::resetForces() {
 void Simulator::calculateConstraintForces() {
     // Solve JWJ^T λ = − J̇q̇ − JWQ − k_s C − k_d  Ċ
 
-    for(const auto& [key, constraintFunction] : constraints) {
+    for(const auto& constraint : constraints) {
+        const std::string& key = constraint.first;
+        const Constraint& constraintFunction = constraint.second;
+
         const Particle particle = *std::find_if(particles.begin(), particles.end(), [&key](const Particle& particleB){
-            return particleB.identifier == key;
+            return particleB.identifier.size() == key.size();
         });
 
         autodiff::var x = particle.position[0];
-        autodiff::var y = particle.position[1];
+        const autodiff::var y = particle.position[1];
 
-        autodiff::var constraint = constraintFunction(x, y);
-        auto constraint1st = autodiff::derivatives(constraint, autodiff::wrt(x));
+        const autodiff::var constraintF = constraintFunction(x, y);
+        auto constraint1st = autodiff::derivatives(constraintF, autodiff::wrt(x));
 
-        spdlog::info("Particle ({}, {}): Compute constraint {}", particle.position[0], particle.position[1], static_cast<double>(constraint));
+        spdlog::info("Particle ({}, {}): Compute constraint {}", particle.position[0], particle.position[1], static_cast<double>(constraintF));
         spdlog::info("Particle ({}, {}): Compute constraint {}", particle.position[0], particle.position[1], constraint1st[0]);
     }
 

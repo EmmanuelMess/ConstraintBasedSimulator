@@ -8,7 +8,8 @@ add_library(ConstraintBasedSimulator::simulator ALIAS simulator)
 target_link_libraries(
     simulator
     PRIVATE ConstraintBasedSimulator::ConstraintBasedSimulator_options
-            ConstraintBasedSimulator::ConstraintBasedSimulator_warnings)
+            ConstraintBasedSimulator::ConstraintBasedSimulator_warnings
+            input_reader)
 
 
 target_include_directories(simulator ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>

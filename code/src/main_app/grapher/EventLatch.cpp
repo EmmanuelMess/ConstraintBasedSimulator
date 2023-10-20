@@ -10,7 +10,7 @@ void EventLatch::eventLatch() {
 
     events_manager::EventManager::getInstance().signalSetSpeed.connect([](unsigned int newSpeed) { grapher.onSetSpeed(newSpeed); });
     events_manager::EventManager::getInstance().signalPause.connect([](bool isPaused) { grapher.onPause(isPaused); });
-    events_manager::EventManager::getInstance().signalRefresh.connect([](std::chrono::milliseconds) { grapher.onRefresh(); });
+    events_manager::EventManager::getInstance().signalRefresh.connect([](std::chrono::milliseconds step)  { grapher.onRefresh(step); });
     events_manager::EventManager::getInstance().signalSimulationResult.connect([](const simulator::SimulationState &state) { grapher.onSimulationResult(state); });
 }
 }

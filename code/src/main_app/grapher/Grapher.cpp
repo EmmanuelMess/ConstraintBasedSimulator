@@ -19,9 +19,9 @@ void Grapher::onPause(bool pause) {
     this->paused = pause;
 }
 
-void Grapher::onRefresh() const {
+void Grapher::onRefresh(std::chrono::milliseconds step) const {
     if(!paused) {
-        events_manager::EventManager::getInstance().signalStep(std::chrono::milliseconds(100));
+        events_manager::EventManager::getInstance().signalStep(step);
     }
 }
 

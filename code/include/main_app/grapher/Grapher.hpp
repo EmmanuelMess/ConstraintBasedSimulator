@@ -20,7 +20,7 @@ private:
 
     void onPause(bool pause);
 
-    void onRefresh() const;
+    void onRefresh(std::chrono::milliseconds step) const;
 
     static void onSimulationResult(const simulator::SimulationState& state);
 
