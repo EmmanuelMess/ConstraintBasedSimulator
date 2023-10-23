@@ -21,8 +21,9 @@ target_include_directories(main_app ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${
 
 target_link_system_libraries(
   main_app
-  PRIVATE
-          spdlog::spdlog
+  PRIVATE spdlog::spdlog
 )
+
+add_backward(main_app)
 
 target_include_directories(main_app PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")

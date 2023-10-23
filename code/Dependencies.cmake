@@ -93,4 +93,8 @@ function(ConstraintBasedSimulator_setup_dependencies)
     cpmaddpackage("gh:autodiff/autodiff@1.0.3")
   endif()
 
+  if(NOT TARGET backward)
+    cpmaddpackage("gh:bombela/backward-cpp@1.6")
+  endif()
+
 endfunction()

@@ -26,7 +26,10 @@ macro(ConstraintBasedSimulator_enable_cppcheck WARNINGS_AS_ERRORS CPPCHECK_OPTIO
           # ignores code that cppcheck thinks is invalid C++
           --suppress=syntaxError
           --suppress=preprocessorErrorDirective
-          --inconclusive)
+          --inconclusive
+          # ignore library folders
+          -i${backward_SOURCE_DIR}/
+      )
     else()
       # if the user provides a CPPCHECK_OPTIONS with a template specified, it will override this template
       set(CMAKE_CXX_CPPCHECK ${CPPCHECK} --template=${CPPCHECK_TEMPLATE} ${CPPCHECK_OPTIONS})

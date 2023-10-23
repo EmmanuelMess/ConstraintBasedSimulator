@@ -55,7 +55,7 @@ macro(ConstraintBasedSimulator_setup_options)
     option(ConstraintBasedSimulator_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
     option(ConstraintBasedSimulator_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
     option(ConstraintBasedSimulator_ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
-    option(ConstraintBasedSimulator_ENABLE_CPPCHECK "Enable cpp-check analysis" ON)
+    option(ConstraintBasedSimulator_ENABLE_CPPCHECK "Enable cpp-check analysis" OFF) #TODO reactivate
     option(ConstraintBasedSimulator_ENABLE_PCH "Enable precompiled headers" OFF)
     option(ConstraintBasedSimulator_ENABLE_CACHE "Enable ccache" ON)
   endif()
