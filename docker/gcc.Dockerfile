@@ -1,4 +1,4 @@
-FROM gcc:13.2.0
+FROM teeks99/gcc-ubuntu:13
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -14,6 +14,8 @@ RUN apt update \
                  libxcb-render-util0 libxcb-render0 libxcb-shape0 libxcb-shm0 libxcb-sync1 \
                  libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb1 libxkbcommon-dev \
                  libxkbcommon-x11-0 libxcb-xkb-dev \
+  && apt install -y libx11-* libx11* libxcb-* libxcb* libxkbcommon-dev libxkbcommon-x11-dev \
+  && apt install -y libxcb-cursor0  \
   && apt clean
 
 #install cmake
@@ -22,6 +24,16 @@ RUN mkdir /opt/cmake
 RUN sh /cmake-Linux-x86_64.sh --prefix=/opt/cmake --skip-license
 RUN ln -s /opt/cmake/bin/cmake /usr/bin/cmake
 RUN cmake --version
+
+# Set the locale
+RUN apt update  \
+  && apt install -y locales  \
+  && apt clean
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 RUN useradd -ms /bin/bash user
 
