@@ -1,13 +1,20 @@
 #pragma once
 
-#include "main_app/input_reader/ConstraintType.hpp"
-#include "main_app/input_reader/ConstraintProperty.hpp"
+#include <variant>
 
 namespace input_reader {
 
 struct Constraint {
-    ConstraintType constraintType;
-    ConstraintProperty properties;
+    enum Type {
+        DistanceConstraint,
+        ForceConstraint
+    };
+
+    using Distance = double;
+    using Property = std::variant<Distance>;
+
+    Type constraintType;
+    Property properties;
 };
 
 } // input_reader

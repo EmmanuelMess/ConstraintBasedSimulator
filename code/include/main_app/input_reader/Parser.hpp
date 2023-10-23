@@ -4,7 +4,6 @@
 #include <filesystem>
 
 #include "main_app/input_reader/LexyComponents.hpp"
-#include "main_app/input_reader/Coordinate.hpp"
 
 namespace input_reader::internal::parser {
     class Parser {

@@ -2,12 +2,13 @@
 
 #include <string>
 
-#include "main_app/input_reader/Coordinate.hpp"
 #include "main_app/input_reader/PointId.hpp"
 
 namespace input_reader {
 
 struct Point {
+    using Coordinate = double;
+
     Coordinate x;
     Coordinate y;
 

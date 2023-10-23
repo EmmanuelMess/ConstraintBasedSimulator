@@ -36,12 +36,12 @@ void Simulator::initialize() {
     });
 
     for(const auto& [key, value] : std::unordered_map<input_reader::PointId, input_reader::Constraint> {
-           { "B", { input_reader::ConstraintType::DistanceConstraint, input_reader::ConstraintProperty(5.0) } }
+           { "B", { input_reader::Constraint::Type::DistanceConstraint, input_reader::Constraint::Constraint::Property(5.0) } }
          }) {
-        if(value.constraintType == input_reader::ConstraintType::DistanceConstraint) {
+        if(value.constraintType == input_reader::Constraint::Type::DistanceConstraint) {
             constraints[key] = [&value = value](const autodiff::var& positionX, const autodiff::var& positionY) {
                 const autodiff::var constraint = (0.5 * (positionX * positionX + positionY * positionY) - 1);
-                return constraint - std::get<input_reader::Distance>(value.properties);
+                return constraint - std::get<input_reader::Constraint::Distance>(value.properties);
             };
         }
     }

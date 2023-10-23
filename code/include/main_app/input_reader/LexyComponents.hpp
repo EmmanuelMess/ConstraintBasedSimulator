@@ -14,13 +14,11 @@
 #include <lexy/input/string_input.hpp>
 #include <lexy_ext/report_error.hpp>
 
-#include "main_app/input_reader/Coordinate.hpp"
-
 namespace input_reader::internal {
 namespace ast {
     using Identifier = std::string;
 
-    using Decimal = Coordinate;
+    using Decimal = double;
 
     struct Point {
         Identifier identifier;
@@ -76,6 +74,7 @@ namespace ast {
     };
 
     struct FunctionBody {
+        // TODO use variant
         std::optional<std::shared_ptr<FunctionBody>> left;
         std::optional<BinaryOperator> binaryOperator;
         std::optional<std::shared_ptr<FunctionBody>> right;

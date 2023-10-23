@@ -7,10 +7,16 @@
 #include <spdlog/spdlog.h>
 
 #include "main_app/input_reader/Parser.hpp"
+#include "main_app/util/VariadicOverload.hpp"
 
 namespace input_reader {
 bool ReadInput::readFile(const std::filesystem::path &path) {
     spdlog::info("Loading simulation file {}", path.string());
+
+    staticPoints.clear();
+    dynamicPoints.clear();
+    constraints.clear();
+    graphics.clear();
 
     const auto statementsOptional = internal::parser::Parser::readFile(path);
 
@@ -21,58 +27,56 @@ bool ReadInput::readFile(const std::filesystem::path &path) {
 
     const auto &statements = *statementsOptional;
 
-    const auto [points, identifiersForStaticPoints] = [&statements]() {
-        std::vector<internal::ast::Point> pointsInternal;
-        std::set<std::string> identifiersForStaticPointsInternal;
+    std::vector<internal::ast::Point> points;
+    std::set<std::string> identifiersForStaticPoints;
 
-        for (const auto &statement : statements) {
-            if (std::holds_alternative<internal::ast::Point>(statement.value)) {
-                const auto point = std::get<internal::ast::Point>(statement.value);
-                pointsInternal.emplace_back(point);
-            } else if (std::holds_alternative<internal::ast::StaticQualifiedPoint>(statement.value)) {
-                const auto qualifier = std::get<internal::ast::StaticQualifiedPoint>(statement.value);
-                const auto qualifiedIdentifier = qualifier.identifier;
-                identifiersForStaticPointsInternal.emplace(qualifiedIdentifier);
-            }
-        }
-
-        return std::pair(pointsInternal, identifiersForStaticPointsInternal);
-    }();
+    for (const auto &statement : statements) {
+        std::visit(VariadicOverload {
+          [&points](const internal::ast::Point& point){
+              points.emplace_back(point);
+          },
+          [&identifiersForStaticPoints](const internal::ast::StaticQualifiedPoint& qualifier){
+              identifiersForStaticPoints.emplace(qualifier.identifier);
+          },
+          [this](const internal::ast::Constraint& constraint) {
+              constraints[constraint.pointA] = { };
+              constraints[constraint.pointB] = { };
+          },
+          [this](const internal::ast::GraphicalStatement& graphicalStatement){
+              std::visit(VariadicOverload {
+                  [this](const internal::ast::Bar& bar){
+                      graphics[bar.pointA] = { };
+                      graphics[bar.pointB] = { };
+                  },
+                  [this](const internal::ast::Circle& circle){
+                      graphics[circle.point] = { };
+                  },
+              }, graphicalStatement.value);
+          },
+        }, statement.value);
+    }
 
     {
-        staticPoints.clear();
         staticPoints.reserve(identifiersForStaticPoints.size());
+        dynamicPoints.reserve(points.size() - identifiersForStaticPoints.size());
 
         for (const auto &point : points) {
             const bool isStatic = identifiersForStaticPoints.contains(point.identifier);
-            if (!isStatic) { continue; }
-
-            staticPoints.emplace_back(Point{
-              .x = point.xCoordinate,
-              .y = point.yCoordinate,
-              .identifier = point.identifier,
-            });
+            if (isStatic) {
+                staticPoints.emplace_back(Point{
+                  .x = point.xCoordinate,
+                  .y = point.yCoordinate,
+                  .identifier = point.identifier,
+                });
+            } else {
+                dynamicPoints.emplace_back(Point{
+                  .x = point.xCoordinate,
+                  .y = point.yCoordinate,
+                  .identifier = point.identifier,
+                });
+            }
         }
     }
-
-
-    {
-        dynamicPoints.clear();
-        dynamicPoints.reserve(points.size() - identifiersForStaticPoints.size());
-        for (const auto &point : points) {
-            const auto isStatic = identifiersForStaticPoints.contains(point.identifier);
-            if (isStatic) { continue; }
-
-            dynamicPoints.emplace_back(Point{
-              .x = point.xCoordinate,
-              .y = point.yCoordinate,
-              .identifier = point.identifier,
-            });
-        }
-    }
-
-    constraints = {};
-    graphics = {};
 
     return true;
 }
