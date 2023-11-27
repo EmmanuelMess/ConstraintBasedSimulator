@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="main_app" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ConstraintBasedSimulator" TARGET_NAME="main_app" CONFIG_NAME="Debug-Docker GCC 13" RUN_TARGET_PROJECT_NAME="ConstraintBasedSimulator" RUN_TARGET_NAME="main_app">
+  <configuration default="false" name="main_app" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ConstraintBasedSimulator" TARGET_NAME="main_app" CONFIG_NAME="Release-GCC 10" RUN_TARGET_PROJECT_NAME="ConstraintBasedSimulator" RUN_TARGET_NAME="main_app">
     <envs>
-      <env name="QT_DEBUG_PLUGINS" value="1" />
       <env name="DISPLAY" value=":0" />
     </envs>
     <method v="2">
