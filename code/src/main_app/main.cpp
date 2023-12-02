@@ -23,6 +23,7 @@ backward::SignalHandling signalHandling;
 // NOLINTNEXTLINE(bugprone-exception-escape)
 int main(int argc, char *argv[]) {
     try {
+        spdlog::set_level(spdlog::level::level_enum::debug);
         const events_manager::EventsInitializer eventsInitializer;
         return ui::runUi(argc, argv);
     } catch (const std::exception &e) { spdlog::error("Unhandled exception in main: {}", e.what()); }

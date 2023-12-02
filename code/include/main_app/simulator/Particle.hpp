@@ -5,9 +5,12 @@
 
 namespace simulator {
 struct Particle {
-    Vector2d position;
-    Vector2d force;
-    float mass;
     ParticleId identifier;
+    Vector2d position;
+    Vector2d velocity;
+    Vector2d acceleration;
+    bool isStatic;
+
+    Particle(ParticleId identifier, Vector2d position, bool isStatic);
 };
 }

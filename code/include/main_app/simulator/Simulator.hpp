@@ -18,10 +18,7 @@ public:
     [[nodiscard]] SimulationState getCurrentState() const;
 
 private:
-    static constexpr float STATIC_POINT_MASS = std::numeric_limits<float>::infinity();
-    static constexpr float DYNAMIC_POINT_MASS = std::numeric_limits<float>::epsilon();
-
-    std::vector<Particle> particles;
+    std::vector<std::shared_ptr<Particle>> particles;
     std::unordered_map<ParticleId, Constraint> constraints;
 
     void resetForces();

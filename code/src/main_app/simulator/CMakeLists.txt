@@ -1,6 +1,8 @@
 add_library(simulator
     EventLatch.cpp
     Simulator.cpp
+    Particle.cpp
+    Constraint.cpp
     StateLoader.cpp)
 
 add_library(ConstraintBasedSimulator::simulator ALIAS simulator)
