@@ -72,15 +72,19 @@ function(ConstraintBasedSimulator_setup_dependencies)
 
     if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
       message(STATUS "Configuring Qt for Linux")
+      file(READ ${QT_SOURCE_DIR}/configure FILE_CONTENTS)
+      string(REPLACE "cmake " "${CMAKE_COMMAND} " FILE_CONTENTS "${FILE_CONTENTS}")
+      file(WRITE ${QT_SOURCE_DIR}/configure "${FILE_CONTENTS}")
       execute_process( COMMAND ${QT_SOURCE_DIR}/configure -release -c++std c++20 -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
     endif ()
     if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
       message(STATUS "Configuring Qt for Windows")
+      # TODO use ${CMAKE_COMMAND} instead of cmake in configure.bat
       execute_process( COMMAND ${QT_SOURCE_DIR}/configure.bat -release -c++std c++20 -prefix ${QT_BUILD_DIR} WORKING_DIRECTORY ${QT_BUILD_DIR} )
     endif ()
 
     message(STATUS "Building Qt")
-    execute_process( COMMAND cmake --build . --parallel ${JOBS_OPTION} WORKING_DIRECTORY ${QT_BUILD_DIR} )
+    execute_process( COMMAND ${CMAKE_COMMAND} --build . --parallel ${JOBS_OPTION} WORKING_DIRECTORY ${QT_BUILD_DIR} )
 
     # Set necessary environment variables to use Qt
     set( ENV{QTDIR} ${QT_BUILD_DIR} )
