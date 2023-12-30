@@ -1,11 +1,11 @@
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
-qt_standard_project_setup()
+#TODO update qt6 version and use qt_standard_project_setup()
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-if (NOT CMAKE_PREFIX_PATH)
+if (NOT DEFINED CMAKE_PREFIX_PATH)
   message(WARNING "CMAKE_PREFIX_PATH is not defined, you may need to set it "
       "(-DCMAKE_PREFIX_PATH=\"path/to/Qt/lib/cmake\" or -DCMAKE_PREFIX_PATH=/usr/include/{host}/qt{version}/ on Ubuntu)")
 endif ()

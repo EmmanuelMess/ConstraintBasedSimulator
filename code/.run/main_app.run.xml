@@ -1,11 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="main_app" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ConstraintBasedSimulator" TARGET_NAME="main_app" CONFIG_NAME="Release-GCC 11" RUN_TARGET_PROJECT_NAME="ConstraintBasedSimulator" RUN_TARGET_NAME="main_app">
-    <envs>
-      <env name="DISPLAY" value=":0" />
-    </envs>
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_xhost docker" />
     </method>
   </configuration>
 </component>

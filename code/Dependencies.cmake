@@ -47,7 +47,8 @@ function(ConstraintBasedSimulator_setup_dependencies)
     cpmaddpackage("https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip")
   endif()
 
-  if(NOT TARGET qt6)
+  # TODO use own qt6 version to prevent multiplatform problems but it doesnt compile with wayland
+  if(FALSE)# if(NOT TARGET qt6)
     message(STATUS "Adding qt6")
 
     # Download and extract archive of Qt
