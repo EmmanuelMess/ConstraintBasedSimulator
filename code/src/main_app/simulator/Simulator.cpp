@@ -1,11 +1,12 @@
 #include "main_app/simulator/Simulator.hpp"
 
+#include <fmt/ostream.h>
 #include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 #include "main_app/GeneralConstants.hpp"
 #include "main_app/events_manager/EventManager.hpp"
 #include "main_app/simulator/StateLoader.hpp"
-#include "main_app/simulator/EigenHelper.hpp"
 
 namespace simulator {
 
@@ -27,17 +28,18 @@ void Simulator::initialize() {
           return std::make_shared<Particle>(point.identifier, Vector2d(point.x, point.y), false);
       });
 
+    // TODO rewrite this
     for(const auto& [key, value] : std::unordered_map<input_reader::PointId, input_reader::Constraint> {
            { "B", { input_reader::Constraint::Type::DistanceConstraint, input_reader::Constraint::Constraint::Property(5.0) } }
          }) {
         if(value.constraintType == input_reader::Constraint::Type::DistanceConstraint) {
-            const auto constraintFunction = [&value = value](autodiff::dual time, autodiff::VectorXdual position,
+            const auto constraintFunction = [value](autodiff::dual time, autodiff::VectorXdual position,
                                               autodiff::VectorXdual velocity, autodiff::VectorXdual acceleration) {
                 const auto positionFunction = [&position, &velocity, &acceleration](autodiff::dual time) -> autodiff::VectorXdual {
                     return position + time * velocity + (time * time) * 1/2 * acceleration;
                 };
                 const double distance = std::get<input_reader::Constraint::Distance>(value.properties);
-                const autodiff::dual constraint = 0.5 * (positionFunction(time) * positionFunction(time)).sum() - distance;
+                const autodiff::dual constraint = 0.5 * positionFunction(time).dot(positionFunction(time)) - distance;
                 return constraint;
             };
 
@@ -50,6 +52,7 @@ void Simulator::step() {
     resetForces();
     //TODO add external forces
     calculateConstraintForces();
+
     // TODO calculate acceleration and apply (for non static functions)
 
     events_manager::EventManager::getInstance().signalSimulationResult(getCurrentState());
@@ -82,12 +85,21 @@ void Simulator::calculateConstraintForces() {
             accelerations.row(index) = particle->acceleration.transpose();
         }
 
-        spdlog::debug("Positions\n{}", internal::EigenHelper::matrixToString(positions.reshaped()));
-        spdlog::debug("Velocity\n{}", internal::EigenHelper::matrixToString(velocities.reshaped()));
-        spdlog::debug("Accelerations\n{}", internal::EigenHelper::matrixToString(accelerations.reshaped()));
+        spdlog::debug("Positions\n{}", fmt::streamed(positions.reshaped()));
+        spdlog::debug("Velocity\n{}", fmt::streamed(velocities.reshaped()));
+        spdlog::debug("Accelerations\n{}", fmt::streamed(accelerations.reshaped()));
 
-        const double c = constraint.dConstraint(positions.reshaped(), velocities.reshaped(), accelerations.reshaped());
+        const double c = constraint.getConstraint(positions.reshaped(), velocities.reshaped(), accelerations.reshaped());
+        const double dC = constraint.dConstraint(positions.reshaped(), velocities.reshaped(), accelerations.reshaped());
+        const auto j = constraint.jacobian(positions.reshaped(), velocities.reshaped(), accelerations.reshaped());
+        const auto d2j = constraint.d2Jacobian(positions.reshaped(), velocities.reshaped(), accelerations.reshaped());
         spdlog::debug("Constraint {}", c);
+        spdlog::debug("dConstraint {}", dC);
+        spdlog::debug("Jacobian\n{}", fmt::streamed(j.reshaped()));
+        spdlog::debug("d2Jacobian\n{}", fmt::streamed(d2j.reshaped()));
+
+
+        
     }
 }
 

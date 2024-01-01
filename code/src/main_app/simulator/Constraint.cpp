@@ -7,6 +7,12 @@ Constraint::Constraint(Constraint::ConstraintFunction constraint, std::vector<st
     : constraint(std::move(constraint))
     , particles(std::move(particles)) {}
 
+double Constraint::getConstraint(autodiff::VectorXdual positionVectors, autodiff::VectorXdual velocityVectors,
+  autodiff::VectorXdual accelerationVectors) const {
+    autodiff::dual time = 0;
+    return constraint(time, positionVectors, velocityVectors, accelerationVectors).val;
+}
+
 double Constraint::dConstraint(autodiff::VectorXdual positionVectors, autodiff::VectorXdual velocityVectors,
   autodiff::VectorXdual accelerationVectors) const {
     autodiff::dual time = 0;

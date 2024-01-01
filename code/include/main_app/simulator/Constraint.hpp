@@ -18,6 +18,9 @@ public:
 
     Constraint(ConstraintFunction constraint, std::vector<std::shared_ptr<Particle>> particles);
 
+    [[nodiscard]] double getConstraint(autodiff::VectorXdual positionVectors, autodiff::VectorXdual velocityVectors,
+      autodiff::VectorXdual accelerationVectors) const;
+
     [[nodiscard]] double dConstraint(autodiff::VectorXdual positionVectors, autodiff::VectorXdual velocityVectors,
       autodiff::VectorXdual accelerationVectors) const;
 
