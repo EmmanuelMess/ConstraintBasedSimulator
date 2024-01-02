@@ -30,5 +30,16 @@ jobs:
         with:
           python-version: ${{ matrix.version }}
       - run: pip install -r requirements.txt
-
-      # TODO add unit tests
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+      - name: Test with pytest
+        run: pytest tests/ --doctest-modules --junitxml=junit/test-results-${{ matrix.version }}.xml
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-results-${{ matrix.version }}
+          path: junit/test-results-${{ matrix.version }}.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
