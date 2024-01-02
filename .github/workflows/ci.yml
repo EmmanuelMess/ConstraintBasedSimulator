@@ -24,7 +24,6 @@ jobs:
         version:
           - '3.10'
           - 'pypy3.9'
-          - 'graalpy-22.3'      
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
