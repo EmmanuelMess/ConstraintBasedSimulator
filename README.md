@@ -26,6 +26,10 @@ constraint force E B fun (t) -> sin(tau*3/4 + tau * 0.5 * t)
 constraint force D B fun (t) -> sin(tau/2   + tau * 0.5 * t)
 ```
 
+## Wireframe
+
+<img src="./design/drawings/main window wireframe.png"/>
+
 ## Sample
 
 <img src="./design/diagrams/sample-diagram.png"/>
