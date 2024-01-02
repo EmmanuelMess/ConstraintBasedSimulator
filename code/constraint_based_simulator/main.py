@@ -1,4 +1,4 @@
-from ui.MainApp import MainApp
+from constraint_based_simulator.ui.MainApp import MainApp
 
 
 def main():

@@ -2,8 +2,8 @@ import sys
 
 from PySide6 import QtWidgets
 
-from common.Singleton import Singleton
-from ui.MainWindow import MainWindow
+from constraint_based_simulator.common.Singleton import Singleton
+from constraint_based_simulator.ui.MainWindow import MainWindow
 
 
 class MainApp(metaclass=Singleton):
