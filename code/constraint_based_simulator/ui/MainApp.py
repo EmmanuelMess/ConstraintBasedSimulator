@@ -6,9 +6,15 @@ from constraint_based_simulator.common.Singleton import Singleton
 from constraint_based_simulator.ui.MainWindow import MainWindow
 
 
-class MainApp(metaclass=Singleton):
+class MainApp(metaclass=Singleton):  # pylint: disable=too-few-public-methods
+    """
+    Initial runner for the app, container for the state of the main Qt runner, and the main window
+    """
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Runs the app
+        """
         app = QtWidgets.QApplication([])
 
         widget = MainWindow()

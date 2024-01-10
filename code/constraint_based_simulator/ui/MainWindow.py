@@ -2,7 +2,7 @@ import random
 from PySide6 import QtCore, QtWidgets
 
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(QtWidgets.QWidget): # pylint: disable=too-few-public-methods
     def __init__(self):
         super().__init__()
 

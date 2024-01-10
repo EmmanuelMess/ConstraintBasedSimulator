@@ -27,4 +27,3 @@ class TestSignal:
         signal.connect(signalDummyCall)
         signal.signal(SEND_VALUE)
         assert self.signalCalled
-
