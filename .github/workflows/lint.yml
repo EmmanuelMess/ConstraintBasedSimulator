@@ -36,3 +36,8 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint constraint_based_simulator
+        
+    - name: Check types with MyPy
+      run: |
+        mypy constraint_based_simulator
+       
