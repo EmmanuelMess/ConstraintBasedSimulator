@@ -1,19 +1,13 @@
-start: statement*
+start: statement* -> start
 
-statement: point_definition
-         | static_qualifier
+?statement: IDENTIFIER "=" "(" DECIMAL "," DECIMAL ")" -> point_definition
+         | "static" IDENTIFIER -> static_qualifier
          | constraint
          | graphical_statement
 
 
-point_definition: IDENTIFIER "=" "(" DECIMAL "," DECIMAL ")"
-
-
-static_qualifier: "static" IDENTIFIER
-
-
-constraint: "constraint" CONSTRAINT_TYPE IDENTIFIER IDENTIFIER CONSTRAINT_OPERATOR DECIMAL
-          | "constraint" CONSTRAINT_TYPE IDENTIFIER IDENTIFIER "fun" function
+constraint: "constraint" CONSTRAINT_TYPE IDENTIFIER IDENTIFIER CONSTRAINT_OPERATOR DECIMAL -> constant_constraint
+          | "constraint" CONSTRAINT_TYPE IDENTIFIER IDENTIFIER "fun" function -> function_constraint
 
 function: "(" function_parameters ")" "->" function_body
 
@@ -28,8 +22,8 @@ function_body: function_body BINARY_OPERATOR function_body
              | CONSTANT
 
 
-graphical_statement: "show" "bar" IDENTIFIER IDENTIFIER
-                   | "show" "circle" IDENTIFIER "radius" DECIMAL
+graphical_statement: "show" "bar" IDENTIFIER IDENTIFIER -> bar
+                   | "show" "circle" IDENTIFIER "radius" DECIMAL -> circle
 
 
 CONSTRAINT_TYPE: "distance"
