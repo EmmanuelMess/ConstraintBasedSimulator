@@ -5,5 +5,5 @@ from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 
 @dataclass
 class Circle:
-    identifier: Identifier
+    center: Identifier
     length: float

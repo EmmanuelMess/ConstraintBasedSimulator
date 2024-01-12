@@ -8,4 +8,7 @@ from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 class Point:
     x: Coordinate
     y: Coordinate
-    name: Identifier
+    identifier: Identifier
+
+    def __hash__(self):
+        return hash(self.identifier)

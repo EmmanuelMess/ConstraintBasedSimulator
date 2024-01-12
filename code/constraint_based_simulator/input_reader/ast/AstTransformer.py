@@ -48,7 +48,7 @@ class AstTransformer(Transformer):
             case 'force':
                 return ConstraintType.FORCE
             case _:
-                MainLogger.LOGGER.error("Forgot to add a constraint type to the AST")
+                MainLogger.MAIN_LOGGER.error("Forgot to add a constraint type to the AST")
                 return None
 
     def CONSTRAINT_OPERATOR(self, op: str) -> ConstraintOperator | None:
@@ -64,7 +64,7 @@ class AstTransformer(Transformer):
             case '<=':
                 return ConstraintOperator.GREATER_OR_EQUAL
             case _:
-                MainLogger.LOGGER.error("Forgot to add an operator type to the AST")
+                MainLogger.MAIN_LOGGER.error("Forgot to add an operator type to the AST")
                 return None
 
     def IDENTIFIER(self, token: Token) -> Identifier:

@@ -17,4 +17,4 @@ def getMainAppLogger() -> Logger:
     return logger
 
 
-LOGGER = getMainAppLogger()
+MAIN_LOGGER = getMainAppLogger()
