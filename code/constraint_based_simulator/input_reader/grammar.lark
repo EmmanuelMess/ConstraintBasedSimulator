@@ -1,0 +1,69 @@
+start: statement*
+
+statement: point_definition
+         | static_qualifier
+         | constraint
+         | graphical_statement
+
+
+point_definition: IDENTIFIER "=" "(" DECIMAL "," DECIMAL ")"
+
+
+static_qualifier: "static" IDENTIFIER
+
+
+constraint: "constraint" CONSTRAINT_TYPE IDENTIFIER IDENTIFIER CONSTRAINT_OPERATOR DECIMAL
+          | "constraint" CONSTRAINT_TYPE IDENTIFIER IDENTIFIER "fun" function
+
+function: "(" function_parameters ")" "->" function_body
+
+function_parameters: PROPERTY_IDENTIFIER
+                   | function_parameters "," PROPERTY_IDENTIFIER
+
+function_body: function_body BINARY_OPERATOR function_body
+             | UNARY_OPERATOR function_body
+             | "(" function_body ")"
+             | PROPERTY_IDENTIFIER
+             | DECIMAL
+             | CONSTANT
+
+
+graphical_statement: "show" "bar" IDENTIFIER IDENTIFIER
+                   | "show" "circle" IDENTIFIER "radius" DECIMAL
+
+
+CONSTRAINT_TYPE: "distance"
+               | "force"
+
+CONSTRAINT_OPERATOR: "=="
+                   | "<"
+                   | ">"
+                   | "<="
+                   | ">="
+
+
+PROPERTY_IDENTIFIER: "distance" | "t"
+
+UNARY_OPERATOR: "-"
+              | "sin" | "cos" | "tan"
+              | "asin" | "acos" | "atan"
+              | "sinh" | "cosh" | "tanh"
+              | "ln" | "log" | "exp" | "sqrt"
+
+BINARY_OPERATOR: "+" | "-" | "*" | "/" | "^"
+
+CONSTANT: "tau" | "pi"
+
+
+IDENTIFIER: CNAME
+          | ESCAPED_IDENTIFIER
+ESCAPED_IDENTIFIER: /\\([^\s]+)/
+DECIMAL: SIGNED_NUMBER
+
+
+%import common.CNAME
+%import common.WS
+%import common.ESCAPED_STRING
+%import common.SIGNED_NUMBER
+
+%ignore WS
