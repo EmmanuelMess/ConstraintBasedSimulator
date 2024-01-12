@@ -1,6 +1,7 @@
 statement ::= ε
             | <point-definition> eol
             | <static-qualifier> eol
+            | <constraint> eol
             | <graphical-statement> eol
 
 point-definition ::= <identifier> = (<decimal>, <decimal>)
