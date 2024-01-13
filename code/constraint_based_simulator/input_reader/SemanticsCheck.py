@@ -17,7 +17,7 @@ def checkSemantics(ast: Statements) -> bool:
         isNotRegistered = identifier not in registeredIdentifiers
         if isNotRegistered:
             MAIN_LOGGER.error(f"Identifier {identifier} is not registered")
-        return isNotRegistered
+        return not isNotRegistered
 
     for statement in ast:
         if isinstance(statement, Point):
@@ -26,20 +26,22 @@ def checkSemantics(ast: Statements) -> bool:
 
             registeredIdentifiers.append(statement.identifier)
         elif isinstance(statement, StaticQualifier):
-            if checkRegistered(statement.identifier):
+            if not checkRegistered(statement.identifier):
                 return False
         elif isinstance(statement, Constraint):
-            if checkRegistered(statement.identifierA):
+            if not checkRegistered(statement.identifierA):
                 return False
-            if checkRegistered(statement.identifierB):
+            if not checkRegistered(statement.identifierB):
+                return False
+            if statement.identifierA == statement.identifierB:
                 return False
         elif isinstance(statement, Bar):
-            if checkRegistered(statement.start):
+            if not checkRegistered(statement.start):
                 return False
-            if checkRegistered(statement.end):
+            if not checkRegistered(statement.end):
                 return False
         elif isinstance(statement, Circle):
-            if checkRegistered(statement.center):
+            if not checkRegistered(statement.center):
                 return False
 
     return True

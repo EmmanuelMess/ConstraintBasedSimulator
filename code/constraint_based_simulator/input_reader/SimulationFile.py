@@ -1,11 +1,10 @@
 from typing import List
 
-from constraint_based_simulator.input_reader import SemanticsCheck
+from constraint_based_simulator.input_reader import SemanticsCheck, Parser
 from constraint_based_simulator.input_reader.ast.AstTransformer import AstTransformer
 from constraint_based_simulator.input_reader.ast.Constraint import Constraint
 from constraint_based_simulator.input_reader.ast.GraphicalElement import GraphicalElement
 from constraint_based_simulator.input_reader.ast.Identifier import Identifier
-from constraint_based_simulator.input_reader.Parser import Parser
 from constraint_based_simulator.input_reader.ast.Point import Point
 from constraint_based_simulator.input_reader.ast.StaticQualifier import StaticQualifier
 
