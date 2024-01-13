@@ -26,7 +26,7 @@ class SimulationFile:
             return
 
         self.allPoints: List[Point] = [value for value in ast if isinstance(value, Point)]
-        self.allPointsByIdentifier: dict[Identifier, Point] = { value.identifier: value for value in self.allPoints }
+        self.allPointsByIdentifier: dict[Identifier, Point] = {value.identifier: value for value in self.allPoints}
         self.staticIdentifiers: List[Identifier] = [
             value.identifier for value in ast if isinstance(value, StaticQualifier)
         ]

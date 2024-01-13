@@ -32,9 +32,9 @@ class TestSemanticsCheck:
         )
 
         assert SemanticsCheck.checkSemantics(
-            declarePoints+[ConstantConstraint(ConstraintType.DISTANCE, "a", "b", ConstraintOperator.GREATER, 3)]
+            declarePoints + [ConstantConstraint(ConstraintType.DISTANCE, "a", "b", ConstraintOperator.GREATER, 3)]
         )
 
         assert SemanticsCheck.checkSemantics(
-            declarePoints+[ConstantConstraint(ConstraintType.FORCE, "a", "b", ConstraintOperator.LESS, 3)]
+            declarePoints + [ConstantConstraint(ConstraintType.FORCE, "a", "b", ConstraintOperator.LESS, 3)]
         )

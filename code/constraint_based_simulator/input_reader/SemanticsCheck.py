@@ -10,40 +10,45 @@ from constraint_based_simulator.input_reader.ast.Statements import Statements
 from constraint_based_simulator.input_reader.ast.StaticQualifier import StaticQualifier
 
 
-def checkSemantics(ast: Statements) -> bool:
-    registeredIdentifiers: List[Identifier] = []
+def _checkRegistered(registeredIdentifiers: List[Identifier], identifier: Identifier):
+    isNotRegistered = identifier not in registeredIdentifiers
+    if isNotRegistered:
+        MAIN_LOGGER.error(f"Identifier {identifier} is not registered")
+    return not isNotRegistered
 
-    def checkRegistered(identifier: Identifier):
-        isNotRegistered = identifier not in registeredIdentifiers
-        if isNotRegistered:
-            MAIN_LOGGER.error(f"Identifier {identifier} is not registered")
-        return not isNotRegistered
+
+def checkSemantics(ast: Statements) -> bool:  # noqa: C901
+    """
+    Validate that a set of statements represents a correctly formed simulation
+    :param ast: list of statements, in order, to check
+    :return: True if it is a valid simulation state
+    """
+
+    registeredIdentifiers: List[Identifier] = []
 
     for statement in ast:
         if isinstance(statement, Point):
-            if checkRegistered(statement.identifier):
+            if _checkRegistered(registeredIdentifiers, statement.identifier):
                 return False
 
             registeredIdentifiers.append(statement.identifier)
         elif isinstance(statement, StaticQualifier):
-            if not checkRegistered(statement.identifier):
+            if not _checkRegistered(registeredIdentifiers, statement.identifier):
                 return False
         elif isinstance(statement, Constraint):
-            if not checkRegistered(statement.identifierA):
+            if not _checkRegistered(registeredIdentifiers, statement.identifierA):
                 return False
-            if not checkRegistered(statement.identifierB):
+            if not _checkRegistered(registeredIdentifiers, statement.identifierB):
                 return False
             if statement.identifierA == statement.identifierB:
                 return False
         elif isinstance(statement, Bar):
-            if not checkRegistered(statement.start):
+            if not _checkRegistered(registeredIdentifiers, statement.start):
                 return False
-            if not checkRegistered(statement.end):
+            if not _checkRegistered(registeredIdentifiers, statement.end):
                 return False
         elif isinstance(statement, Circle):
-            if not checkRegistered(statement.center):
+            if not _checkRegistered(registeredIdentifiers, statement.center):
                 return False
 
     return True
-
-
