@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing_extensions import Callable, TypeVarTuple, Generic, Unpack
 
 VarArgs = TypeVarTuple('VarArgs')
@@ -8,7 +10,7 @@ class Signal(Generic[Unpack[VarArgs]]):
     Simple mechanism that allows abstracted invocation of callbacks. Multiple callbacks can be attached to a signal
     so that they are all called when the signal is emitted.
     """
-    function: Callable
+    function: Callable | None = None
 
     def connect(self, function: Callable[[Unpack[VarArgs]], None]):
         """
@@ -22,4 +24,5 @@ class Signal(Generic[Unpack[VarArgs]]):
         Call all callbacks with the arguments passed
         :param args: arguments for the signal, must be the same type as type parameter
         """
-        self.function(*args)
+        if self.function is not None:
+            self.function(*args)
