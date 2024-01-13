@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import Qt, Slot, QTimer
+from PySide6.QtWidgets import QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QWidget
 
+from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.events_manager.EventsManager import EventsManager
 from constraint_based_simulator.ui import Strings
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(QWidget):
     """
     Handles state and interaction with the main window of the app
     """
@@ -18,19 +20,25 @@ class MainWindow(QtWidgets.QWidget):
         SimulationSpeeds.X100: Strings.speed100
     }
 
+    UPDATE_TICK: int = 1000
+
     def __init__(self):
         super().__init__()
 
         self.isPaused = True
         self.velocity = SimulationSpeeds.X1
 
-        self.runButton = QtWidgets.QPushButton(Strings.run)
-        self.velocityButton = QtWidgets.QPushButton(Strings.speed1)
-        self.text = QtWidgets.QLabel(text="Grapher", parent=self, alignment=QtCore.Qt.AlignCenter)
+        self.timer = QTimer(self)
+        self.timer.start(MainWindow.UPDATE_TICK)
+        self.timer.timeout.connect(self.onUpdateGraph)
 
-        self.rootLayout = QtWidgets.QVBoxLayout(self)
+        self.runButton = QPushButton(Strings.run)
+        self.velocityButton = QPushButton(Strings.speed1)
+        self.text = QLabel(text="Grapher", parent=self, alignment=Qt.AlignCenter)
 
-        self.topLayout = QtWidgets.QHBoxLayout(self)
+        self.rootLayout = QVBoxLayout(self)
+
+        self.topLayout = QHBoxLayout(self)
         self.topLayout.addWidget(self.runButton)
         self.topLayout.addWidget(self.velocityButton)
 
@@ -40,14 +48,19 @@ class MainWindow(QtWidgets.QWidget):
         self.runButton.clicked.connect(self.onRunButtonClick)
         self.velocityButton.clicked.connect(self.onVelocityButtonClick)
 
-    @QtCore.Slot()
+    @Slot()
+    def onUpdateGraph(self):  # pylint: disable=missing-function-docstring
+        MAIN_LOGGER.debug("Update called")
+        EventsManager.signalRefresh.emit()
+
+    @Slot()
     def onRunButtonClick(self):  # pylint: disable=missing-function-docstring
         self.isPaused = not self.isPaused
 
         EventsManager.signalPause.emit(self.isPaused)
         self.runButton.setText(MainWindow.PAUSED_TEXT[self.isPaused])
 
-    @QtCore.Slot()
+    @Slot()
     def onVelocityButtonClick(self):  # pylint: disable=missing-function-docstring
         self.velocity = list(SimulationSpeeds)[(self.velocity.value + 1) % len(SimulationSpeeds)]
 
