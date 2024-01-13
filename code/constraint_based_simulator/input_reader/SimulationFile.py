@@ -2,7 +2,9 @@ from typing import List
 
 from constraint_based_simulator.input_reader import SemanticsCheck, Parser
 from constraint_based_simulator.input_reader.ast.AstTransformer import AstTransformer
+from constraint_based_simulator.input_reader.ast.ConstantConstraint import ConstantConstraint
 from constraint_based_simulator.input_reader.ast.Constraint import Constraint
+from constraint_based_simulator.input_reader.ast.FunctionConstraint import FunctionConstraint
 from constraint_based_simulator.input_reader.ast.GraphicalElement import GraphicalElement
 from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 from constraint_based_simulator.input_reader.ast.Point import Point
@@ -38,7 +40,8 @@ class SimulationFile:
         ]
 
         self.allConstraints: List[Constraint] = [
-            value for value in ast if isinstance(value, Constraint)
+            value for value in ast if isinstance(value, ConstantConstraint) or isinstance(value, FunctionConstraint)
+            # HACK because mypy doesnt support unions in isinstance see https://github.com/python/mypy/issues/16358
         ]
         self.constraintsByPoints: dict[Point, Constraint] = {}
 
