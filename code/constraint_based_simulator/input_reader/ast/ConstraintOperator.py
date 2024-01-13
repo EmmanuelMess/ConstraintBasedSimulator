@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ConstraintOperator(Enum):
+class ConstraintOperator(Enum):  # pylint: disable=missing-class-docstring
     EQUAL = 0
     GREATER = 1
     LESS = 2

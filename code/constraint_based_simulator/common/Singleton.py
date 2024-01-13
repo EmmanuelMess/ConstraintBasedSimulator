@@ -6,6 +6,9 @@ _T = TypeVar("_T")
 
 
 class Singleton(type, Generic[_T]):
+    """
+    A metaclass designed to hijack the constructor of the class to generate and always use a single instance
+    """
     _instances: dict[Singleton[_T], _T] = {}
 
     def __call__(cls, *args: Any, **kwargs: Any) -> _T:

@@ -2,7 +2,10 @@ import random
 from PySide6 import QtCore, QtWidgets
 
 
-class MainWindow(QtWidgets.QWidget):  # pylint: disable=too-few-public-methods
+class MainWindow(QtWidgets.QWidget):
+    """
+    Handles state and interaction with the main window of the app
+    """
     def __init__(self):
         super().__init__()
 
@@ -18,5 +21,5 @@ class MainWindow(QtWidgets.QWidget):  # pylint: disable=too-few-public-methods
         self.button.clicked.connect(self.magic)
 
     @QtCore.Slot()
-    def magic(self):
+    def magic(self):  # pylint: disable=missing-function-docstring
         self.text.setText(random.choice(self.hello))

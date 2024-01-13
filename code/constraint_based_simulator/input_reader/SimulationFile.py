@@ -25,49 +25,70 @@ class SimulationFile:
         if not self.semanticsValid:
             return
 
-        self.allPoints: List[Point] = [value for value in ast if isinstance(value, Point)]
-        self.allPointsByIdentifier: dict[Identifier, Point] = {value.identifier: value for value in self.allPoints}
+        allPoints: List[Point] = [value for value in ast if isinstance(value, Point)]
+        allPointsByIdentifier: dict[Identifier, Point] = {value.identifier: value for value in allPoints}
         self.staticIdentifiers: List[Identifier] = [
             value.identifier for value in ast if isinstance(value, StaticQualifier)
         ]
 
         self.staticPoints: List[Point] = [
-            point for point in self.allPoints if point.identifier in self.staticIdentifiers
+            point for point in allPoints if point.identifier in self.staticIdentifiers
         ]
 
         self.dynamicPoints: List[Point] = [
-            point for point in self.allPoints if point.identifier not in self.staticIdentifiers
+            point for point in allPoints if point.identifier not in self.staticIdentifiers
         ]
 
-        self.allConstraints: List[Constraint] = [
+        allConstraints: List[Constraint] = [
+            # pylint: disable-next=consider-merging-isinstance
             value for value in ast if isinstance(value, ConstantConstraint) or isinstance(value, FunctionConstraint)
-            # HACK because mypy doesnt support unions in isinstance see https://github.com/python/mypy/issues/16358
+            # HACK because mypy doesn't support unions in isinstance see https://github.com/python/mypy/issues/16358
         ]
         self.constraintsByPoints: dict[Point, Constraint] = {}
 
-        for constraint in self.allConstraints:
-            self.constraintsByPoints[self.allPointsByIdentifier[constraint.identifierA]] = constraint
-            self.constraintsByPoints[self.allPointsByIdentifier[constraint.identifierB]] = constraint
+        for constraint in allConstraints:
+            self.constraintsByPoints[allPointsByIdentifier[constraint.identifierA]] = constraint
+            self.constraintsByPoints[allPointsByIdentifier[constraint.identifierB]] = constraint
 
     def getStaticPoints(self) -> List[Point] | None:
+        """
+        Get static points in file
+        :return: if the file does not pass the SemanticsCheck.checkSemantics validation, returns None, otherwise
+        a list of AST Point
+        """
         if not self.semanticsValid:
             return None
 
         return self.staticPoints
 
     def getDynamicPoints(self) -> List[Point] | None:
+        """
+        Get dynamic points in file
+        :return: if the file does not pass the SemanticsCheck.checkSemantics validation, returns None, otherwise
+        a list of AST Point
+        """
         if not self.semanticsValid:
             return None
 
         return self.dynamicPoints
 
     def getConstraints(self) -> dict[Point, Constraint] | None:
+        """
+        Get constraints in file indexed by the points it acts on
+        :return: if the file does not pass the SemanticsCheck.checkSemantics validation, returns None, otherwise
+        a dictionary of AST Point to Constraint
+        """
         if not self.semanticsValid:
             return None
 
         return self.constraintsByPoints
 
     def getGraphics(self) -> dict[Point, GraphicalElement] | None:
+        """
+        Get graphical elements in file indexed by the points it latches to
+        :return: if the file does not pass the SemanticsCheck.checkSemantics validation, returns None, otherwise
+        a dictionary of AST Points to GraphicalElement
+        """
         if not self.semanticsValid:
             return None
 

@@ -17,7 +17,7 @@ def _checkRegistered(registeredIdentifiers: List[Identifier], identifier: Identi
     return not isNotRegistered
 
 
-def checkSemantics(ast: Statements) -> bool:  # noqa: C901
+def checkSemantics(ast: Statements) -> bool:  # noqa: C901 pylint: disable=too-many-branches
     """
     Validate that a set of statements represents a correctly formed simulation
     :param ast: list of statements, in order, to check

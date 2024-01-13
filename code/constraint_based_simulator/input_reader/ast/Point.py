@@ -5,7 +5,7 @@ from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 
 
 @dataclass
-class Point:
+class Point:  # pylint: disable=missing-class-docstring
     x: Coordinate
     y: Coordinate
     identifier: Identifier

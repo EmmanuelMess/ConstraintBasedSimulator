@@ -8,7 +8,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -30,14 +30,17 @@ jobs:
         python -m pip install -r requirements.txt -r dev-requirements.txt
 
     - name: Lint with flake8
+      if: always()
       run: |
         flake8 . --count --show-source --statistics
 
     - name: Analysing the code with pylint
+      if: always()
       run: |
         pylint constraint_based_simulator
         
     - name: Check types with MyPy
+      if: always()
       run: |
         mypy constraint_based_simulator
        

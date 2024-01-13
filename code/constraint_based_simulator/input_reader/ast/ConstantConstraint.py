@@ -6,7 +6,7 @@ from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 
 
 @dataclass
-class ConstantConstraint:
+class ConstantConstraint:  # pylint: disable=missing-class-docstring
     constraintType: ConstraintType
     identifierA: Identifier
     identifierB: Identifier

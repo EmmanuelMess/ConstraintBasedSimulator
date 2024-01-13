@@ -16,31 +16,38 @@ from constraint_based_simulator.input_reader.ast.StaticQualifier import StaticQu
 
 
 class AstTransformer(Transformer):
-    def start(self, value: List[Statement]):
+    """
+    Takes the Tree from lark and transforms into a list of Statements typed with custom ast types
+    """
+
+    def start(self, value: List[Statement]):  # pylint: disable=missing-function-docstring
         return value
 
-    def point_definition(self, tokens: Tuple[Identifier, Coordinate, Coordinate]) -> Point:
+    def point_definition(self, tokens: Tuple[Identifier, Coordinate, Coordinate])\
+            -> Point:  # pylint: disable=missing-function-docstring
         return Point(tokens[1], tokens[2], tokens[0])
 
-    def static_qualifier(self, token: Token) -> StaticQualifier:
+    def static_qualifier(self, token: Token) -> StaticQualifier:  # pylint: disable=missing-function-docstring
         return StaticQualifier(token)
 
     def constant_constraint(self, tokens: Tuple[ConstraintType, Identifier, Identifier, ConstraintOperator, float])\
-            -> ConstantConstraint:
+            -> ConstantConstraint:  # pylint: disable=missing-function-docstring
         return ConstantConstraint(*tokens)
 
     def function_constraint(self, tokens: Tuple[ConstraintType, Identifier, Identifier, Any])\
-            -> FunctionConstraint:
+            -> FunctionConstraint:  # pylint: disable=missing-function-docstring
         return FunctionConstraint(*tokens)
 
-    def circle(self, values: Tuple[Identifier, float]) -> Circle:
+    def circle(self, values: Tuple[Identifier, float]) -> Circle:  # pylint: disable=missing-function-docstring
         return Circle(values[0], values[1])
 
-    def bar(self, value: Tuple[Identifier, Identifier]) -> Bar:
+    def bar(self, value: Tuple[Identifier, Identifier])\
+            -> Bar:  # pylint: disable=missing-function-docstring,disallowed-name
         return Bar(value[0], value[1])
 
-    def CONSTRAINT_TYPE(self, type: str) -> ConstraintType | None:
-        match type:
+    def CONSTRAINT_TYPE(self, constraintType: str)\
+            -> ConstraintType | None:  # pylint: disable=missing-function-docstring
+        match constraintType:
             case 'distance':
                 return ConstraintType.DISTANCE
             case 'force':
@@ -49,7 +56,7 @@ class AstTransformer(Transformer):
                 MainLogger.MAIN_LOGGER.error("Forgot to add a constraint type to the AST")
                 return None
 
-    def CONSTRAINT_OPERATOR(self, op: str) -> ConstraintOperator | None:
+    def CONSTRAINT_OPERATOR(self, op: str) -> ConstraintOperator | None:  # pylint: disable=missing-function-docstring
         match op:
             case '==':
                 return ConstraintOperator.EQUAL
@@ -65,8 +72,8 @@ class AstTransformer(Transformer):
                 MainLogger.MAIN_LOGGER.error("Forgot to add an operator type to the AST")
                 return None
 
-    def IDENTIFIER(self, token: Token) -> Identifier:
+    def IDENTIFIER(self, token: Token) -> Identifier:  # pylint: disable=missing-function-docstring
         return token.value
 
-    def DECIMAL(self, token: Token) -> Coordinate:
+    def DECIMAL(self, token: Token) -> Coordinate:  # pylint: disable=missing-function-docstring
         return float(token.value)
