@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from lark import Transformer, Token
 from typing_extensions import List, Any, Tuple
 
@@ -47,30 +49,37 @@ class AstTransformer(Transformer):
 
     def CONSTRAINT_TYPE(self, constraintType: str)\
             -> ConstraintType | None:  # pylint: disable=missing-function-docstring
-        match constraintType:
-            case 'distance':
-                return ConstraintType.DISTANCE
-            case 'force':
-                return ConstraintType.FORCE
-            case _:
-                MainLogger.MAIN_LOGGER.error("Forgot to add a constraint type to the AST")
-                return None
+        switch = {
+            "distance": ConstraintType.DISTANCE,
+            "force": ConstraintType.FORCE
+        }
+
+        # HACK there is a bug in pylint see https://github.com/pylint-dev/pylint/issues/9360
+        # pylint: disable-next=consider-iterating-dictionary
+        if constraintType not in switch.keys():
+            MainLogger.MAIN_LOGGER.error(f"Forgot to add a constraint type \"{constraintType}\" to the AST")
+            return None
+
+        return switch[constraintType]  # HACK for retrocompatibility with 3.8 (still supported)
+        # see https://stackoverflow.com/a/11479840/3124150
 
     def CONSTRAINT_OPERATOR(self, op: str) -> ConstraintOperator | None:  # pylint: disable=missing-function-docstring
-        match op:
-            case '==':
-                return ConstraintOperator.EQUAL
-            case '<':
-                return ConstraintOperator.GREATER
-            case '>':
-                return ConstraintOperator.LESS
-            case '>=':
-                return ConstraintOperator.LESS_OR_EQUAL
-            case '<=':
-                return ConstraintOperator.GREATER_OR_EQUAL
-            case _:
-                MainLogger.MAIN_LOGGER.error("Forgot to add an operator type to the AST")
-                return None
+        switch = {
+            "==": ConstraintOperator.EQUAL,
+            "<": ConstraintOperator.GREATER,
+            ">": ConstraintOperator.LESS,
+            ">=": ConstraintOperator.LESS_OR_EQUAL,
+            "<=": ConstraintOperator.GREATER_OR_EQUAL,
+        }
+
+        # HACK there is a bug in pylint see https://github.com/pylint-dev/pylint/issues/9360
+        # pylint: disable-next=consider-iterating-dictionary
+        if op not in switch.keys():
+            MainLogger.MAIN_LOGGER.error(f"Forgot to add an operator type \"{op}\" to the AST")
+            return None
+
+        return switch[op]  # HACK for retrocompatibility with 3.8 (still supported)
+        # see https://stackoverflow.com/a/11479840/3124150
 
     def IDENTIFIER(self, token: Token) -> Identifier:  # pylint: disable=missing-function-docstring
         return token.value

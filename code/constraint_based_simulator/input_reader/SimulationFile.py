@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 from constraint_based_simulator.input_reader import SemanticsCheck, Parser
