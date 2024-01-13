@@ -12,7 +12,7 @@ class TestSignal:
 
         signal: Signal = Signal()
         signal.connect(signalDummyCall)
-        signal.signal()
+        signal.emit()
         assert self.signalCalled
 
     def testArgumentedSignal(self):
@@ -25,5 +25,5 @@ class TestSignal:
 
         signal: Signal[int] = Signal()
         signal.connect(signalDummyCall)
-        signal.signal(SEND_VALUE)
+        signal.emit(SEND_VALUE)
         assert self.signalCalled

@@ -11,7 +11,7 @@ def _getMainAppLogger() -> Logger:
     logger = logging.getLogger('main_app')
     logger.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('[%(asctime)s][%(levelname)s]\t%(message)s')  # TODO add line number and file
+    formatter = logging.Formatter('[%(asctime)s][%(filename)s:%(lineno)d][%(levelname)s]\t%(message)s')
 
     streamHandler = logging.StreamHandler()
     streamHandler.setLevel(logging.DEBUG)

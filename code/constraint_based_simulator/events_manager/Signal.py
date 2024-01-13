@@ -17,7 +17,7 @@ class Signal(Generic[Unpack[VarArgs]]):
         """
         self.function = function
 
-    def signal(self, *args: Unpack[VarArgs]):  # TODO change to emit
+    def emit(self, *args: Unpack[VarArgs]):
         """
         Call all callbacks with the arguments passed
         :param args: arguments for the signal, must be the same type as type parameter
