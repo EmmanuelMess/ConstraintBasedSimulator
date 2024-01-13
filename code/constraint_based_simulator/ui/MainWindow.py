@@ -1,9 +1,10 @@
-import random
+from __future__ import annotations
+
 from PySide6 import QtCore, QtWidgets
 
 from constraint_based_simulator.events_manager.EventsManager import EventsManager
 from constraint_based_simulator.ui import Strings
-from constraint_based_simulator.ui.Speeds import Speeds
+from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
 
 class MainWindow(QtWidgets.QWidget):
@@ -12,14 +13,16 @@ class MainWindow(QtWidgets.QWidget):
     """
 
     PAUSED_TEXT: dict[bool, str] = {True: Strings.run, False: Strings.pause}
-    SPEED_TEXT: dict[Speeds, str] \
-        = {Speeds.X1: Strings.speed1, Speeds.X10: Strings.speed10, Speeds.X100: Strings.speed100}
+    SPEED_TEXT: dict[SimulationSpeeds, str] = {
+        SimulationSpeeds.X1: Strings.speed1, SimulationSpeeds.X10: Strings.speed10,
+        SimulationSpeeds.X100: Strings.speed100
+    }
 
     def __init__(self):
         super().__init__()
 
         self.isPaused = True
-        self.velocity = Speeds.X1
+        self.velocity = SimulationSpeeds.X1
 
         self.runButton = QtWidgets.QPushButton(Strings.run)
         self.velocityButton = QtWidgets.QPushButton(Strings.speed1)
@@ -46,7 +49,7 @@ class MainWindow(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def onVelocityButtonClick(self):  # pylint: disable=missing-function-docstring
-        self.velocity = list(Speeds)[(self.velocity.value + 1) % len(Speeds)]
+        self.velocity = list(SimulationSpeeds)[(self.velocity.value + 1) % len(SimulationSpeeds)]
 
         EventsManager.signalSetSpeed.emit(self.velocity)
         self.velocityButton.setText(MainWindow.SPEED_TEXT[self.velocity])
