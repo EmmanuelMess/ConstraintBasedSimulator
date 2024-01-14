@@ -1,5 +1,7 @@
 setuptools
-numpy
 lark
 PySide6
 typing-extensions
+numpy
+jax
+numba

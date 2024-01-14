@@ -2,3 +2,4 @@ pytest
 flake8
 pylint>=2.16
 mypy
+scalene
