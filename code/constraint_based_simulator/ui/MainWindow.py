@@ -4,7 +4,7 @@ from PySide6.QtCore import Qt, Slot, QTimer
 from PySide6.QtWidgets import QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QWidget
 
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
-from constraint_based_simulator.events_manager.EventsManager import EventsManager
+from constraint_based_simulator.events_manager import GraphingSignals
 from constraint_based_simulator.ui import Strings
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
@@ -51,18 +51,18 @@ class MainWindow(QWidget):
     @Slot()
     def onUpdateGraph(self):  # pylint: disable=missing-function-docstring
         MAIN_LOGGER.debug("Update called")
-        EventsManager.signalRefresh.emit()
+        GraphingSignals.signalRefresh.emit()
 
     @Slot()
     def onRunButtonClick(self):  # pylint: disable=missing-function-docstring
         self.isPaused = not self.isPaused
 
-        EventsManager.signalPause.emit(self.isPaused)
+        GraphingSignals.signalPause.emit(self.isPaused)
         self.runButton.setText(MainWindow.PAUSED_TEXT[self.isPaused])
 
     @Slot()
     def onVelocityButtonClick(self):  # pylint: disable=missing-function-docstring
         self.velocity = list(SimulationSpeeds)[(self.velocity.value + 1) % len(SimulationSpeeds)]
 
-        EventsManager.signalSetSpeed.emit(self.velocity)
+        GraphingSignals.signalSetSpeed.emit(self.velocity)
         self.velocityButton.setText(MainWindow.SPEED_TEXT[self.velocity])

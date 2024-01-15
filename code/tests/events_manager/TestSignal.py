@@ -7,11 +7,11 @@ class TestSignal:
     def testBasicSignal(self):
         self.signalCalled = False
 
-        def signalDummyCall():
+        def signalEmptyCall():
             self.signalCalled = True
 
         signal: Signal = Signal()
-        signal.connect(signalDummyCall)
+        signal.connect(signalEmptyCall)
         signal.emit()
         assert self.signalCalled
 
@@ -19,11 +19,11 @@ class TestSignal:
         SEND_VALUE: Final[int] = 8
         self.signalCalled = False
 
-        def signalDummyCall(x: int):
+        def signalCallWithParam(x: int):
             self.signalCalled = True
             assert x == SEND_VALUE
 
-        signal: Signal[int] = Signal()
-        signal.connect(signalDummyCall)
+        signal: Signal[int] = Signal[int]()
+        signal.connect(signalCallWithParam)
         signal.emit(SEND_VALUE)
         assert self.signalCalled
