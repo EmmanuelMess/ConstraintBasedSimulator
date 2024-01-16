@@ -1,6 +1,7 @@
 from constraint_based_simulator.common.Singleton import Singleton
 from constraint_based_simulator.events_manager import InitializationSignals
 from constraint_based_simulator.events_manager.EventsHandler import EventsHandler
+from constraint_based_simulator.ui.MainApp import MainApp
 
 
 class UiEventsHandler(EventsHandler, metaclass=Singleton):
@@ -10,4 +11,4 @@ class UiEventsHandler(EventsHandler, metaclass=Singleton):
         InitializationSignals.appInitialization.connect(self.initializeUi)
 
     def initializeUi(self):
-        pass
+        MainApp().run()

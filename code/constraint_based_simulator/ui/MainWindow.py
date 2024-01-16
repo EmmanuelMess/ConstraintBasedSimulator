@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QWi
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.events_manager import GraphingSignals
 from constraint_based_simulator.ui import Strings
+from constraint_based_simulator.ui.GrapherWidget import GrapherWidget
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
 
@@ -34,7 +35,7 @@ class MainWindow(QWidget):
 
         self.runButton = QPushButton(Strings.run)
         self.velocityButton = QPushButton(Strings.speed1)
-        self.text = QLabel(text="Grapher", parent=self, alignment=Qt.AlignCenter)
+        self.grapher = GrapherWidget()
 
         self.rootLayout = QVBoxLayout(self)
 
@@ -43,7 +44,7 @@ class MainWindow(QWidget):
         self.topLayout.addWidget(self.velocityButton)
 
         self.rootLayout.addLayout(self.topLayout)
-        self.rootLayout.addWidget(self.text)
+        self.rootLayout.addWidget(self.grapher)
 
         self.runButton.clicked.connect(self.onRunButtonClick)
         self.velocityButton.clicked.connect(self.onVelocityButtonClick)
