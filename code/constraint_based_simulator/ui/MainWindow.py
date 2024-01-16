@@ -51,7 +51,7 @@ class MainWindow(QWidget):
     @Slot()
     def onUpdateGraph(self):  # pylint: disable=missing-function-docstring
         MAIN_LOGGER.debug("Update called")
-        GraphingSignals.signalRefresh.emit()
+        GraphingSignals.signalRefresh.emit(0)  # TODO add correct time
 
     @Slot()
     def onRunButtonClick(self):  # pylint: disable=missing-function-docstring

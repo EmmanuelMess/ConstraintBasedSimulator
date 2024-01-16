@@ -28,7 +28,8 @@ def checkSemantics(ast: Statements) -> bool:  # noqa: C901 pylint: disable=too-m
 
     for statement in ast:
         if isinstance(statement, Point):
-            if _checkRegistered(registeredIdentifiers, statement.identifier):
+            if statement.identifier in registeredIdentifiers:
+                MAIN_LOGGER.error(f"Identifier {statement.identifier} already registered")
                 return False
 
             registeredIdentifiers.append(statement.identifier)
@@ -41,6 +42,7 @@ def checkSemantics(ast: Statements) -> bool:  # noqa: C901 pylint: disable=too-m
             if not _checkRegistered(registeredIdentifiers, statement.identifierB):
                 return False
             if statement.identifierA == statement.identifierB:
+                MAIN_LOGGER.error(f"Constraint acts on point {statement.identifierA} twice")
                 return False
         elif isinstance(statement, Bar):
             if not _checkRegistered(registeredIdentifiers, statement.start):

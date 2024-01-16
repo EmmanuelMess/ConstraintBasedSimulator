@@ -5,6 +5,6 @@ from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 signalSetSpeed: Signal[SimulationSpeeds] = Signal[SimulationSpeeds]()
 signalPause: Signal[bool] = Signal[bool]()
 signalRefresh: Signal[float] = Signal[float]()
-signalStep: Signal = Signal()
+signalStep: Signal[float] = Signal[float]()
 signalRequestState: Signal = Signal()
 signalNewFrame: Signal = Signal()

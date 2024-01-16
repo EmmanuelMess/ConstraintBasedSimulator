@@ -23,6 +23,8 @@ class TestSemanticsCheck:
     def testConstraints(self):
         declarePoints = [Point(5, 4, "a"), Point(-30, 4, "b")]
 
+        assert not SemanticsCheck.checkSemantics([Point(5, 4, "a"), Point(-30, 4, "a")])
+
         assert not SemanticsCheck.checkSemantics(
             [ConstantConstraint(ConstraintType.DISTANCE, "a", "b", ConstraintOperator.GREATER, 3)]
         )

@@ -28,7 +28,6 @@ class Signal(Generic[Unpack[VarArgs]]):
         """
         for function in self.functions:
             if args:
-                print(args)
                 function(*args)
             else:
                 function()

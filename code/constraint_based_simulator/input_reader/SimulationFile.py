@@ -52,6 +52,12 @@ class SimulationFile:
             self.constraintsByPoints[allPointsByIdentifier[constraint.identifierA]] = constraint
             self.constraintsByPoints[allPointsByIdentifier[constraint.identifierB]] = constraint
 
+    def loadedCorrectly(self):
+        """
+        :return: If the file was loaded correctly, it ensures that all methods will work
+        """
+        return self.semanticsValid
+
     def getStaticPoints(self) -> List[Point] | None:
         """
         Get static points in file
