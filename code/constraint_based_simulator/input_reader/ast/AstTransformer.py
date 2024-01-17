@@ -54,9 +54,7 @@ class AstTransformer(Transformer):
             "force": ConstraintType.FORCE
         }
 
-        # HACK there is a bug in pylint see https://github.com/pylint-dev/pylint/issues/9360
-        # pylint: disable-next=consider-iterating-dictionary
-        if constraintType not in switch.keys():
+        if constraintType not in switch:
             MainLogger.MAIN_LOGGER.error(f"Forgot to add a constraint type \"{constraintType}\" to the AST")
             return None
 
