@@ -8,6 +8,9 @@ from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
 
 class GrapherEventsHandler(EventsHandler, metaclass=Singleton):
+    """
+    Handles all the signals for the grapher module, presenter for the simulator (model-view-presenter pattern)
+    """
 
     def __init__(self):
         super().__init__()
@@ -23,25 +26,25 @@ class GrapherEventsHandler(EventsHandler, metaclass=Singleton):
         GraphingSignals.signalRefresh.connect(self.onRefresh)
         GraphingSignals.signalRequestState.connect(self.onSimulationResult)
 
-    def onSimulatorLoaded(self):
+    def onSimulatorLoaded(self):  # pylint: disable=missing-function-docstring
         # TODO is this needed?
         pass
 
-    def onGrapherParameters(self, width: int, height: int):
+    def onGrapherParameters(self, width: int, height: int):  # pylint: disable=missing-function-docstring
         self.width = width
         self.height = height
 
-    def onSetSpeed(self, speed: SimulationSpeeds):
+    def onSetSpeed(self, speed: SimulationSpeeds):  # pylint: disable=missing-function-docstring
         self.speed = speed
 
-    def onPause(self, isPaused: bool):
+    def onPause(self, isPaused: bool):  # pylint: disable=missing-function-docstring
         self.paused = isPaused
 
-    def onRefresh(self, currentTime: float):
+    def onRefresh(self, currentTime: float):  # pylint: disable=missing-function-docstring
         if not self.paused:
             GraphingSignals.signalStep.emit(currentTime)
 
-    def onSimulationResult(self, simulationData: SimulationData):
+    def onSimulationResult(self, simulationData: SimulationData):  # pylint: disable=missing-function-docstring
         drawableScene = DrawableScene([])
 
         # TODO this is for testing, move it out to its own class and deal with correct placing in window

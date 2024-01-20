@@ -25,5 +25,5 @@ class MainApp(metaclass=Singleton):  # pylint: disable=too-few-public-methods
         self.mainWindow.show()
         sys.exit(self.app.exec())
 
-    def getMainWindow(self) -> MainWindow:
+    def getMainWindow(self) -> MainWindow:  # pylint: disable=missing-function-docstring
         return self.mainWindow

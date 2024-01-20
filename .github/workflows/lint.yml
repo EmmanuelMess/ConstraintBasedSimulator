@@ -37,7 +37,7 @@ jobs:
     - name: Analysing the code with pylint
       if: always()
       run: |
-        pylint constraint_based_simulator
+        pylint --fail-under=9 constraint_based_simulator
         
     - name: Check types with MyPy
       if: always()

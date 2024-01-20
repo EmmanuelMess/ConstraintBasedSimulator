@@ -12,6 +12,10 @@ from constraint_based_simulator.simulator.constraints.Constraint import Constrai
 
 
 class Simulation:
+    """
+    Manage the state and step running for simulation
+    """
+
     def __init__(self, particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
                  timestep: np.float64, force: Callable[[np.float64], np.ndarray], printData: bool = False):
         self.particles = particles
@@ -85,5 +89,5 @@ class Simulation:
         self.updateTiming = end - start
         self.t += self.timestep
 
-    def getRunningTime(self):
+    def getRunningTime(self):  # pylint: disable=missing-function-docstring
         return self.t

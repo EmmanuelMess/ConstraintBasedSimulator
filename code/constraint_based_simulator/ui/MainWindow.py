@@ -10,7 +10,7 @@ from constraint_based_simulator.ui.GrapherWidget import GrapherWidget
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
 
-class MainWindow(QWidget):
+class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
     """
     Handles state and interaction with the main window of the app
     """

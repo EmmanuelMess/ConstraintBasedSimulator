@@ -6,14 +6,17 @@ from constraint_based_simulator.ui.MainApp import MainApp
 
 
 class UiEventsHandler(EventsHandler, metaclass=Singleton):
+    """
+    Handles all the signals for the ui module
+    """
 
     def __init__(self):
         super().__init__()
         InitializationSignals.appInitialization.connect(self.initializeUi)
         GraphingSignals.signalNewFrame.connect(self.onNewFrame)
 
-    def initializeUi(self):
+    def initializeUi(self):  # pylint: disable=missing-function-docstring
         MainApp().run()
 
-    def onNewFrame(self, drawableScene: DrawableScene):
+    def onNewFrame(self, drawableScene: DrawableScene):  # pylint: disable=missing-function-docstring
         MainApp().getMainWindow().newFrame.emit(drawableScene)

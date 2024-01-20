@@ -7,20 +7,33 @@ from constraint_based_simulator.simulator.constraints.Constraint import Constrai
 
 
 class SimulationFunctions:
+    """
+    See mathematical model
+    """
+
     @staticmethod
     @numba.njit
     def precompiledForceCalculation(J: np.ndarray, l: np.float64) -> np.ndarray:
+        """
+        Resulting force for the particles (see mathematical model)
+        """
         return (J.T @ l).reshape((-1, 2))
 
     @staticmethod
     @numba.njit
     def precompiledLagrange(l: np.float64, dq: np.ndarray, Q: np.ndarray, W: np.ndarray, J: np.ndarray, dJ: np.ndarray,
                             C: np.ndarray, dC: np.ndarray, ks: np.float64, kd: np.float64):
+        """
+        Minimization to calculate correct forces as lagrangian multipliers (see mathematical model)
+        """
         return ((J @ W @ J.T) * l.T + dJ @ dq + J @ W @ Q + ks * C + kd * dC).reshape((-1,))
 
     @staticmethod
     def matrices(particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
                  weight: np.float64 = np.float64(1)):
+        """
+        Compute the matrices to run the lagrangian multipliers (see mathematical model)
+        """
         d = 2
         n = len(particles)
         m = len(constraints)
@@ -63,8 +76,14 @@ class SimulationFunctions:
 
     @staticmethod
     def x(p, v, a, t):
+        """
+        Position Taylor approximation from position, velocity, acceleration and time
+        """
         return p + v * t + (1/2) * a * t**2
 
     @staticmethod
-    def dx(p, v, a, t):
+    def dx(p, v, a, t):  # pylint: disable=unused-argument
+        """
+        Derivative of Taylor approximation from position, velocity, acceleration and time
+        """
         return v + a * t

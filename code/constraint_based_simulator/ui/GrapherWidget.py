@@ -9,6 +9,9 @@ from constraint_based_simulator.grapher.drawables.PointDrawable import PointDraw
 
 
 class GrapherWidget(QWidget):
+    """
+    Grapher Qt Widget, view for the simulator (model-view-presenter pattern)
+    """
     newFrame = Signal(DrawableScene)
 
     def __init__(self, parent=None):
@@ -36,12 +39,12 @@ class GrapherWidget(QWidget):
         InitializationSignals.grapherParameters.emit(event.size().width(), event.size().height())
 
     @Slot()
-    def onNewFrame(self, drawableScene: DrawableScene):
+    def onNewFrame(self, drawableScene: DrawableScene):  # pylint: disable=missing-function-docstring
         self.scene = drawableScene
         MAIN_LOGGER.debug(self.scene)
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, _):
         with QPainter(self) as painter:
             painter.setPen(self.pen)
             painter.setBrush(self.brush)

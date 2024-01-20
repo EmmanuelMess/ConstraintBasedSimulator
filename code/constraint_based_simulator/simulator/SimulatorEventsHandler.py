@@ -24,6 +24,9 @@ from constraint_based_simulator.simulator.constraints.DistanceConstraint import 
 
 
 class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
+    """
+    Handles all the signals for the simulator module
+    """
 
     def __init__(self):
         super().__init__()
