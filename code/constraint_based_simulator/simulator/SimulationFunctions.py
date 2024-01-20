@@ -1,5 +1,3 @@
-from typing import List
-
 import numba
 import numpy as np
 
@@ -16,12 +14,13 @@ class SimulationFunctions:
 
     @staticmethod
     @numba.njit
-    def precompiledLagrange(l: np.float64, dq: np.ndarray, Q: np.ndarray, W: np.ndarray, J: np.ndarray, dJ: np.ndarray, C: np.ndarray,
-                            dC: np.ndarray, ks: np.float64, kd: np.float64):
+    def precompiledLagrange(l: np.float64, dq: np.ndarray, Q: np.ndarray, W: np.ndarray, J: np.ndarray, dJ: np.ndarray,
+                            C: np.ndarray, dC: np.ndarray, ks: np.float64, kd: np.float64):
         return ((J @ W @ J.T) * l.T + dJ @ dq + J @ W @ Q + ks * C + kd * dC).reshape((-1,))
 
     @staticmethod
-    def matrices(particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint], weight: np.float64 = 1):
+    def matrices(particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
+                 weight: np.float64 = np.float(1)):
         d = 2
         n = len(particles)
         m = len(constraints)

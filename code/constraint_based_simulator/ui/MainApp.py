@@ -1,10 +1,8 @@
 import sys
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import Signal, QObject
 
 from constraint_based_simulator.common.Singleton import Singleton
-from constraint_based_simulator.grapher.drawables.DrawableScene import DrawableScene
 from constraint_based_simulator.ui.MainWindow import MainWindow
 
 

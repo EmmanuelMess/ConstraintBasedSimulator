@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing_extensions import Callable, TypeVarTuple, Generic, Unpack, List, TypeVar
+from typing_extensions import Callable, TypeVarTuple, Generic, Unpack, List
 
 VarArgs = TypeVarTuple('VarArgs')
 

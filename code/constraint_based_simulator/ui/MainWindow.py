@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Slot, QTimer, Signal
-from PySide6.QtWidgets import QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QWidget
+from PySide6.QtCore import Slot, QTimer, Signal
+from PySide6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout, QWidget
 
-from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.events_manager import GraphingSignals
 from constraint_based_simulator.grapher.drawables.DrawableScene import DrawableScene
 from constraint_based_simulator.ui import Strings

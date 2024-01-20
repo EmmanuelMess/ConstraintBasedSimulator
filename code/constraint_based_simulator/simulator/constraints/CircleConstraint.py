@@ -2,7 +2,8 @@ import numpy as np
 
 from constraint_based_simulator.simulator.Particle import Particle
 from constraint_based_simulator.simulator.constraints.Constraint import Constraint
-from constraint_based_simulator.simulator.constraints.functions.CircleConstraintFunctions import CircleConstraintFunctions
+from constraint_based_simulator.simulator.constraints.functions.CircleConstraintFunctions\
+    import CircleConstraintFunctions
 
 
 class CircleConstraint(Constraint):
@@ -19,4 +20,3 @@ class CircleConstraint(Constraint):
             "center": self.center,
             "radius": self.radius
         }
-

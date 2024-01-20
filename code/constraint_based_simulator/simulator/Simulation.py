@@ -12,8 +12,8 @@ from constraint_based_simulator.simulator.constraints.Constraint import Constrai
 
 
 class Simulation:
-    def __init__(self, particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint], timestep: np.float64,
-                 force: Callable[[np.float64], np.ndarray], printData: bool = False):
+    def __init__(self, particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
+                 timestep: np.float64, force: Callable[[np.float64], np.ndarray], printData: bool = False):
         self.particles = particles
         self.constraints = constraints
         self.timestep = timestep
@@ -74,7 +74,8 @@ class Simulation:
             particle.a = particle.aApplied + particle.aConstraint
 
             if self.printData:
-                MAIN_LOGGER.debug(f"i {particle.index} ~a + ^a = a {particle.aApplied} {particle.aConstraint} {particle.a}")
+                MAIN_LOGGER.debug(f"i {particle.index} ~a + ^a = a"
+                                  f" {particle.aApplied} {particle.aConstraint} {particle.a}")
 
             particle.x = SimulationFunctions.x(particle.x, particle.v, particle.a, self.t)
             particle.v = SimulationFunctions.dx(particle.x, particle.v, particle.a, self.t)

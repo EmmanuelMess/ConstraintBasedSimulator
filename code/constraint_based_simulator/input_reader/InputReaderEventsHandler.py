@@ -14,7 +14,7 @@ class InputReaderEventsHandler(EventsHandler, metaclass=Singleton):
     def readSimulationFile(self):
         simulationFile = SimulationFile("../../examples/example4.simulation")
         if not simulationFile.loadedCorrectly():
-            MAIN_LOGGER.error(f"File loaded incorrectly")
+            MAIN_LOGGER.error("File loaded incorrectly")
             return
 
         InitializationSignals.simulationPropertiesAvailable.emit(simulationFile)

@@ -45,7 +45,7 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
 
     def step(self, currentTime: float):
         if SimulationHolder.simulation is None:
-            MAIN_LOGGER.error(f"Simulation update without simulation loaded!")
+            MAIN_LOGGER.error("Simulation update without simulation loaded!")
             return
 
         SimulationHolder.simulation.update()

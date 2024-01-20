@@ -1,6 +1,5 @@
-from PySide6.QtCore import QPoint, QSize, QRect, qVersion, Qt, Signal, Slot
-from PySide6.QtGui import QPolygon, QPen, QBrush, QPixmap, QPalette, QPainterPath, QPainter, QResizeEvent, QColor, \
-    QColorConstants
+from PySide6.QtCore import QSize, QRect, Qt, Signal, Slot
+from PySide6.QtGui import QPen, QBrush, QPalette, QPainter, QResizeEvent, QColorConstants
 from PySide6.QtWidgets import QWidget
 
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER

@@ -4,7 +4,7 @@ from jax import config
 
 config.update("jax_enable_x64", True)
 
-import jax.numpy as jnp
+import jax.numpy as jnp  # noqa: E402
 
 
 # HACK for some reason jnp.float64 calls asarray and takes too long, this way it is called only once
@@ -16,7 +16,7 @@ def constructPositionFunction(position: jnp.ndarray, velocity: jnp.ndarray, acce
     Construct a position function approximation using Taylor.
     """
 
-    def f(t: jnp.ndarray):
+    def f(t: jnp.ndarray):  # pylint: disable=missing-function-docstring
         """
         This function simply satisfies:
             * f(0) = position

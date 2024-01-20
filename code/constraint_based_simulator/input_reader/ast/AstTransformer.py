@@ -29,7 +29,8 @@ class AstTransformer(Transformer):
             -> Point:  # pylint: disable=missing-function-docstring
         return Point(tokens[1], tokens[2], tokens[0])
 
-    def static_qualifier(self, tokens: Tuple[Identifier]) -> StaticQualifier:  # pylint: disable=missing-function-docstring
+    def static_qualifier(self, tokens: Tuple[Identifier])\
+            -> StaticQualifier:  # pylint: disable=missing-function-docstring
         return StaticQualifier(tokens[0])
 
     def constant_constraint(self, tokens: Tuple[ConstraintType, Identifier, Identifier, ConstraintOperator, float])\

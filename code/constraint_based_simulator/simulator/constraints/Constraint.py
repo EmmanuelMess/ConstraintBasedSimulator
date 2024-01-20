@@ -14,7 +14,8 @@ class Constraint(ABC, IndexedElement):
 
     @abstractmethod
     def __init__(self, particles: List[Particle],
-                 constraintAndDerivativeOfTime: Callable[[jnp.float64, jnp.ndarray, jnp.ndarray, jnp.ndarray, dict], Tuple[jnp.float64, jnp.float64]],
+                 constraintAndDerivativeOfTime: Callable[[jnp.float64, jnp.ndarray, jnp.ndarray, jnp.ndarray, dict],
+                                                         Tuple[jnp.float64, jnp.float64]],
                  dConstraint: Callable[[jnp.float64, jnp.ndarray, jnp.ndarray, jnp.ndarray, dict], jnp.ndarray],
                  d2Constraint: Callable[[jnp.float64, jnp.ndarray, jnp.ndarray, jnp.ndarray, dict], jnp.ndarray]):
         """

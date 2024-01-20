@@ -1,10 +1,8 @@
-from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.common.Singleton import Singleton
 from constraint_based_simulator.events_manager import InitializationSignals, GraphingSignals
 from constraint_based_simulator.events_manager.EventsHandler import EventsHandler
 from constraint_based_simulator.grapher.drawables.DrawableScene import DrawableScene
 from constraint_based_simulator.grapher.drawables.PointDrawable import PointDrawable
-from constraint_based_simulator.simulator import SimulationHolder
 from constraint_based_simulator.simulator.SimulationData import SimulationData
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
