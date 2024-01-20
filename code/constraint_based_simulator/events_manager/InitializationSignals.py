@@ -3,5 +3,6 @@ from constraint_based_simulator.input_reader.SimulationFile import SimulationFil
 
 appInitialization: Signal = Signal()
 readFileProperties: Signal = Signal()
+grapherParameters: Signal[int, int] = Signal[int, int]()
 simulationPropertiesAvailable: Signal[SimulationFile] = Signal[SimulationFile]()
 simulatorLoaded: Signal = Signal()

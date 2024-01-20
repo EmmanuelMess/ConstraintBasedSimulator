@@ -4,6 +4,7 @@ from typing import Callable
 import numpy as np
 from scipy.optimize import root
 
+from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
 from constraint_based_simulator.simulator.Particle import Particle
 from constraint_based_simulator.simulator.SimulationFunctions import SimulationFunctions
@@ -26,12 +27,12 @@ class Simulation:
         start = timer()
 
         if self.printData:
-            print("----------")
-            print("t", self.t)
+            MAIN_LOGGER.debug("----------")
+            MAIN_LOGGER.debug(f"t {self.t}")
 
         if self.printData:
             for particle in self.particles:
-                print("i", particle.index, "x", particle.x, "v", particle.v)
+                MAIN_LOGGER.debug(f"i {particle.index} x {particle.x} v {particle.v}")
 
         for particle in self.particles:
             if particle.static:
@@ -50,20 +51,20 @@ class Simulation:
         self.error = np.sqrt(np.sum(lagrange(res.x, *lagrangeArgs)**2))
 
         if self.printData:
-            print("dq", dq)
-            print("Q", Q)
-            print("W", W)
-            print("J", J)
-            print("dJ", dJ)
+            MAIN_LOGGER.debug(f"dq {dq}")
+            MAIN_LOGGER.debug(f"Q {Q}")
+            MAIN_LOGGER.debug(f"W {W}")
+            MAIN_LOGGER.debug(f"J {J}")
+            MAIN_LOGGER.debug(f"dJ {dJ}")
 
-            print("J W J.T", J @ W @ J.T)
-            print("dJ dq", dJ @ dq)
-            print("JWQ", J @ W @ Q)
-            print("C", C)
-            print("dC", dC)
+            MAIN_LOGGER.debug(f"J W J.T {J @ W @ J.T}")
+            MAIN_LOGGER.debug(f"dJ dq {dJ @ dq}")
+            MAIN_LOGGER.debug(f"JWQ {J @ W @ Q}")
+            MAIN_LOGGER.debug(f"C {C}")
+            MAIN_LOGGER.debug(f"dC {dC}")
 
-            print("l", res.x)
-            print("f", lagrange(res.x))
+            MAIN_LOGGER.debug(f"l {res.x}")
+            MAIN_LOGGER.debug(f"f {lagrange(res.x, *lagrangeArgs)}")
 
         for particle in self.particles:
             if particle.static:
@@ -73,7 +74,7 @@ class Simulation:
             particle.a = particle.aApplied + particle.aConstraint
 
             if self.printData:
-                print("i", particle.index, "~a + ^a = a", particle.aApplied, particle.aConstraint, particle.a)
+                MAIN_LOGGER.debug(f"i {particle.index} ~a + ^a = a {particle.aApplied} {particle.aConstraint} {particle.a}")
 
             particle.x = SimulationFunctions.x(particle.x, particle.v, particle.a, self.t)
             particle.v = SimulationFunctions.dx(particle.x, particle.v, particle.a, self.t)

@@ -1,8 +1,10 @@
 import sys
 
 from PySide6 import QtWidgets
+from PySide6.QtCore import Signal, QObject
 
 from constraint_based_simulator.common.Singleton import Singleton
+from constraint_based_simulator.grapher.drawables.DrawableScene import DrawableScene
 from constraint_based_simulator.ui.MainWindow import MainWindow
 
 
@@ -12,14 +14,18 @@ class MainApp(metaclass=Singleton):  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self):
+        super().__init__()
         self.app = QtWidgets.QApplication([])
 
-        self.widget = MainWindow()
-        self.widget.resize(800, 600)
+        self.mainWindow = MainWindow()
+        self.mainWindow.resize(800, 600)
 
     def run(self) -> None:
         """
         Runs the app
         """
-        self.widget.show()
+        self.mainWindow.show()
         sys.exit(self.app.exec())
+
+    def getMainWindow(self) -> MainWindow:
+        return self.mainWindow

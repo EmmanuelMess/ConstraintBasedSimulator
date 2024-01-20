@@ -1,0 +1,8 @@
+A = (250.0, 250.0)
+B = (10.0, 10.0)
+static A
+constraint distance A B == 25.0
+
+show circle A radius 25.0
+
+show bar A B

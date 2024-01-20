@@ -12,7 +12,7 @@ class InputReaderEventsHandler(EventsHandler, metaclass=Singleton):
         InitializationSignals.appInitialization.connect(self.readSimulationFile)
 
     def readSimulationFile(self):
-        simulationFile = SimulationFile("../../examples/example3.simulation")
+        simulationFile = SimulationFile("../../examples/example4.simulation")
         if not simulationFile.loadedCorrectly():
             MAIN_LOGGER.error(f"File loaded incorrectly")
             return

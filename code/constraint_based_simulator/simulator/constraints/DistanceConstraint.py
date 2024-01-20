@@ -9,7 +9,7 @@ class DistanceConstraint(Constraint):
     distance: np.float64
 
     def __init__(self, particleA: Particle, particleB: Particle, distance: np.float64):
-        super(Constraint).__init__([particleA, particleB], DistanceConstraintFunctions().constraintAndDerivativeOfTime,
+        super(DistanceConstraint, self).__init__([particleA, particleB], DistanceConstraintFunctions().constraintAndDerivativeOfTime,
                          DistanceConstraintFunctions().dConstraint, DistanceConstraintFunctions().d2Constraint)
         self.distance = distance
 

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Slot, QTimer
+from PySide6.QtCore import Qt, Slot, QTimer, Signal
 from PySide6.QtWidgets import QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QWidget
 
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.events_manager import GraphingSignals
+from constraint_based_simulator.grapher.drawables.DrawableScene import DrawableScene
 from constraint_based_simulator.ui import Strings
 from constraint_based_simulator.ui.GrapherWidget import GrapherWidget
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
@@ -21,7 +22,9 @@ class MainWindow(QWidget):
         SimulationSpeeds.X100: Strings.speed100
     }
 
-    UPDATE_TICK: int = 1000
+    UPDATE_TICK: int = 16
+
+    newFrame = Signal(DrawableScene)
 
     def __init__(self):
         super().__init__()
@@ -49,9 +52,10 @@ class MainWindow(QWidget):
         self.runButton.clicked.connect(self.onRunButtonClick)
         self.velocityButton.clicked.connect(self.onVelocityButtonClick)
 
+        self.newFrame.connect(self.grapher.newFrame)
+
     @Slot()
     def onUpdateGraph(self):  # pylint: disable=missing-function-docstring
-        MAIN_LOGGER.debug("Update called")
         GraphingSignals.signalRefresh.emit(0)  # TODO add correct time
 
     @Slot()

@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 from typing_extensions import List, Callable, Tuple
 
@@ -16,6 +18,7 @@ from constraint_based_simulator.simulator import SimulationHolder, ParticlesHold
 from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
 from constraint_based_simulator.simulator.Particle import Particle
 from constraint_based_simulator.simulator.Simulation import Simulation
+from constraint_based_simulator.simulator.SimulationData import SimulationData
 from constraint_based_simulator.simulator.constraints.Constraint import Constraint as SimulatorConstraint
 from constraint_based_simulator.simulator.constraints.DistanceConstraint import DistanceConstraint
 
@@ -34,9 +37,9 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         particles: IndexerIterator[Particle] = ParticlesHolder.particles
         constraints: IndexerIterator[SimulatorConstraint] = SimulatorEventsHandler.convertConstraints(
             pointMapping, simulationFile.getConstraints())
-        timestep: np.float64 = np.float64(1)
-        force: Callable[[np.float64], np.ndarray] = lambda x: np.array([0, 0])
-        printData: bool = False
+        timestep: np.float64 = np.float64(0.016)
+        force: Callable[[np.float64], np.ndarray] = lambda x: np.array([[0, 0] for _ in particles])
+        printData: bool = True
         SimulationHolder.simulation = Simulation(particles, constraints, timestep, force, printData)
         InitializationSignals.simulatorLoaded.emit()
 
@@ -47,7 +50,9 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
 
         SimulationHolder.simulation.update()
 
-        GraphingSignals.signalRequestState.emit()
+        simulationData = SimulationData(copy.deepcopy(ParticlesHolder.particles))
+
+        GraphingSignals.signalRequestState.emit(simulationData)
 
     @staticmethod
     def convertParticles(staticPoints: List[Point], dynamicPoints: List[Point]) \

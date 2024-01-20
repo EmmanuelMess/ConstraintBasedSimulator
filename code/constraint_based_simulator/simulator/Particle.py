@@ -12,7 +12,6 @@ class Particle(IndexedElement):
     static: bool
 
     def __init__(self, x: np.ndarray, static: bool = False):
-        super(IndexedElement).__init__()
         self.x = x
         self.static = static
         self.v = np.zeros_like(x)
