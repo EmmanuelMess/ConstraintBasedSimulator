@@ -10,7 +10,7 @@ class TestSignal:
         def signalEmptyCall():
             self.signalCalled = True
 
-        signal: Signal[()] = Signal[()]()
+        signal: Signal = Signal()
         signal.connect(signalEmptyCall)
         signal.emit()
         assert self.signalCalled
