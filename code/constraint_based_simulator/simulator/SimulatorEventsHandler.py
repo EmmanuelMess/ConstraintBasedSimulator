@@ -31,16 +31,22 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         GraphingSignals.signalStep.connect(self.step)
 
     def loadSimulator(self, simulationFile: SimulationFile):
-        ParticlesHolder.particles, pointMapping = SimulatorEventsHandler.convertParticles(
-            simulationFile.getStaticPoints(), simulationFile.getDynamicPoints())  # type: ignore
+        staticPoints = simulationFile.getStaticPoints()
+        dynamicPoints = simulationFile.getDynamicPoints()
+        constraints = simulationFile.getConstraints()
+        if staticPoints is None or dynamicPoints is None or constraints is None:
+            MAIN_LOGGER.error("Points or constraints are None")
+            return
 
-        particles: IndexerIterator[Particle] = ParticlesHolder.particles
-        constraints: IndexerIterator[SimulatorConstraint] = SimulatorEventsHandler.convertConstraints(
-            pointMapping, simulationFile.getConstraints())
+        ParticlesHolder.particles, pointMapping = SimulatorEventsHandler.convertParticles(staticPoints, dynamicPoints)
+
+        particlesIndexed: IndexerIterator[Particle] = ParticlesHolder.particles
+        constraintsIndexed: IndexerIterator[SimulatorConstraint] = (SimulatorEventsHandler.
+                                                                    convertConstraints(pointMapping, constraints))
         timestep: np.float64 = np.float64(0.016)
-        force: Callable[[np.float64], np.ndarray] = lambda x: np.array([[0, 0] for _ in particles])
+        force: Callable[[np.float64], np.ndarray] = lambda x: np.array([[0, 0] for _ in particlesIndexed])
         printData: bool = True
-        SimulationHolder.simulation = Simulation(particles, constraints, timestep, force, printData)
+        SimulationHolder.simulation = Simulation(particlesIndexed, constraintsIndexed, timestep, force, printData)
         InitializationSignals.simulatorLoaded.emit()
 
     def step(self, currentTime: float):

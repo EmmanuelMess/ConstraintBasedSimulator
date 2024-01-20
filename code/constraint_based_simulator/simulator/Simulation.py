@@ -2,7 +2,7 @@ from timeit import default_timer as timer
 from typing import Callable
 
 import numpy as np
-from scipy.optimize import root
+from scipy.optimize import root  # type: ignore
 
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator

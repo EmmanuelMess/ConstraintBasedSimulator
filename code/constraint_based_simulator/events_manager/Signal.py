@@ -6,6 +6,10 @@ VarArgs = TypeVarTuple('VarArgs')
 
 
 class Signal(Generic[Unpack[VarArgs]]):
+    """
+    Simple mechanism that allows abstracted invocation of callbacks. Multiple callbacks can be attached to a signal
+    so that they are all called when the signal is emitted.
+    """
 
     def __init__(self):
         self.functions: List[Callable[..., None]] = []

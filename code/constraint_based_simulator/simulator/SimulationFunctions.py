@@ -1,4 +1,4 @@
-import numba
+import numba  # type: ignore
 import numpy as np
 
 from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
@@ -20,7 +20,7 @@ class SimulationFunctions:
 
     @staticmethod
     def matrices(particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
-                 weight: np.float64 = np.float(1)):
+                 weight: np.float64 = np.float64(1)):
         d = 2
         n = len(particles)
         m = len(constraints)
