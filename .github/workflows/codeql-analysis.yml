@@ -40,16 +40,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup Cache
-      uses: ./.github/actions/setup_cache
-      with:
-        build_path: ${{ github.workspace }}/code/build
-
-    - name: Project Name
-      uses: cardinalby/export-env-action@v2
-      with:
-        envFile: '.github/constants.env'
-
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
@@ -61,7 +51,7 @@ jobs:
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
     - name: Install deps
-    - uses: actions/setup-python@v5
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
