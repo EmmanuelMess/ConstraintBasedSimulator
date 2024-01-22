@@ -72,10 +72,10 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
 
         staticPointsMapping: Dict[Identifier, Particle] \
             = {staticPoint.identifier: Particle(x=np.array([staticPoint.x, staticPoint.y]), static=True)
-                    for staticPoint in staticPoints}
+               for staticPoint in staticPoints}
         dynamicPointsMapping: Dict[Identifier, Particle] \
             = {dynamicPoint.identifier: Particle(x=np.array([dynamicPoint.x, dynamicPoint.y]), static=False)
-                    for dynamicPoint in dynamicPoints}
+               for dynamicPoint in dynamicPoints}
 
         # Weird merging syntax for Python 3.8
         mapping: Dict[Identifier, Particle] = {**staticPointsMapping, **dynamicPointsMapping}
