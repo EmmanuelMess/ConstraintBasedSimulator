@@ -20,7 +20,7 @@ jobs:
         os:
           - ubuntu-22.04
           # - macos-10.15 # doesn't run for free
-          - windows-2019
+          - windows-2022
         version:
           - '3.10'
           - '3.9'
