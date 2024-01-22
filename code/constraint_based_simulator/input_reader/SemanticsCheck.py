@@ -3,7 +3,8 @@ from typing_extensions import List
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.input_reader.ast.Bar import Bar
 from constraint_based_simulator.input_reader.ast.Circle import Circle
-from constraint_based_simulator.input_reader.ast.Constraint import Constraint
+from constraint_based_simulator.input_reader.ast.ConstantConstraint import ConstantConstraint
+from constraint_based_simulator.input_reader.ast.FunctionConstraint import FunctionConstraint
 from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 from constraint_based_simulator.input_reader.ast.Point import Point
 from constraint_based_simulator.input_reader.ast.Statements import Statements
@@ -36,7 +37,15 @@ def checkSemantics(ast: Statements) -> bool:  # noqa: C901 pylint: disable=too-m
         elif isinstance(statement, StaticQualifier):
             if not _checkRegistered(registeredIdentifiers, statement.identifier):
                 return False
-        elif isinstance(statement, Constraint):
+        elif isinstance(statement, ConstantConstraint):
+            if not _checkRegistered(registeredIdentifiers, statement.identifierA):
+                return False
+            if not _checkRegistered(registeredIdentifiers, statement.identifierB):
+                return False
+            if statement.identifierA == statement.identifierB:
+                MAIN_LOGGER.error(f"Constraint acts on point {statement.identifierA} twice")
+                return False
+        elif isinstance(statement, FunctionConstraint):
             if not _checkRegistered(registeredIdentifiers, statement.identifierA):
                 return False
             if not _checkRegistered(registeredIdentifiers, statement.identifierB):
