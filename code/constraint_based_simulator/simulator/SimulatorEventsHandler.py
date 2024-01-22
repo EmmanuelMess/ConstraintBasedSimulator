@@ -1,7 +1,7 @@
 import copy
 
 import numpy as np
-from typing_extensions import List, Callable, Tuple
+from typing_extensions import List, Callable, Tuple, Dict
 
 from constraint_based_simulator.common.MainLogger import MAIN_LOGGER
 from constraint_based_simulator.common.Singleton import Singleton
@@ -65,12 +65,12 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
 
     @staticmethod
     def convertParticles(staticPoints: List[Point], dynamicPoints: List[Point]) \
-            -> Tuple[IndexerIterator[Particle], dict[Identifier, Particle]]:
+            -> Tuple[IndexerIterator[Particle], Dict[Identifier, Particle]]:
         """
         Convert AST points to simulator particles
         """
 
-        mapping: dict[Identifier, Particle] = {}
+        mapping: Dict[Identifier, Particle] = {}
 
         mapping |= {staticPoint.identifier: Particle(x=np.array([staticPoint.x, staticPoint.y]), static=True)
                     for staticPoint in staticPoints}
@@ -80,7 +80,7 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         return IndexerIterator(list(mapping.values())), mapping
 
     @staticmethod
-    def convertConstraints(mapping: dict[Identifier, Particle], constraints: dict[Point, AstConstraint]) \
+    def convertConstraints(mapping: Dict[Identifier, Particle], constraints: Dict[Point, AstConstraint]) \
             -> IndexerIterator[SimulatorConstraint]:
         """
         Convert AST constraints to simulator constraints
