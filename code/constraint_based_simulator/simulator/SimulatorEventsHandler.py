@@ -70,12 +70,15 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         Convert AST points to simulator particles
         """
 
-        mapping: Dict[Identifier, Particle] = {}
-
-        mapping |= {staticPoint.identifier: Particle(x=np.array([staticPoint.x, staticPoint.y]), static=True)
+        staticPointsMapping: Dict[Identifier, Particle] \
+            = {staticPoint.identifier: Particle(x=np.array([staticPoint.x, staticPoint.y]), static=True)
                     for staticPoint in staticPoints}
-        mapping |= {dynamicPoint.identifier: Particle(x=np.array([dynamicPoint.x, dynamicPoint.y]), static=False)
+        dynamicPointsMapping: Dict[Identifier, Particle] \
+            = {dynamicPoint.identifier: Particle(x=np.array([dynamicPoint.x, dynamicPoint.y]), static=False)
                     for dynamicPoint in dynamicPoints}
+
+        # Weird merging syntax for Python 3.8
+        mapping: Dict[Identifier, Particle] = {**staticPointsMapping, **dynamicPointsMapping}
 
         return IndexerIterator(list(mapping.values())), mapping
 
