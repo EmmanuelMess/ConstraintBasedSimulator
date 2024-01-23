@@ -1,4 +1,4 @@
-from PySide6.QtCore import QSize, QRect, Qt, Signal, Slot, QObject
+from PySide6.QtCore import QSize, QRect, Qt, Signal, Slot
 from PySide6.QtGui import QPen, QBrush, QPalette, QPainter, QResizeEvent, QColorConstants, QPaintEvent
 from PySide6.QtWidgets import QWidget
 from typing_extensions import Union
@@ -15,7 +15,7 @@ class GrapherWidget(QWidget):
     """
     newFrame = Signal(DrawableScene)
 
-    def __init__(self, parent:Union[QWidget, None]=None) -> None:
+    def __init__(self, parent: Union[QWidget, None] = None) -> None:
         super().__init__(parent)
 
         self.scene = DrawableScene([])

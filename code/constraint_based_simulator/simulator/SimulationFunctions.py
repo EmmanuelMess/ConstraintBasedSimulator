@@ -34,7 +34,7 @@ class SimulationFunctions:
                  weight: np.float64 = np.float64(1))\
             -> Tuple[
                 Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
-                        np.float64, np.float64],
+                      np.float64, np.float64],
                 Callable[[np.float64, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
                           np.ndarray, np.float64, np.float64], np.ndarray]
             ]:
