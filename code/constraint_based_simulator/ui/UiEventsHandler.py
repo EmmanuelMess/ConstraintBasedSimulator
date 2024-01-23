@@ -10,13 +10,13 @@ class UiEventsHandler(EventsHandler, metaclass=Singleton):
     Handles all the signals for the ui module
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         InitializationSignals.appInitialization.connect(self.initializeUi)
         GraphingSignals.signalNewFrame.connect(self.onNewFrame)
 
-    def initializeUi(self):  # pylint: disable=missing-function-docstring
+    def initializeUi(self) -> None:  # pylint: disable=missing-function-docstring
         MainApp().run()
 
-    def onNewFrame(self, drawableScene: DrawableScene):  # pylint: disable=missing-function-docstring
+    def onNewFrame(self, drawableScene: DrawableScene) -> None:  # pylint: disable=missing-function-docstring
         MainApp().getMainWindow().newFrame.emit(drawableScene)

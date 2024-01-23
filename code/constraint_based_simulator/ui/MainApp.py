@@ -11,7 +11,7 @@ class MainApp(metaclass=Singleton):  # pylint: disable=too-few-public-methods
     Initial runner for the app, container for the state of the main Qt runner, and the main window
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.app = QtWidgets.QApplication([])
 

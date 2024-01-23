@@ -4,7 +4,7 @@ from constraint_based_simulator.simulator.SimulatorEventsHandler import Simulato
 from constraint_based_simulator.ui.UiEventsHandler import UiEventsHandler
 
 
-def loadEventsHandlers():
+def loadEventsHandlers() -> None:
     """
     Loads every single module for each of its subclases
     """

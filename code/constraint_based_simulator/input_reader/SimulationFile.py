@@ -19,7 +19,7 @@ class SimulationFile:
     file.
     """
 
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         rawTree = Parser.readFile(path)
         ast = AstTransformer(visit_tokens=True).transform(rawTree)
         self.semanticsValid = SemanticsCheck.checkSemantics(ast)
@@ -52,7 +52,7 @@ class SimulationFile:
             self.constraintsByPoints[allPointsByIdentifier[constraint.identifierA]] = constraint
             self.constraintsByPoints[allPointsByIdentifier[constraint.identifierB]] = constraint
 
-    def loadedCorrectly(self):
+    def loadedCorrectly(self) -> bool:
         """
         :return: If the file was loaded correctly, it ensures that all methods will work
         """

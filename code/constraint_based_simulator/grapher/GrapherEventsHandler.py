@@ -11,7 +11,7 @@ class GrapherEventsHandler(EventsHandler, metaclass=Singleton):
     Handles all the signals for the grapher module, presenter for the simulator (model-view-presenter pattern)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.paused: bool = True
         self.speed: SimulationSpeeds = SimulationSpeeds.X1
@@ -25,24 +25,24 @@ class GrapherEventsHandler(EventsHandler, metaclass=Singleton):
         GraphingSignals.signalRefresh.connect(self.onRefresh)
         GraphingSignals.signalRequestState.connect(self.onSimulationResult)
 
-    def onSimulatorLoaded(self):  # pylint: disable=missing-function-docstring
+    def onSimulatorLoaded(self) -> None:  # pylint: disable=missing-function-docstring
         # TODO is this needed?
         pass
 
-    def onGrapherParameters(self, width: int, height: int):  # pylint: disable=missing-function-docstring
+    def onGrapherParameters(self, width: int, height: int) -> None:  # pylint: disable=missing-function-docstring
         self.width = width
         self.height = height
 
-    def onSetSpeed(self, speed: SimulationSpeeds):  # pylint: disable=missing-function-docstring
+    def onSetSpeed(self, speed: SimulationSpeeds) -> None:  # pylint: disable=missing-function-docstring
         self.speed = speed
 
-    def onPause(self, isPaused: bool):  # pylint: disable=missing-function-docstring
+    def onPause(self, isPaused: bool) -> None:  # pylint: disable=missing-function-docstring
         self.paused = isPaused
 
-    def onRefresh(self, currentTime: float):  # pylint: disable=missing-function-docstring
+    def onRefresh(self, currentTime: float) -> None:  # pylint: disable=missing-function-docstring
         if not self.paused:
             GraphingSignals.signalStep.emit(currentTime)
 
-    def onSimulationResult(self, simulationData: SimulationData):  # pylint: disable=missing-function-docstring
+    def onSimulationResult(self, simulationData: SimulationData) -> None:  # pylint: disable=missing-function-docstring
         drawableScene = GenerateDrawables.generateDrawableScene(simulationData.particles)
         GraphingSignals.signalNewFrame.emit(drawableScene)

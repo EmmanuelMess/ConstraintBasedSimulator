@@ -10,5 +10,5 @@ class Point:  # pylint: disable=missing-class-docstring
     y: Coordinate
     identifier: Identifier
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.identifier)

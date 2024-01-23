@@ -1,5 +1,6 @@
 import numba  # type: ignore
 import numpy as np
+from typing_extensions import Tuple, Callable
 
 from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
 from constraint_based_simulator.simulator.Particle import Particle
@@ -22,7 +23,7 @@ class SimulationFunctions:
     @staticmethod
     @numba.njit
     def precompiledLagrange(l: np.float64, dq: np.ndarray, Q: np.ndarray, W: np.ndarray, J: np.ndarray, dJ: np.ndarray,
-                            C: np.ndarray, dC: np.ndarray, ks: np.float64, kd: np.float64):
+                            C: np.ndarray, dC: np.ndarray, ks: np.float64, kd: np.float64) -> np.ndarray:
         """
         Minimization to calculate correct forces as lagrangian multipliers (see mathematical model)
         """
@@ -30,7 +31,13 @@ class SimulationFunctions:
 
     @staticmethod
     def matrices(particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
-                 weight: np.float64 = np.float64(1)):
+                 weight: np.float64 = np.float64(1))\
+            -> Tuple[
+                Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
+                        np.float64, np.float64],
+                Callable[[np.float64, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
+                          np.ndarray, np.float64, np.float64], np.ndarray]
+            ]:
         """
         Compute the matrices to run the lagrangian multipliers (see mathematical model)
         """
@@ -75,14 +82,14 @@ class SimulationFunctions:
         return lagrangeArgs, SimulationFunctions.precompiledLagrange
 
     @staticmethod
-    def x(p, v, a, t):
+    def x(p: np.ndarray, v: np.ndarray, a: np.ndarray, t: np.float64) -> np.ndarray:
         """
         Position Taylor approximation from position, velocity, acceleration and time
         """
         return p + v * t + (1/2) * a * t**2
 
     @staticmethod
-    def dx(p, v, a, t):  # pylint: disable=unused-argument
+    def dx(p: np.ndarray, v: np.ndarray, a: np.ndarray, t: np.float64) -> np.ndarray:  # pylint: disable=unused-argument
         """
         Derivative of Taylor approximation from position, velocity, acceleration and time
         """

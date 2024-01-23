@@ -43,5 +43,5 @@ jobs:
     - name: Check types with MyPy
       if: always()
       run: |
-        mypy constraint_based_simulator
+        mypy --disallow-untyped-defs constraint_based_simulator
        

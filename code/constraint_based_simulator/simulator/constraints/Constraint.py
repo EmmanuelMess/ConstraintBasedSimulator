@@ -32,7 +32,7 @@ class Constraint(ABC, IndexedElement):
     def getArgs(self) -> dict:
         pass
 
-    def getFullParticleMatrices(self):
+    def getFullParticleMatrices(self) -> Tuple[jnp.ndarray, jnp.ndarray, jnp.ndarray]:
         positionMatrix = jnp.array([particle.x for particle in self.particles])
         velocityMatrix = jnp.array([particle.v for particle in self.particles])
         accelerationMatrix = jnp.array([particle.a for particle in self.particles])

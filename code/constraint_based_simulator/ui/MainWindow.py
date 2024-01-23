@@ -25,7 +25,7 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
 
     newFrame = Signal(DrawableScene)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.isPaused = True
@@ -54,18 +54,18 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
         self.newFrame.connect(self.grapher.newFrame)
 
     @Slot()
-    def onUpdateGraph(self):  # pylint: disable=missing-function-docstring
+    def onUpdateGraph(self) -> None:  # pylint: disable=missing-function-docstring
         GraphingSignals.signalRefresh.emit(0)  # TODO add correct time
 
     @Slot()
-    def onRunButtonClick(self):  # pylint: disable=missing-function-docstring
+    def onRunButtonClick(self) -> None:  # pylint: disable=missing-function-docstring
         self.isPaused = not self.isPaused
 
         GraphingSignals.signalPause.emit(self.isPaused)
         self.runButton.setText(MainWindow.PAUSED_TEXT[self.isPaused])
 
     @Slot()
-    def onVelocityButtonClick(self):  # pylint: disable=missing-function-docstring
+    def onVelocityButtonClick(self) -> None:  # pylint: disable=missing-function-docstring
         self.velocity = list(SimulationSpeeds)[(self.velocity.value + 1) % len(SimulationSpeeds)]
 
         GraphingSignals.signalSetSpeed.emit(self.velocity)

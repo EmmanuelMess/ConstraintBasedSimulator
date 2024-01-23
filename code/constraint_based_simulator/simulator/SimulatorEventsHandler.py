@@ -28,12 +28,12 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
     Handles all the signals for the simulator module
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         InitializationSignals.simulationPropertiesAvailable.connect(self.loadSimulator)
         GraphingSignals.signalStep.connect(self.step)
 
-    def loadSimulator(self, simulationFile: SimulationFile):
+    def loadSimulator(self, simulationFile: SimulationFile) -> None:
         staticPoints = simulationFile.getStaticPoints()
         dynamicPoints = simulationFile.getDynamicPoints()
         constraints = simulationFile.getConstraints()
@@ -52,7 +52,7 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         SimulationHolder.simulation = Simulation(particlesIndexed, constraintsIndexed, timestep, force, printData)
         InitializationSignals.simulatorLoaded.emit()
 
-    def step(self, currentTime: float):
+    def step(self, currentTime: float) -> None:
         if SimulationHolder.simulation is None:
             MAIN_LOGGER.error("Simulation update without simulation loaded!")
             return

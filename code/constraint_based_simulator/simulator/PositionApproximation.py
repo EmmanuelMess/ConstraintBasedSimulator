@@ -1,6 +1,7 @@
 from typing import Final
 
 from jax import config
+from typing_extensions import Callable
 
 config.update("jax_enable_x64", True)
 
@@ -11,12 +12,13 @@ import jax.numpy as jnp  # noqa: E402
 ZERO_TIME: Final[jnp.ndarray] = jnp.float64(0)
 
 
-def constructPositionFunction(position: jnp.ndarray, velocity: jnp.ndarray, acceleration: jnp.ndarray):
+def constructPositionFunction(position: jnp.ndarray, velocity: jnp.ndarray, acceleration: jnp.ndarray)\
+        -> Callable[[jnp.ndarray], jnp.ndarray]:
     """
     Construct a position function approximation using Taylor.
     """
 
-    def f(t: jnp.ndarray):  # pylint: disable=missing-function-docstring
+    def f(t: jnp.ndarray) -> jnp.ndarray:  # pylint: disable=missing-function-docstring
         """
         This function simply satisfies:
             * f(0) = position

@@ -18,6 +18,6 @@ class CircleConstraintFunctions(metaclass=Singleton):
         return (CircleConstraintFunctions
                 .constraint(jnp.array([positionApproximation(t)]), params))  # TODO fix this array() call
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.constraintAndDerivativeOfTime, self.dConstraint, self.d2Constraint = (
             ConstraintFunctions.computeDerivatives(CircleConstraintFunctions.constraintOfTime))

@@ -7,11 +7,11 @@ from constraint_based_simulator.input_reader.SimulationFile import SimulationFil
 
 class InputReaderEventsHandler(EventsHandler, metaclass=Singleton):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         InitializationSignals.appInitialization.connect(self.readSimulationFile)
 
-    def readSimulationFile(self):
+    def readSimulationFile(self) -> None:
         simulationFile = SimulationFile("../../examples/example4.simulation")
         if not simulationFile.loadedCorrectly():
             MAIN_LOGGER.error("File loaded incorrectly")

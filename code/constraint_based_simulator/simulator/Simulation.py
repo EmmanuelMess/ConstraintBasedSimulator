@@ -17,17 +17,17 @@ class Simulation:
     """
 
     def __init__(self, particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
-                 timestep: np.float64, force: Callable[[np.float64], np.ndarray], printData: bool = False):
+                 timestep: np.float64, force: Callable[[np.float64], np.ndarray], printData: bool = False) -> None:
         self.particles = particles
         self.constraints = constraints
         self.timestep = timestep
         self.force = force
         self.printData = printData
-        self.updateTiming = 0
+        self.updateTiming: float = 0.0
         self.t = np.float64(0)
         self.error = np.float64(0)
 
-    def update(self):
+    def update(self) -> None:
         start = timer()
 
         if self.printData:
@@ -89,5 +89,5 @@ class Simulation:
         self.updateTiming = end - start
         self.t += self.timestep
 
-    def getRunningTime(self):  # pylint: disable=missing-function-docstring
+    def getRunningTime(self) -> np.float64:  # pylint: disable=missing-function-docstring
         return self.t

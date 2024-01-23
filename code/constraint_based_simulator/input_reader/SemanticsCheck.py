@@ -11,7 +11,7 @@ from constraint_based_simulator.input_reader.ast.Statements import Statements
 from constraint_based_simulator.input_reader.ast.StaticQualifier import StaticQualifier
 
 
-def _checkRegistered(registeredIdentifiers: List[Identifier], identifier: Identifier):
+def _checkRegistered(registeredIdentifiers: List[Identifier], identifier: Identifier) -> bool:
     isNotRegistered = identifier not in registeredIdentifiers
     if isNotRegistered:
         MAIN_LOGGER.error(f"Identifier {identifier} is not registered")

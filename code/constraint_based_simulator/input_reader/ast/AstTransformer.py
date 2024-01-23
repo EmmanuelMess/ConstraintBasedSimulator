@@ -22,7 +22,7 @@ class AstTransformer(Transformer):
     Takes the Tree from lark and transforms into a list of Statements typed with custom ast types
     """
 
-    def start(self, value: List[Statement]):  # pylint: disable=missing-function-docstring
+    def start(self, value: List[Statement]) -> List[Statement]:  # pylint: disable=missing-function-docstring
         return value
 
     def point_definition(self, tokens: Tuple[Identifier, Coordinate, Coordinate])\
