@@ -1,8 +1,7 @@
 from constraint_based_simulator.common.Singleton import Singleton
 from constraint_based_simulator.events_manager import InitializationSignals, GraphingSignals
 from constraint_based_simulator.events_manager.EventsHandler import EventsHandler
-from constraint_based_simulator.grapher.drawables.DrawableScene import DrawableScene
-from constraint_based_simulator.grapher.drawables.PointDrawable import PointDrawable
+from constraint_based_simulator.grapher import GenerateDrawables
 from constraint_based_simulator.simulator.SimulationData import SimulationData
 from constraint_based_simulator.ui.SimulationSpeeds import SimulationSpeeds
 
@@ -45,10 +44,5 @@ class GrapherEventsHandler(EventsHandler, metaclass=Singleton):
             GraphingSignals.signalStep.emit(currentTime)
 
     def onSimulationResult(self, simulationData: SimulationData):  # pylint: disable=missing-function-docstring
-        drawableScene = DrawableScene([])
-
-        # TODO this is for testing, move it out to its own class and deal with correct placing in window
-        for particle in simulationData.particles:
-            drawableScene.allDrawables.append(PointDrawable(int(particle.x[0]), int(particle.x[1])))
-
+        drawableScene = GenerateDrawables.generateDrawableScene(simulationData.particles)
         GraphingSignals.signalNewFrame.emit(drawableScene)
