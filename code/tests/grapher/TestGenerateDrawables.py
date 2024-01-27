@@ -7,7 +7,7 @@ from constraint_based_simulator.simulator.Particle import Particle
 
 
 class TestGenerateDrawables:
-    def testGenerateDrawableScene(self):
+    def testGenerateDrawableScene(self) -> None:
         particles: List[Particle] = [
             Particle(np.array([3.4, 4.6])),
             Particle(np.array([55, 34.4]), static=False),

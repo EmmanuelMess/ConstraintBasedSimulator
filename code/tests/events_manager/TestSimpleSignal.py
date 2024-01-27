@@ -5,7 +5,7 @@ class TestSimpleSignal:
     def testBasicSignal(self) -> None:
         self.signalCalled = False
 
-        def signalEmptyCall():
+        def signalEmptyCall() -> None:
             self.signalCalled = True
 
         signal: SimpleSignal = SimpleSignal()

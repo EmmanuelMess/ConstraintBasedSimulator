@@ -1,3 +1,5 @@
+from typing_extensions import List, Sequence
+
 from constraint_based_simulator.input_reader import SemanticsCheck
 from constraint_based_simulator.input_reader.ast.ConstantConstraint import ConstantConstraint
 from constraint_based_simulator.input_reader.ast.ConstraintOperator import ConstraintOperator
@@ -7,7 +9,7 @@ from constraint_based_simulator.input_reader.ast.StaticQualifier import StaticQu
 
 
 class TestSemanticsCheck:
-    def testSinglePoints(self):
+    def testSinglePoints(self) -> None:
         assert SemanticsCheck.checkSemantics([Point(5, 4, "a")])
 
         assert SemanticsCheck.checkSemantics([Point(5, 4, "a"), StaticQualifier("a")])
@@ -20,9 +22,7 @@ class TestSemanticsCheck:
 
         assert not SemanticsCheck.checkSemantics([Point(5, 4, "a"), Point(5, 4, "b"), StaticQualifier("c")])
 
-    def testConstraints(self):
-        declarePoints = [Point(5, 4, "a"), Point(-30, 4, "b")]
-
+    def testConstraints(self) -> None:
         assert not SemanticsCheck.checkSemantics([Point(5, 4, "a"), Point(-30, 4, "a")])
 
         assert not SemanticsCheck.checkSemantics(
@@ -34,9 +34,11 @@ class TestSemanticsCheck:
         )
 
         assert SemanticsCheck.checkSemantics(
-            declarePoints + [ConstantConstraint(ConstraintType.DISTANCE, "a", "b", ConstraintOperator.GREATER, 3)]
+            [Point(5, 4, "a"), Point(-30, 4, "b"),
+             ConstantConstraint(ConstraintType.DISTANCE, "a", "b", ConstraintOperator.GREATER, 3)]
         )
 
         assert SemanticsCheck.checkSemantics(
-            declarePoints + [ConstantConstraint(ConstraintType.FORCE, "a", "b", ConstraintOperator.LESS, 3)]
+            [Point(5, 4, "a"), Point(-30, 4, "b"),
+             ConstantConstraint(ConstraintType.FORCE, "a", "b", ConstraintOperator.LESS, 3)]
         )

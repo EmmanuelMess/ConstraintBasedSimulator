@@ -33,15 +33,15 @@ jobs:
     - name: Lint with flake8
       if: always()
       run: |
-        flake8 . --count --show-source --statistics
+        flake8 --count --show-source --statistics .
 
     - name: Analysing the code with pylint
       if: always()
       run: |
-        pylint --fail-under=9 constraint_based_simulator
+        pylint --fail-under=9 constraint_based_simulator tests
         
     - name: Check types with MyPy
       if: always()
       run: |
-        mypy --disallow-untyped-defs constraint_based_simulator
+        mypy --disallow-untyped-defs constraint_based_simulator tests
        

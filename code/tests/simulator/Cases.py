@@ -1,6 +1,5 @@
-from typing import List
-
 import numpy as np
+from typing_extensions import Tuple, Callable, List, Dict
 
 from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
 from constraint_based_simulator.simulator.Particle import Particle
@@ -12,7 +11,7 @@ from constraint_based_simulator.simulator.constraints.DistanceConstraint import 
 # TODO convert into tests
 
 
-def case1():
+def case1() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Circle constrant single particle
     """
@@ -30,7 +29,7 @@ def case1():
     return particles, constraints, force
 
 
-def case2():
+def case2() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Distance constraint single particle
     """
@@ -52,7 +51,7 @@ def case2():
     return particles, constraints, force
 
 
-def case3():
+def case3() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Circle and distance constraints multi particles
     """
@@ -72,7 +71,7 @@ def case3():
     return particles, constraints, force
 
 
-def case4():
+def case4() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Distance constraints multi particles
     """
@@ -106,7 +105,7 @@ def case4():
     return particles, constraints, force
 
 
-def case5():
+def case5() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Distance constraints multi particles
     """
@@ -140,7 +139,7 @@ def case5():
     return particles, constraints, force
 
 
-def case6():
+def case6() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Circle constrant single particle
     """
@@ -157,7 +156,7 @@ def case6():
     return particles, constraints, force
 
 
-def case7():
+def case7() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Distance constraints in a grid for a lot of particles
     """
@@ -194,7 +193,7 @@ def case7():
     return IndexerIterator(particles), IndexerIterator(constraints), force
 
 
-def case8():
+def case8() -> Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]:
     """
     Distance constraints in a grid for a lot of particles
     """
@@ -225,10 +224,10 @@ def case8():
         constraints.append(DistanceConstraint(particles[i+i//N+K], particles[i+M], CONSTRAINT_DISTANCE))
         constraints.append(DistanceConstraint(particles[i+i//N+K+1], particles[i+M], CONSTRAINT_DISTANCE))
 
-        constraints.append(DistanceConstraint(particles[i+i//N], particles[i+i//N+1], DISTANCE))
-        constraints.append(DistanceConstraint(particles[i+i//N+1], particles[i+i//N+K+1], DISTANCE))
-        constraints.append(DistanceConstraint(particles[i+i//N+K+1], particles[i+i//N+K], DISTANCE))
-        constraints.append(DistanceConstraint(particles[i+i//N+K], particles[i+i//N], DISTANCE))
+        constraints.append(DistanceConstraint(particles[i+i//N], particles[i+i//N+1], np.float64(DISTANCE)))
+        constraints.append(DistanceConstraint(particles[i+i//N+1], particles[i+i//N+K+1], np.float64(DISTANCE)))
+        constraints.append(DistanceConstraint(particles[i+i//N+K+1], particles[i+i//N+K], np.float64(DISTANCE)))
+        constraints.append(DistanceConstraint(particles[i+i//N+K], particles[i+i//N], np.float64(DISTANCE)))
 
     def force(t: np.float64) -> np.ndarray:
         return np.array([[10*np.abs(np.sin(1000*t)), -10*np.abs(np.sin(1000*t))]]
@@ -237,4 +236,8 @@ def case8():
     return IndexerIterator(particles), IndexerIterator(constraints), force
 
 
-CASES = {"1": case1, "2": case2, "3": case3, "4": case4, "5": case5, "6": case6, "7": case7, "8": case8}
+CASES: Dict[str, Callable[
+    [],
+    Tuple[IndexerIterator[Particle], IndexerIterator[Constraint], Callable[[np.float64], np.ndarray]]
+]]\
+    = {"1": case1, "2": case2, "3": case3, "4": case4, "5": case5, "6": case6, "7": case7, "8": case8}
