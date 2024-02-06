@@ -1,9 +1,12 @@
+from dataclasses import dataclass
+
 import numpy as np
 
 from constraint_based_simulator.simulator.IndexedElement import IndexedElement
 
 
-class Particle(IndexedElement):
+@dataclass
+class Particle(IndexedElement):  # pylint: disable=missing-class-docstring,too-few-public-methods
     x: np.ndarray
     v: np.ndarray
     a: np.ndarray

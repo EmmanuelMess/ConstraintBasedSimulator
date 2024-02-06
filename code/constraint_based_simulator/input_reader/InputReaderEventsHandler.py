@@ -5,7 +5,7 @@ from constraint_based_simulator.events_manager.EventsHandler import EventsHandle
 from constraint_based_simulator.input_reader.SimulationFile import SimulationFile
 
 
-class InputReaderEventsHandler(EventsHandler, metaclass=Singleton):
+class InputReaderEventsHandler(EventsHandler, metaclass=Singleton):  # pylint: disable=missing-class-docstring
 
     def __init__(self) -> None:
         super().__init__()

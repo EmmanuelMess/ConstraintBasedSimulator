@@ -34,6 +34,10 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         GraphingSignals.signalStep.connect(self.step)
 
     def loadSimulator(self, simulationFile: SimulationFile) -> None:
+        """
+        Load simulation in this module, after this initialization the module can be stepped to run it
+        """
+
         staticPoints = simulationFile.getStaticPoints()
         dynamicPoints = simulationFile.getDynamicPoints()
         constraints = simulationFile.getConstraints()
@@ -53,6 +57,10 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         InitializationSignals.simulatorLoaded.emit()
 
     def step(self, currentTime: float) -> None:
+        """
+        Run a simulation step
+        :param currentTime: The amount of time that passes between steps TODO implement
+        """
         if SimulationHolder.simulation is None:
             MAIN_LOGGER.error("Simulation update without simulation loaded!")
             return

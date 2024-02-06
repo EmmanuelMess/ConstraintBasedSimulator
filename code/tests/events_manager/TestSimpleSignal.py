@@ -1,11 +1,11 @@
 from constraint_based_simulator.events_manager.SimpleSignal import SimpleSignal
 
 
-class TestSimpleSignal:
-    def testBasicSignal(self) -> None:
+class TestSimpleSignal:  # pylint: disable=missing-class-docstring
+    def testBasicSignal(self) -> None:  # pylint: disable=missing-function-docstring
         self.signalCalled = False
 
-        def signalEmptyCall() -> None:
+        def signalEmptyCall() -> None:  # pylint: disable=missing-function-docstring
             self.signalCalled = True
 
         signal: SimpleSignal = SimpleSignal()

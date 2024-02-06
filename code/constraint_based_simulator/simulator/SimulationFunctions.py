@@ -24,6 +24,7 @@ class SimulationFunctions:
     @numba.njit
     def precompiledLagrange(l: np.float64, dq: np.ndarray, Q: np.ndarray, W: np.ndarray, J: np.ndarray, dJ: np.ndarray,
                             C: np.ndarray, dC: np.ndarray, ks: np.float64, kd: np.float64) -> np.ndarray:
+        # pylint: disable=too-many-arguments
         """
         Minimization to calculate correct forces as lagrangian multipliers (see mathematical model)
         """
@@ -37,7 +38,7 @@ class SimulationFunctions:
                       np.float64, np.float64],
                 Callable[[np.float64, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
                           np.ndarray, np.float64, np.float64], np.ndarray]
-            ]:
+            ]:  # pylint: disable=too-many-locals
         """
         Compute the matrices to run the lagrangian multipliers (see mathematical model)
         """

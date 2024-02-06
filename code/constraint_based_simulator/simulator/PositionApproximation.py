@@ -5,7 +5,7 @@ from typing_extensions import Callable
 
 config.update("jax_enable_x64", True)
 
-import jax.numpy as jnp  # noqa: E402
+import jax.numpy as jnp  # noqa: E402  # pylint: disable=wrong-import-position
 
 
 # HACK for some reason jnp.float64 calls asarray and takes too long, this way it is called only once

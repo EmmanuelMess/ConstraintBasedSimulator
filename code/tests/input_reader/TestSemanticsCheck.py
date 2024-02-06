@@ -1,5 +1,3 @@
-from typing_extensions import List, Sequence
-
 from constraint_based_simulator.input_reader import SemanticsCheck
 from constraint_based_simulator.input_reader.ast.ConstantConstraint import ConstantConstraint
 from constraint_based_simulator.input_reader.ast.ConstraintOperator import ConstraintOperator
@@ -8,8 +6,8 @@ from constraint_based_simulator.input_reader.ast.Point import Point
 from constraint_based_simulator.input_reader.ast.StaticQualifier import StaticQualifier
 
 
-class TestSemanticsCheck:
-    def testSinglePoints(self) -> None:
+class TestSemanticsCheck:  # pylint: disable=missing-class-docstring
+    def testSinglePoints(self) -> None:  # pylint: disable=missing-function-docstring
         assert SemanticsCheck.checkSemantics([Point(5, 4, "a")])
 
         assert SemanticsCheck.checkSemantics([Point(5, 4, "a"), StaticQualifier("a")])
@@ -22,7 +20,7 @@ class TestSemanticsCheck:
 
         assert not SemanticsCheck.checkSemantics([Point(5, 4, "a"), Point(5, 4, "b"), StaticQualifier("c")])
 
-    def testConstraints(self) -> None:
+    def testConstraints(self) -> None:  # pylint: disable=missing-function-docstring
         assert not SemanticsCheck.checkSemantics([Point(5, 4, "a"), Point(-30, 4, "a")])
 
         assert not SemanticsCheck.checkSemantics(

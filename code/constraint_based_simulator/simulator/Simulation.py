@@ -11,13 +11,14 @@ from constraint_based_simulator.simulator.SimulationFunctions import SimulationF
 from constraint_based_simulator.simulator.constraints.Constraint import Constraint
 
 
-class Simulation:
+class Simulation:  # pylint: disable=too-many-instance-attributes
     """
     Manage the state and step running for simulation
     """
 
     def __init__(self, particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
                  timestep: np.float64, force: Callable[[np.float64], np.ndarray], printData: bool = False) -> None:
+        # pylint: disable=too-many-arguments
         self.particles = particles
         self.constraints = constraints
         self.timestep = timestep
@@ -28,6 +29,11 @@ class Simulation:
         self.error = np.float64(0)
 
     def update(self) -> None:
+        """
+        Run internal simulation update
+        TODO implement variable timestep size
+        """
+
         start = timer()
 
         if self.printData:
