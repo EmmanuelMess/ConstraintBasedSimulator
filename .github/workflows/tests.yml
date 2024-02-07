@@ -30,9 +30,16 @@ jobs:
           - 'pypy3.8'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      
+      - name: Set up Python ${{ matrix.version }}
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.version }}
+
+      - name: Install linux deps
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt install -y libopenblas-dev
 
       - name: Install deps
         run: |

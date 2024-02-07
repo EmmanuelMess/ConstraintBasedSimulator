@@ -26,6 +26,7 @@ jobs:
         
     - name: Install deps
       run: |
+        sudo apt install -y libopenblas-dev
         python -m pip install --upgrade pip
         python -m pip install "jax[cpu]"
         python -m pip install -r requirements.txt -r dev-requirements.txt
