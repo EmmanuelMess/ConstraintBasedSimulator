@@ -28,6 +28,11 @@ jobs:
           - 'pypy3.10'
           - 'pypy3.9'
           - 'pypy3.8'
+        exclude:
+          - os: ubuntu-22.04
+            version: 'pypy3.10' # broken PySide6 https://stackoverflow.com/a/76345084/3124150
+          - os: ubuntu-22.04
+            version: 'pypy3.8' # broken PySide6 https://stackoverflow.com/a/76345084/3124150
     steps:
       - uses: actions/checkout@v4
       
