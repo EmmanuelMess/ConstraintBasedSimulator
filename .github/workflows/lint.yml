@@ -42,7 +42,7 @@ jobs:
         pylint --fail-under=9 constraint_based_simulator tests
         
     - name: Check types with MyPy
-      if: always()
+      if: always() && !contains(matrix.python-version, '3.8') # https://github.com/python/mypy/issues/16884
       run: |
         mypy --disallow-untyped-defs constraint_based_simulator tests
        
