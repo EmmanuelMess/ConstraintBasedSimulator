@@ -2,6 +2,7 @@ setuptools
 lark
 PySide6
 typing-extensions
+scipy
 numpy
 jax
 numba
