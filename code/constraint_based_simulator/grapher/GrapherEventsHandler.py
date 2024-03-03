@@ -41,8 +41,8 @@ class GrapherEventsHandler(EventsHandler, metaclass=Singleton):
         self.graphicalElements = graphics
 
     def onSimulatorLoaded(self) -> None:  # pylint: disable=missing-function-docstring
-        # TODO is this needed?
-        pass
+        GraphingSignals.signalStep.emit(0)  # Sort of hack, tells the simulator to present the simulation as-is,
+        # to show it on UI
 
     def onGrapherParameters(self, width: int, height: int) -> None:  # pylint: disable=missing-function-docstring
         self.width = width
