@@ -78,12 +78,15 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         Convert AST points to simulator particles
         """
 
-        staticPointsMapping: Dict[Identifier, Particle] \
-            = {staticPoint.identifier: Particle(x=np.array([staticPoint.x, staticPoint.y]), static=True)
-               for staticPoint in staticPoints}
-        dynamicPointsMapping: Dict[Identifier, Particle] \
-            = {dynamicPoint.identifier: Particle(x=np.array([dynamicPoint.x, dynamicPoint.y]), static=False)
-               for dynamicPoint in dynamicPoints}
+        staticPointsMapping: Dict[Identifier, Particle] = {
+            staticPoint.identifier:
+                Particle(np.array([staticPoint.x, staticPoint.y]), staticPoint.identifier, static=True)
+            for staticPoint in staticPoints
+        }
+        dynamicPointsMapping: Dict[Identifier, Particle] = {
+            dynamicPoint.identifier:
+                Particle(np.array([dynamicPoint.x, dynamicPoint.y]), dynamicPoint.identifier, static=False)
+            for dynamicPoint in dynamicPoints}
 
         # Weird merging syntax for Python 3.8
         mapping: Dict[Identifier, Particle] = {**staticPointsMapping, **dynamicPointsMapping}
@@ -91,7 +94,7 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         return IndexerIterator(list(mapping.values())), mapping
 
     @staticmethod
-    def convertConstraints(mapping: Dict[Identifier, Particle], constraints: Dict[Point, AstConstraint]) \
+    def convertConstraints(mapping: Dict[Identifier, Particle], constraints: Dict[Identifier, AstConstraint]) \
             -> IndexerIterator[SimulatorConstraint]:
         """
         Convert AST constraints to simulator constraints

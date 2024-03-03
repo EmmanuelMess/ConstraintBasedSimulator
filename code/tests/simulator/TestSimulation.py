@@ -13,7 +13,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
 
     def testCircleConstraintSingleParticle(self) -> None:  # pylint: disable=missing-function-docstring
         particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([25, 0], dtype=np.float64))
+            Particle(np.array([25, 0], dtype=np.float64), "A")
         ])
 
         constraints: IndexerIterator[Constraint] = IndexerIterator([
@@ -28,10 +28,10 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
 
     def testDistanceConstraintSingleParticle(self) -> None:  # pylint: disable=missing-function-docstring
         particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([50, 25], dtype=np.float64)),
-            Particle(np.array([50, 50], dtype=np.float64)),
-            Particle(np.array([25, 0], dtype=np.float64)),
-            Particle(np.array([0, 0], dtype=np.float64)),
+            Particle(np.array([50, 25], dtype=np.float64), "A"),
+            Particle(np.array([50, 50], dtype=np.float64), "B"),
+            Particle(np.array([25, 0], dtype=np.float64), "C"),
+            Particle(np.array([0, 0], dtype=np.float64), "D"),
         ])
 
         constraints: IndexerIterator[Constraint] = IndexerIterator([
@@ -47,8 +47,8 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
 
     def testCircleDistanceConstraintMultiParticles(self) -> None:  # pylint: disable=missing-function-docstring
         particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([0, 0], dtype=np.float64)),
-            Particle(np.array([25, 25], dtype=np.float64))
+            Particle(np.array([0, 0], dtype=np.float64), "A"),
+            Particle(np.array([25, 25], dtype=np.float64), "B"),
         ])
 
         constraints: IndexerIterator[Constraint] = IndexerIterator([
@@ -64,13 +64,13 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
 
     def testDistanceConstraintMultiParticles(self) -> None:  # pylint: disable=missing-function-docstring
         particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([0, 0], dtype=np.float64)),
-            Particle(np.array([25, -25], dtype=np.float64)),
-            Particle(np.array([50, 0], dtype=np.float64)),
-            Particle(np.array([75, -25], dtype=np.float64)),
-            Particle(np.array([100, 0], dtype=np.float64)),
-            Particle(np.array([125, -25], dtype=np.float64)),
-            Particle(np.array([150, 0], dtype=np.float64)),
+            Particle(np.array([0, 0], dtype=np.float64), "A"),
+            Particle(np.array([25, -25], dtype=np.float64), "B"),
+            Particle(np.array([50, 0], dtype=np.float64), "C"),
+            Particle(np.array([75, -25], dtype=np.float64), "D"),
+            Particle(np.array([100, 0], dtype=np.float64), "E"),
+            Particle(np.array([125, -25], dtype=np.float64), "F"),
+            Particle(np.array([150, 0], dtype=np.float64), "G"),
         ])
 
         constraints: IndexerIterator[Constraint] = IndexerIterator([
@@ -95,13 +95,13 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
 
     def testDistanceConstraintsMultiParticle(self) -> None:  # pylint: disable=missing-function-docstring
         particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([0, 0], dtype=np.float64), static=True),
-            Particle(np.array([25, -25], dtype=np.float64)),
-            Particle(np.array([50, 0], dtype=np.float64)),
-            Particle(np.array([75, -25], dtype=np.float64)),
-            Particle(np.array([100, 0], dtype=np.float64)),
-            Particle(np.array([125, -25], dtype=np.float64)),
-            Particle(np.array([150, 0], dtype=np.float64), static=True),
+            Particle(np.array([0, 0], dtype=np.float64), "A", static=True),
+            Particle(np.array([25, -25], dtype=np.float64), "B"),
+            Particle(np.array([50, 0], dtype=np.float64), "C"),
+            Particle(np.array([75, -25], dtype=np.float64), "D"),
+            Particle(np.array([100, 0], dtype=np.float64), "E"),
+            Particle(np.array([125, -25], dtype=np.float64), "F"),
+            Particle(np.array([150, 0], dtype=np.float64), "G", static=True),
         ])
 
         constraints: IndexerIterator[Constraint] = IndexerIterator([
@@ -125,7 +125,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         simulator.update()
 
     def testCircleSingleParticle(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([Particle(np.array([25, 0], dtype=np.float64),)])
+        particles: IndexerIterator[Particle] = IndexerIterator([Particle(np.array([25, 0], dtype=np.float64), "A")])
 
         constraints: IndexerIterator[Constraint] = IndexerIterator([
             CircleConstraint(particles[0], np.array([50, 20], dtype=np.float64), np.float64(100)),
@@ -152,7 +152,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         particles: List[Particle] = []
 
         for xy in list(positionsGridA)+list(positionsGridB):
-            particles.append(Particle(np.array(xy, dtype=np.float64)))
+            particles.append(Particle(np.array(xy, dtype=np.float64), "C"))
 
         constraints: List[Constraint] = []
 
@@ -187,7 +187,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         particles: List[Particle] = []
 
         for xy in list(positionsGridA)+list(positionsGridB):
-            particles.append(Particle(np.array(xy, dtype=np.float64)))
+            particles.append(Particle(np.array(xy, dtype=np.float64), "A"))
 
         constraints: List[Constraint] = []
 

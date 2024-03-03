@@ -1,0 +1,10 @@
+A = (250.0, 250.0)
+B = (200.0, 250.0)
+C = (15.0, 15.0)
+static A
+static B
+constraint distance A C == 25.0
+constraint distance B C == 25.0
+
+show circle A radius 25.0
+show circle B radius 25.0

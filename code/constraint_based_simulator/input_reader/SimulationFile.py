@@ -4,6 +4,8 @@ from typing import List
 
 from constraint_based_simulator.input_reader import SemanticsCheck, Parser
 from constraint_based_simulator.input_reader.ast.AstTransformer import AstTransformer
+from constraint_based_simulator.input_reader.ast.Bar import Bar
+from constraint_based_simulator.input_reader.ast.Circle import Circle
 from constraint_based_simulator.input_reader.ast.ConstantConstraint import ConstantConstraint
 from constraint_based_simulator.input_reader.ast.Constraint import Constraint
 from constraint_based_simulator.input_reader.ast.FunctionConstraint import FunctionConstraint
@@ -28,7 +30,6 @@ class SimulationFile:
             return
 
         allPoints: List[Point] = [value for value in ast if isinstance(value, Point)]
-        allPointsByIdentifier: dict[Identifier, Point] = {value.identifier: value for value in allPoints}
         self.staticIdentifiers: List[Identifier] = [
             value.identifier for value in ast if isinstance(value, StaticQualifier)
         ]
@@ -46,11 +47,17 @@ class SimulationFile:
             value for value in ast if isinstance(value, ConstantConstraint) or isinstance(value, FunctionConstraint)
             # HACK because mypy doesn't support unions in isinstance see https://github.com/python/mypy/issues/16358
         ]
-        self.constraintsByPoints: dict[Point, Constraint] = {}
+        self.constraintsByPoints: dict[Identifier, Constraint] = {}
 
         for constraint in allConstraints:
-            self.constraintsByPoints[allPointsByIdentifier[constraint.identifierA]] = constraint
-            self.constraintsByPoints[allPointsByIdentifier[constraint.identifierB]] = constraint
+            self.constraintsByPoints[constraint.identifierA] = constraint
+            self.constraintsByPoints[constraint.identifierB] = constraint
+
+        self.graphics: List[GraphicalElement] = [
+            # pylint: disable-next=consider-merging-isinstance
+            value for value in ast if isinstance(value, Bar) or isinstance(value, Circle)
+            # HACK because mypy doesn't support unions in isinstance see https://github.com/python/mypy/issues/16358
+        ]
 
     def loadedCorrectly(self) -> bool:
         """
@@ -80,9 +87,9 @@ class SimulationFile:
 
         return self.dynamicPoints
 
-    def getConstraints(self) -> dict[Point, Constraint] | None:
+    def getConstraints(self) -> dict[Identifier, Constraint] | None:
         """
-        Get constraints in file indexed by the points it acts on
+        Get constraints in file indexed by the point identifier it acts on
         :return: if the file does not pass the SemanticsCheck.checkSemantics validation, returns None, otherwise
         a dictionary of AST Point to Constraint
         """
@@ -91,13 +98,13 @@ class SimulationFile:
 
         return self.constraintsByPoints
 
-    def getGraphics(self) -> dict[Point, GraphicalElement] | None:
+    def getGraphics(self) -> List[GraphicalElement] | None:
         """
-        Get graphical elements in file indexed by the points it latches to
+        Get graphical elements in file indexed by the point identifier it latches to
         :return: if the file does not pass the SemanticsCheck.checkSemantics validation, returns None, otherwise
         a dictionary of AST Points to GraphicalElement
         """
         if not self.semanticsValid:
             return None
 
-        return {}
+        return self.graphics
