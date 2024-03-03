@@ -50,22 +50,21 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
         particlesIndexed: IndexerIterator[Particle] = ParticlesHolder.particles
         constraintsIndexed: IndexerIterator[SimulatorConstraint] = (SimulatorEventsHandler.
                                                                     convertConstraints(pointMapping, constraints))
-        timestep: np.float64 = np.float64(0.016)
         force: Callable[[np.float64], np.ndarray] = lambda x: np.array([[0, 0] for _ in particlesIndexed])
         printData: bool = True
-        SimulationHolder.simulation = Simulation(particlesIndexed, constraintsIndexed, timestep, force, printData)
+        SimulationHolder.simulation = Simulation(particlesIndexed, constraintsIndexed, force, printData)
         InitializationSignals.simulatorLoaded.emit()
 
     def step(self, currentTime: float) -> None:
         """
         Run a simulation step
-        :param currentTime: The amount of time that passes between steps TODO implement
+        :param currentTime: The amount of time that passes between steps
         """
         if SimulationHolder.simulation is None:
             MAIN_LOGGER.error("Simulation update without simulation loaded!")
             return
 
-        SimulationHolder.simulation.update()
+        SimulationHolder.simulation.update(np.float64(currentTime))
 
         simulationData = SimulationData(copy.deepcopy(ParticlesHolder.particles))
 

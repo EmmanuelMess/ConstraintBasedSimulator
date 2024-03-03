@@ -21,7 +21,11 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
         SimulationSpeeds.X100: Strings.speed100
     }
 
-    UPDATE_TICK: int = 16
+    UPDATE_TICK: dict[SimulationSpeeds, int] = {
+        SimulationSpeeds.X1: 1000 // 30,  # 30fps
+        SimulationSpeeds.X10: 1000 // 60,  # 60fps
+        SimulationSpeeds.X100: 1000 // 120,  # 120fps
+    }
 
     newFrame = Signal(DrawableScene)
 
@@ -32,7 +36,7 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
         self.velocity = SimulationSpeeds.X1
 
         self.timer = QTimer(self)
-        self.timer.start(MainWindow.UPDATE_TICK)
+        self.timer.start(MainWindow.UPDATE_TICK[self.velocity])
         self.timer.timeout.connect(self.onUpdateGraph)
 
         self.runButton = QPushButton(Strings.run)
@@ -55,7 +59,8 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
 
     @Slot()
     def onUpdateGraph(self) -> None:  # pylint: disable=missing-function-docstring
-        GraphingSignals.signalRefresh.emit(0)  # TODO add correct time
+        timestep: float = 0.0001
+        GraphingSignals.signalRefresh.emit(timestep)
 
     @Slot()
     def onRunButtonClick(self) -> None:  # pylint: disable=missing-function-docstring
@@ -70,3 +75,5 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
 
         GraphingSignals.signalSetSpeed.emit(self.velocity)
         self.velocityButton.setText(MainWindow.SPEED_TEXT[self.velocity])
+
+        self.timer.start(MainWindow.UPDATE_TICK[self.velocity])

@@ -17,28 +17,32 @@ class Simulation:  # pylint: disable=too-many-instance-attributes
     """
 
     def __init__(self, particles: IndexerIterator[Particle], constraints: IndexerIterator[Constraint],
-                 timestep: np.float64, force: Callable[[np.float64], np.ndarray], printData: bool = False) -> None:
+                 force: Callable[[np.float64], np.ndarray], printData: bool = False) -> None:
         # pylint: disable=too-many-arguments
         self.particles = particles
         self.constraints = constraints
-        self.timestep = timestep
         self.force = force
         self.printData = printData
         self.updateTiming: float = 0.0
-        self.t = np.float64(0)
+        self.simulationTime = np.float64(0)
         self.error = np.float64(0)
 
-    def update(self) -> None:
+        self.update(np.float64(0))  # HACK this is to prevent the compile from running when pressing the "run" button
+        # TODO actually make the precompilation run faster
+
+    def update(self, timestep: np.float64) -> None:
         """
-        Run internal simulation update
-        TODO implement variable timestep size
+        Run internal simulation update.
+        :param timestep: Delta time at which the *next* step will be shown
         """
 
         start = timer()
 
         if self.printData:
             MAIN_LOGGER.debug("----------")
-            MAIN_LOGGER.debug(f"t {self.t}")
+            MAIN_LOGGER.debug(f"t {self.simulationTime} Δt {timestep}")
+
+        self.simulationTime += timestep
 
         if self.printData:
             for particle in self.particles:
@@ -48,7 +52,7 @@ class Simulation:  # pylint: disable=too-many-instance-attributes
             if particle.static:
                 continue
 
-            particle.aApplied = self.force(self.t)[particle.index].copy()
+            particle.aApplied = self.force(self.simulationTime)[particle.index].copy()
             particle.a = particle.aApplied.copy()
 
         lagrangeArgs, lagrange = SimulationFunctions.matrices(self.particles, self.constraints)
@@ -87,13 +91,12 @@ class Simulation:  # pylint: disable=too-many-instance-attributes
                 MAIN_LOGGER.debug(f"i {particle.index} ~a + ^a = a"
                                   f" {particle.aApplied} {particle.aConstraint} {particle.a}")
 
-            particle.x = SimulationFunctions.x(particle.x, particle.v, particle.a, self.t)
-            particle.v = SimulationFunctions.dx(particle.x, particle.v, particle.a, self.t)
+            particle.x = SimulationFunctions.x(particle.x, particle.v, particle.a, self.simulationTime)
+            particle.v = SimulationFunctions.dx(particle.x, particle.v, particle.a, self.simulationTime)
 
         end = timer()
 
         self.updateTiming = end - start
-        self.t += self.timestep
 
     def getRunningTime(self) -> np.float64:  # pylint: disable=missing-function-docstring
-        return self.t
+        return self.simulationTime
