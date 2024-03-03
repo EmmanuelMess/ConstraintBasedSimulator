@@ -1,7 +1,7 @@
 
 
-pause = "pause"
-run = "run"
+paused = "paused"
+running = "running"
 
 speed1 = "x1"
 speed10 = "x10"

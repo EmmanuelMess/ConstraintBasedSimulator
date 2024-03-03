@@ -30,9 +30,25 @@ constraint force D B fun (t) -> sin(tau/2   + tau * 0.5 * t)
 
 <img src="./design/drawings/main window wireframe.png"/>
 
-## Sample
+## Screenshots
 
-<img src="./design/diagrams/sample-diagram.png"/>
+<img src="./screenshots/simple example.gif"/>
+
+
+## Usage
+
+### Setup
+```bash
+cd code
+python3 -m venv venv
+source venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
+
+### Running
+```bash
+python3 code/constraint_based_simulator/main.py
+```
 
 ## Architecture
 

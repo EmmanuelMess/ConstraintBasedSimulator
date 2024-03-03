@@ -15,7 +15,7 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
     Handles state and interaction with the main window of the app
     """
 
-    PAUSED_TEXT: dict[bool, str] = {True: Strings.run, False: Strings.pause}
+    PAUSED_TEXT: dict[bool, str] = {True: Strings.paused, False: Strings.running}
     SPEED_TEXT: dict[SimulationSpeeds, str] = {
         SimulationSpeeds.X1: Strings.speed1, SimulationSpeeds.X10: Strings.speed10,
         SimulationSpeeds.X100: Strings.speed100
@@ -39,7 +39,7 @@ class MainWindow(QWidget):  # pylint: disable=too-many-instance-attributes
         self.timer.start(MainWindow.UPDATE_TICK[self.velocity])
         self.timer.timeout.connect(self.onUpdateGraph)
 
-        self.runButton = QPushButton(Strings.run)
+        self.runButton = QPushButton(Strings.paused)
         self.velocityButton = QPushButton(Strings.speed1)
         self.grapher = GrapherWidget()
 
