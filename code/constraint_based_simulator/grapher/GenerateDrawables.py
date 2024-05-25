@@ -10,14 +10,15 @@ from constraint_based_simulator.input_reader.ast.Bar import Bar
 from constraint_based_simulator.input_reader.ast.Circle import Circle
 from constraint_based_simulator.input_reader.ast.GraphicalElement import GraphicalElement
 from constraint_based_simulator.input_reader.ast.Identifier import Identifier
-from constraint_based_simulator.simulator.Particle import Particle
+from constraint_based_simulator.simulator.NamedParticle import NamedParticle
+from simulator.Particle import Particle
 
 
-def generateDrawableScene(particles: List[Particle], graphicalElements: List[GraphicalElement]) -> DrawableScene:
+def generateDrawableScene(particles: List[NamedParticle], graphicalElements: List[GraphicalElement]) -> DrawableScene:
     drawableScene = DrawableScene([])
 
     indexedPositions: dict[Identifier, Tuple[int, int]] = \
-        {particle.identifier: particleToPosition(particle) for particle in particles}  # TODO optimize
+        {particle.id: particleToPosition(particle.particle) for particle in particles}  # TODO optimize
 
     for identifier, position in indexedPositions.items():
         drawableScene.allDrawables.append(PointDrawable(position[0], position[1], identifier))

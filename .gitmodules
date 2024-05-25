@@ -1,0 +1,3 @@
+[submodule "deps/Interactive-Dynamics-Physics-Simulations"]
+	path = deps/Interactive-Dynamics-Physics-Simulations
+	url = https://github.com/EmmanuelMess/Interactive-Dynamics-Physics-Simulations

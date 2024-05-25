@@ -1,6 +1,6 @@
 from typing_extensions import Union
 
-from constraint_based_simulator.simulator.Simulation import Simulation
+from simulator.Simulation import Simulation
 
 simulation: Union[Simulation, None] = None
 """

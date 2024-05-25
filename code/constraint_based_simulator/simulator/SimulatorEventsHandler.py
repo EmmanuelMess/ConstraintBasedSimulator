@@ -15,12 +15,13 @@ from constraint_based_simulator.input_reader.ast.ConstraintType import Constrain
 from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 from constraint_based_simulator.input_reader.ast.Point import Point
 from constraint_based_simulator.simulator import SimulationHolder, ParticlesHolder
-from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
-from constraint_based_simulator.simulator.Particle import Particle
-from constraint_based_simulator.simulator.Simulation import Simulation
+from constraint_based_simulator.simulator.NamedParticle import NamedParticle
+from simulator import Indexer
+from simulator.Particle import Particle
+from simulator.Simulation import Simulation
 from constraint_based_simulator.simulator.SimulationData import SimulationData
-from constraint_based_simulator.simulator.constraints.Constraint import Constraint as SimulatorConstraint
-from constraint_based_simulator.simulator.constraints.DistanceConstraint import DistanceConstraint
+from simulator.constraints.Constraint import Constraint as SimulatorConstraint
+from simulator.constraints.DistanceConstraint import DistanceConstraint
 
 
 class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
@@ -45,11 +46,11 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
             MAIN_LOGGER.error("Points or constraints are None")
             return
 
-        ParticlesHolder.particles, pointMapping = SimulatorEventsHandler.convertParticles(staticPoints, dynamicPoints)
+        particlesIndexed, pointMapping = SimulatorEventsHandler.convertParticles(staticPoints, dynamicPoints)
 
-        particlesIndexed: IndexerIterator[Particle] = ParticlesHolder.particles
-        constraintsIndexed: IndexerIterator[SimulatorConstraint] = (SimulatorEventsHandler.
-                                                                    convertConstraints(pointMapping, constraints))
+        ParticlesHolder.particles = [NamedParticle(particle, id) for (id, particle) in pointMapping.items()]
+
+        constraintsIndexed: List[SimulatorConstraint] = (SimulatorEventsHandler.convertConstraints(pointMapping, constraints))
         force: Callable[[np.float64], np.ndarray] = lambda x: np.array([[0, 0] for _ in particlesIndexed])
         printData: bool = True
         SimulationHolder.simulation = Simulation(particlesIndexed, constraintsIndexed, force, printData)
@@ -72,29 +73,29 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
 
     @staticmethod
     def convertParticles(staticPoints: List[Point], dynamicPoints: List[Point]) \
-            -> Tuple[IndexerIterator[Particle], Dict[Identifier, Particle]]:
+            -> Tuple[List[Particle], Dict[Identifier, Particle]]:
         """
         Convert AST points to simulator particles
         """
 
         staticPointsMapping: Dict[Identifier, Particle] = {
             staticPoint.identifier:
-                Particle(np.array([staticPoint.x, staticPoint.y]), staticPoint.identifier, static=True)
+                Particle(np.array([staticPoint.x, staticPoint.y]), static=True)
             for staticPoint in staticPoints
         }
         dynamicPointsMapping: Dict[Identifier, Particle] = {
             dynamicPoint.identifier:
-                Particle(np.array([dynamicPoint.x, dynamicPoint.y]), dynamicPoint.identifier, static=False)
+                Particle(np.array([dynamicPoint.x, dynamicPoint.y]), static=False)
             for dynamicPoint in dynamicPoints}
 
         # Weird merging syntax for Python 3.8
         mapping: Dict[Identifier, Particle] = {**staticPointsMapping, **dynamicPointsMapping}
 
-        return IndexerIterator(list(mapping.values())), mapping
+        return Indexer.indexer(list(mapping.values())), mapping
 
     @staticmethod
     def convertConstraints(mapping: Dict[Identifier, Particle], constraints: Dict[Identifier, AstConstraint]) \
-            -> IndexerIterator[SimulatorConstraint]:
+            -> List[SimulatorConstraint]:
         """
         Convert AST constraints to simulator constraints
         """
@@ -117,4 +118,4 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
             else:
                 MAIN_LOGGER.error(f"Constraint not implemented for simulator: {constraint}")
 
-        return IndexerIterator(constraintList)
+        return Indexer.indexer(constraintList)

@@ -1,9 +1,8 @@
 from typing_extensions import List
 
-from constraint_based_simulator.simulator.Particle import Particle
+from constraint_based_simulator.simulator.NamedParticle import NamedParticle
 
-
-particles: List[Particle] = []
+particles: List[NamedParticle] = []
 """
 This holds the reference for all particles in the simulator
 """
