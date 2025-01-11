@@ -1,40 +1,40 @@
 import numpy as np
 from typing_extensions import List
 
-from constraint_based_simulator.simulator.IndexerIterator import IndexerIterator
-from constraint_based_simulator.simulator.Particle import Particle
-from constraint_based_simulator.simulator.Simulation import Simulation
-from constraint_based_simulator.simulator.constraints.CircleConstraint import CircleConstraint
-from constraint_based_simulator.simulator.constraints.Constraint import Constraint
-from constraint_based_simulator.simulator.constraints.DistanceConstraint import DistanceConstraint
+from simulator.Indexer import indexer
+from simulator.Particle import Particle
+from simulator.Simulation import Simulation
+from simulator.constraints.CircleConstraint import CircleConstraint
+from simulator.constraints.Constraint import Constraint
+from simulator.constraints.DistanceConstraint import DistanceConstraint
 
 
 class TestSimulation:  # pylint: disable=missing-class-docstring
 
     def testCircleConstraintSingleParticle(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([25, 0], dtype=np.float64), "A")
+        particles: List[Particle] = indexer([
+            Particle(np.array([25, 0], dtype=np.float64))
         ])
 
-        constraints: IndexerIterator[Constraint] = IndexerIterator([
+        constraints: List[Constraint] = indexer([
             CircleConstraint(particles[0], np.array([50, 20], dtype=np.float64), np.float64(100))
         ])
 
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0]], dtype=np.float64)
 
-        simulator = Simulation(particles, constraints, force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testDistanceConstraintSingleParticle(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([50, 25], dtype=np.float64), "A"),
-            Particle(np.array([50, 50], dtype=np.float64), "B"),
-            Particle(np.array([25, 0], dtype=np.float64), "C"),
-            Particle(np.array([0, 0], dtype=np.float64), "D"),
+        particles: List[Particle] = indexer([
+            Particle(np.array([50, 25], dtype=np.float64)),
+            Particle(np.array([50, 50], dtype=np.float64)),
+            Particle(np.array([25, 0], dtype=np.float64)),
+            Particle(np.array([0, 0], dtype=np.float64)),
         ])
 
-        constraints: IndexerIterator[Constraint] = IndexerIterator([
+        constraints: List[Constraint] = indexer([
             DistanceConstraint(particles[0], particles[1], np.float64(100)),
             DistanceConstraint(particles[2], particles[3], np.float64(100)),
         ])
@@ -42,16 +42,16 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0], [0, 0], [0, 0], [0, 0]], dtype=np.float64)
 
-        simulator = Simulation(particles, constraints, force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testCircleDistanceConstraintMultiParticles(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([0, 0], dtype=np.float64), "A"),
-            Particle(np.array([25, 25], dtype=np.float64), "B"),
+        particles: List[Particle] = indexer([
+            Particle(np.array([0, 0], dtype=np.float64)),
+            Particle(np.array([25, 25], dtype=np.float64)),
         ])
 
-        constraints: IndexerIterator[Constraint] = IndexerIterator([
+        constraints: List[Constraint] = indexer([
             CircleConstraint(particles[0], np.array([25, 0], dtype=np.float64), np.float64(100)),
             DistanceConstraint(particles[0], particles[1], np.float64(20)),
         ])
@@ -59,21 +59,21 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0], [0, 0]], dtype=np.float64)
 
-        simulator = Simulation(particles, constraints, force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testDistanceConstraintMultiParticles(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([0, 0], dtype=np.float64), "A"),
-            Particle(np.array([25, -25], dtype=np.float64), "B"),
-            Particle(np.array([50, 0], dtype=np.float64), "C"),
-            Particle(np.array([75, -25], dtype=np.float64), "D"),
-            Particle(np.array([100, 0], dtype=np.float64), "E"),
-            Particle(np.array([125, -25], dtype=np.float64), "F"),
-            Particle(np.array([150, 0], dtype=np.float64), "G"),
+        particles: List[Particle] = indexer([
+            Particle(np.array([0, 0], dtype=np.float64)),
+            Particle(np.array([25, -25], dtype=np.float64)),
+            Particle(np.array([50, 0], dtype=np.float64)),
+            Particle(np.array([75, -25], dtype=np.float64)),
+            Particle(np.array([100, 0], dtype=np.float64)),
+            Particle(np.array([125, -25], dtype=np.float64)),
+            Particle(np.array([150, 0], dtype=np.float64)),
         ])
 
-        constraints: IndexerIterator[Constraint] = IndexerIterator([
+        constraints: List[Constraint] = indexer([
             DistanceConstraint(particles[0], particles[1], np.float64(25)),
             DistanceConstraint(particles[0], particles[2], np.float64(25)),
             DistanceConstraint(particles[1], particles[2], np.float64(25)),
@@ -90,21 +90,21 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0] for i in range(len(particles))], dtype=np.float64)
 
-        simulator = Simulation(particles, constraints, force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testDistanceConstraintsMultiParticle(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([
-            Particle(np.array([0, 0], dtype=np.float64), "A", static=True),
-            Particle(np.array([25, -25], dtype=np.float64), "B"),
-            Particle(np.array([50, 0], dtype=np.float64), "C"),
-            Particle(np.array([75, -25], dtype=np.float64), "D"),
-            Particle(np.array([100, 0], dtype=np.float64), "E"),
-            Particle(np.array([125, -25], dtype=np.float64), "F"),
-            Particle(np.array([150, 0], dtype=np.float64), "G", static=True),
+        particles: List[Particle] = indexer([
+            Particle(np.array([0, 0], dtype=np.float64), static=True),
+            Particle(np.array([25, -25], dtype=np.float64)),
+            Particle(np.array([50, 0], dtype=np.float64)),
+            Particle(np.array([75, -25], dtype=np.float64)),
+            Particle(np.array([100, 0], dtype=np.float64)),
+            Particle(np.array([125, -25], dtype=np.float64)),
+            Particle(np.array([150, 0], dtype=np.float64), static=True),
         ])
 
-        constraints: IndexerIterator[Constraint] = IndexerIterator([
+        constraints: List[Constraint] = indexer([
             DistanceConstraint(particles[0], particles[1], np.float64(50)),
             DistanceConstraint(particles[0], particles[2], np.float64(50)),
             DistanceConstraint(particles[1], particles[2], np.float64(50)),
@@ -121,13 +121,13 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0] for i in range(len(particles))], dtype=np.float64)
 
-        simulator = Simulation(particles, constraints, force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testCircleSingleParticle(self) -> None:  # pylint: disable=missing-function-docstring
-        particles: IndexerIterator[Particle] = IndexerIterator([Particle(np.array([25, 0], dtype=np.float64), "A")])
+        particles: List[Particle] = indexer([Particle(np.array([25, 0], dtype=np.float64))])
 
-        constraints: IndexerIterator[Constraint] = IndexerIterator([
+        constraints: List[Constraint] = indexer([
             CircleConstraint(particles[0], np.array([50, 20], dtype=np.float64), np.float64(100)),
             CircleConstraint(particles[0], np.array([100, 20], dtype=np.float64), np.float64(100))
         ])
@@ -135,7 +135,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0]], dtype=np.float64)
 
-        simulator = Simulation(particles, constraints, force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testDistanceConstraintsInGrid(self) -> None:  # pylint: disable=missing-function-docstring
@@ -152,7 +152,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         particles: List[Particle] = []
 
         for xy in list(positionsGridA)+list(positionsGridB):
-            particles.append(Particle(np.array(xy, dtype=np.float64), "C"))
+            particles.append(Particle(np.array(xy, dtype=np.float64)))
 
         constraints: List[Constraint] = []
 
@@ -169,8 +169,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         def force(_: np.float64) -> np.ndarray:
             return np.array([[0, 0] for i in range(len(particles))], dtype=np.float64)
 
-        simulator = Simulation(IndexerIterator[Particle](particles), IndexerIterator[Constraint](constraints),
-                               force, False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))
 
     def testDistanceConstraintsInGridWithDiagonals(self) -> None:  # pylint: disable=missing-function-docstring
@@ -187,7 +186,7 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
         particles: List[Particle] = []
 
         for xy in list(positionsGridA)+list(positionsGridB):
-            particles.append(Particle(np.array(xy, dtype=np.float64), "A"))
+            particles.append(Particle(np.array(xy, dtype=np.float64)))
 
         constraints: List[Constraint] = []
 
@@ -210,6 +209,5 @@ class TestSimulation:  # pylint: disable=missing-class-docstring
             return np.array([[10*np.abs(np.sin(1000*t)), -10*np.abs(np.sin(1000*t))]]
                             + [[0, 0] for i in range(len(particles)-1)], dtype=np.float64)
 
-        simulator = Simulation(IndexerIterator[Particle](particles), IndexerIterator[Constraint](constraints), force,
-                               False)
+        simulator = Simulation(indexer(particles), indexer(constraints), force, False)
         simulator.update(np.float64(0))

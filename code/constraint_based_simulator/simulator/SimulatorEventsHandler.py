@@ -16,10 +16,10 @@ from constraint_based_simulator.input_reader.ast.Identifier import Identifier
 from constraint_based_simulator.input_reader.ast.Point import Point
 from constraint_based_simulator.simulator import SimulationHolder, ParticlesHolder
 from constraint_based_simulator.simulator.NamedParticle import NamedParticle
+from constraint_based_simulator.simulator.SimulationData import SimulationData
 from simulator import Indexer
 from simulator.Particle import Particle
 from simulator.Simulation import Simulation
-from constraint_based_simulator.simulator.SimulationData import SimulationData
 from simulator.constraints.Constraint import Constraint as SimulatorConstraint
 from simulator.constraints.DistanceConstraint import DistanceConstraint
 
@@ -50,7 +50,8 @@ class SimulatorEventsHandler(EventsHandler, metaclass=Singleton):
 
         ParticlesHolder.particles = [NamedParticle(particle, id) for (id, particle) in pointMapping.items()]
 
-        constraintsIndexed: List[SimulatorConstraint] = (SimulatorEventsHandler.convertConstraints(pointMapping, constraints))
+        constraintsIndexed: List[SimulatorConstraint] = (
+            SimulatorEventsHandler.convertConstraints(pointMapping, constraints))
         force: Callable[[np.float64], np.ndarray] = lambda x: np.array([[0, 0] for _ in particlesIndexed])
         printData: bool = True
         SimulationHolder.simulation = Simulation(particlesIndexed, constraintsIndexed, force, printData)

@@ -7,6 +7,6 @@ class NamedParticle:
     A particle with an identifier
     """
 
-    def __init__(self, particle: Particle, id: Identifier):
+    def __init__(self, particle: Particle, identifier: Identifier):
         self.particle = particle
-        self.id = id
+        self.id = identifier
