@@ -41,7 +41,7 @@ class GrapherWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent) -> None:
         InitializationSignals.grapherParameters.emit(event.size().width(), event.size().height())
 
-    @Slot()
+    @Slot(DrawableScene)  # type: ignore
     def onNewFrame(self, drawableScene: DrawableScene) -> None:  # pylint: disable=missing-function-docstring
         self.scene = drawableScene
         MAIN_LOGGER.debug(self.scene)
