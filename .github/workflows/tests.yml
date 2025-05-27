@@ -20,7 +20,7 @@ jobs:
         os:
           - ubuntu-22.04
           # - macos-10.15 # doesn't run for free
-          - windows-2022
+          # - windows-2022 # can't actually run tests
         version:
           - '3.12'
           - '3.10'
