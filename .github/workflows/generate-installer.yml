@@ -31,4 +31,3 @@ jobs:
           requirements: 'code/requirements.txt'
           upload_exe_with_name: 'ConstraintBasedSimulator'
           options: --onefile, --name "Constraint Based Simulator", --windowed, 
-          is_uploaded: true
