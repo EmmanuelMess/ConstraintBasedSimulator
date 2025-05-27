@@ -22,8 +22,8 @@ jobs:
           # - macos-10.15 # doesn't run for free
           - windows-2022
         version:
+          - '3.12'
           - '3.10'
-          - '3.9'
           - '3.8'
           # - 'pypy3.10' # broken PySide6 https://stackoverflow.com/a/76345084/3124150
           # - 'pypy3.9' # Make it work
