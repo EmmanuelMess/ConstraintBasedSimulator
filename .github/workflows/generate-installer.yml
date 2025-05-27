@@ -14,7 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
+          - ubuntu-22.04
+          - ubuntu-24.04
           # - macos-latest # doesn't run for free
           - windows-latest
         version:
@@ -29,5 +30,5 @@ jobs:
           python_ver: ${{ matrix.version }}
           spec: 'code/main.py'
           requirements: 'code/requirements.txt'
-          upload_exe_with_name: 'ConstraintBasedSimulator-py${{ matrix.version }}-${{ runner.os }}'
+          upload_exe_with_name: 'ConstraintBasedSimulator-py${{ matrix.version }}-${{ matrix.os }}'
           options: --onefile, --name "Constraint Based Simulator", --windowed, 
