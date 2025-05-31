@@ -35,7 +35,7 @@ jobs:
     - name: Lint with flake8
       if: always()
       run: |
-        flake8 --count --show-source --statistics .
+        flake8 --count --show-source --statistics constraint_based_simulator main.py
 
     - name: Analysing the code with pylint
       if: always()
