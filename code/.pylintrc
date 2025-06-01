@@ -408,9 +408,7 @@ logging-modules=logging
 # UNDEFINED.
 confidence=HIGH,
            CONTROL_FLOW,
-           INFERENCE,
-           INFERENCE_FAILURE,
-           UNDEFINED
+           INFERENCE
 
 # Disable the message, report, category or checker with the given id(s). You
 # can either give multiple identifiers separated by comma (,) or put this
